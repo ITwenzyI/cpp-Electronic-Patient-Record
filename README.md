@@ -72,6 +72,6 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 - Encrypt private patient data for security
 
 ## 👤 Author
-This project was created by *Kilian* as part of independent study in Medical Informatics.
+This project was created by **Kilian** as part of independent study in Medical Informatics.
 The software was fully developed in C++ using modern programming techniques.
 
