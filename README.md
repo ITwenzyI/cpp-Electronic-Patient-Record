@@ -48,6 +48,7 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 ---
 
 ## 📦 Project Structure
+```
 /ElectronicPatientRecord/
 │
 ├── src/
@@ -62,6 +63,7 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 │
 ├── README.md
 └── Makefile (optional)
+```
 
 ## 💡 Future Ideas
 - Save records in XML or JSON
