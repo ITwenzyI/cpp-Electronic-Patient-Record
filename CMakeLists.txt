@@ -3,4 +3,6 @@ project(patient_record)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(patient_record main.cpp)
+add_executable(patient_record main.cpp
+        src/Patient.cpp
+        src/Patient.hpp)
