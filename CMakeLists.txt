@@ -10,7 +10,9 @@ add_executable(patient_record main.cpp
         src/user/User.hpp
         src/Doctor/Doctor.cpp
         src/Doctor/Doctor.hpp
-        src/Menu/Menu.cpp
-        src/Menu/Menu.hpp
+        src/Menu.cpp
+        src/Menu.hpp
         src/Assistant/Assistant.cpp
-        src/Assistant/Assistant.hpp)
+        src/Assistant/Assistant.hpp
+        src/Utils/UserID.cpp
+        src/Utils/UserID.hpp)

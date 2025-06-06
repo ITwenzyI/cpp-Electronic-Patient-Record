@@ -5,14 +5,10 @@
 #include "Patient.hpp"
 #include <iostream>
 
-Patient::Patient(const std::string& firstName, const std::string& lastName,
-                 const std::string& dateOfBirth, const std::string& gender,
-                 const std::string& nationality, const std::string& address,
-                 const std::string& phoneNumber, const std::string& insuranceID,
-                 const std::string& insuranceType, const std::string& email)
-    : User(firstName, lastName, dateOfBirth, gender, nationality, address,
-           phoneNumber, insuranceID, insuranceType, "patient", email)
-{ }
+Patient::Patient(const std::string& firstName, const std::string& lastName)
+    : User(firstName, lastName) {
+
+}
 
 void Patient::displayMenu() {
     std::cout << "\n=== Patient Menu ===" << std::endl;
