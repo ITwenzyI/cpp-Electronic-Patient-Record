@@ -26,6 +26,9 @@
 *.a
 *.lib
 
+# Privat
+docs/
+
 # Build-Ordner
 cmake-build-debug/
 cmake-build-release/
