@@ -1,9 +1,10 @@
 #include "User.hpp"
 
 User::User(const std::string& firstName, const std::string& lastName, const std::string& role)
-    : firstName(firstName), lastName(lastName), role("Unknown") { }
+    : firstName(firstName), lastName(lastName), role(role) { }
 
-User::~User() {}
+
+User::~User() = default;
 
 
 // Getters

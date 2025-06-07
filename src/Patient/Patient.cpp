@@ -6,11 +6,11 @@
 #include <iostream>
 
 Patient::Patient(const std::string& firstName, const std::string& lastName)
-    : User(firstName, lastName) {
+    : User(firstName, lastName, "Patient") {
 
 }
 
-Patient::~Patient() {}
+Patient::~Patient() = default;
 
 void Patient::displayMenu()
 {

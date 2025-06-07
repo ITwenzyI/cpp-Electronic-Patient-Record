@@ -21,7 +21,7 @@ public:
     // Getters
     std::string getFirstName() const;
     std::string getLastName() const;
-    std::string getRole() const;
+    virtual std::string getRole() const;
 
     // Setters
     void setFirstName(const std::string& firstName);

@@ -4,11 +4,11 @@
 #include <iostream>
 
 Doctor::Doctor(const std::string& firstName, const std::string& lastName) : 
-    User(firstName, lastName) {
+    User(firstName, lastName, "Doctor") {
 
 };
 
-Doctor::~Doctor() {};
+Doctor::~Doctor() = default;
 
 
 void Doctor::displayMenu() {

@@ -4,11 +4,11 @@
 #include <iostream>
 
 Assistant::Assistant(const std::string& firstName, const std::string& lastName) 
-    : User(firstName, lastName) {
+    : User(firstName, lastName, "Assistant") {
 
 };
 
-Assistant::~Assistant() {};
+Assistant::~Assistant() = default;
 
 void Assistant::displayMenu() {
     std::cout << "\n=== Assistant Menu ===" << std::endl;
