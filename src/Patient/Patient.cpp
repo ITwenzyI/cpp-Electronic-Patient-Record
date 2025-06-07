@@ -10,11 +10,18 @@ Patient::Patient(const std::string& firstName, const std::string& lastName)
 
 }
 
-void Patient::displayMenu() {
+Patient::~Patient() {}
+
+// Getters
+
+
+// Setters
+
+void Patient::displayMenu()
+{
     std::cout << "\n=== Patient Menu ===" << std::endl;
     std::cout << "1. View Medical Record" << std::endl;
     std::cout << "2. View Documents" << std::endl;
     std::cout << "3. Book Appointment" << std::endl;
     std::cout << "4. Logout" << std::endl;
 }
-
