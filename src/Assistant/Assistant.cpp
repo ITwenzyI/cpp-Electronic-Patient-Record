@@ -11,11 +11,34 @@ Assistant::Assistant(const std::string& firstName, const std::string& lastName)
 Assistant::~Assistant() = default;
 
 void Assistant::displayMenu() {
-    std::cout << "\n=== Assistant Menu ===" << std::endl;
-    std::cout << "1. View Medical Records" << std::endl;
-    std::cout << "2. View Documents" << std::endl;
-    std::cout << "3. View open Doctors" << std::endl;
-    std::cout << "4. Create Patient" << std::endl;
-    std::cout << "5. Book Apointment" << std::endl;
-    std::cout << "9. Logout" << std::endl;
+    int choice;
+
+    do {
+        std::cout << "\n=== Assistant Menu ===" << std::endl;
+        std::cout << "1. View Medical Records" << std::endl;
+        std::cout << "2. View Documents" << std::endl;
+        std::cout << "3. View open Doctors" << std::endl;
+        std::cout << "4. Create Patient" << std::endl;
+        std::cout << "5. Book Appointment" << std::endl;
+        std::cout << "0. Logout" << std::endl;
+        std::cin >> choice;
+
+        switch (choice) {
+            case 0:
+                std::cout << "Logging out..." << std::endl;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+                std::cout << "Invalid Choice." << std::endl;
+                break;
+
+        }
+
+
+
+    } while (choice != 0);
 }
