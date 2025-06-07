@@ -12,11 +12,6 @@ Patient::Patient(const std::string& firstName, const std::string& lastName)
 
 Patient::~Patient() {}
 
-// Getters
-
-
-// Setters
-
 void Patient::displayMenu()
 {
     std::cout << "\n=== Patient Menu ===" << std::endl;
