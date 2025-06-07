@@ -53,6 +53,10 @@ install_manifest.txt
 *.dll
 *.app
 
+# Extra
+.vscode
+data
+
 # Log-Dateien
 *.log
 
