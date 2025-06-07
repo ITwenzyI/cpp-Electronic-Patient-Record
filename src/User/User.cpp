@@ -1,7 +1,7 @@
 #include "User.hpp"
 
-User::User(const std::string& firstName, const std::string& lastName)
-    : firstName(firstName), lastName(lastName) { }
+User::User(const std::string& firstName, const std::string& lastName, const std::string& role)
+    : firstName(firstName), lastName(lastName), role("Unknown") { }
 
 User::~User() {}
 
@@ -14,6 +14,10 @@ std::string User::getFirstName() const {
 
 std::string User::getLastName() const {
     return lastName;
+}
+
+std::string User::getRole() const {
+    return role;
 }
 
 // Setters
