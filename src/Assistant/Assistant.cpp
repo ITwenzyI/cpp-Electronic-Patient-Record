@@ -1,10 +1,14 @@
 
 
 #include "Assistant.hpp"
+#include "../Utils/Utils.hpp"
+
+
 #include <iostream>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <format>  // Nur in C++20
 
 Assistant::Assistant(const std::string& firstName, const std::string& lastName) 
     : User(firstName, lastName, "Assistant") {
@@ -49,22 +53,17 @@ void Assistant::displayMenu() {
 
 void Assistant::createNewPatient(const std::string& firstName, const std::string& lastName) {
 
-    std::ifstream file_in("data/patient_id.txt");
-    int id;
-    if (file_in.is_open()) {
-        file_in >> id;
-        file_in.close();
-    } else {
-        std::cerr << "Faild to open!\n";
-    }
 
-    std::ofstream file_out("data/patient_id.txt");
-    if (file_out.is_open()) {
-        file_out << id + 1;
-        file_out.close();
-    } else {
-        std::cerr << "Faild to open!\n";
-    }
+    int patient_id = get_patient_id(); // get old ID
+    std::string folderName = "data/P" + std::string(8 - std::to_string(patient_id).length(), '0') + std::to_string(patient_id); // P00000001
+    //std::string folderName = std::format("data/P{:08}", patient_id); // If you have C++20
+    std::filesystem::create_directories(folderName);
+
+
+
+
+
+    update_patient_id(patient_id); // update ID
 
 
 

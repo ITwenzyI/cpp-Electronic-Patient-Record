@@ -38,9 +38,11 @@ int main() {
         std::filesystem::create_directories("data");
         if (!std::filesystem::exists("data/patient_id.txt")) {
             std::ofstream out("data/patient_id.txt");
-            out << "1"; // Initialwert
+            out << "1"; // Initialvalue
             out.close();
         }
+
+        Assistant::createNewPatient("test1", "test2");
 
 
         std::cout << "Welcome to the Electronic Patient Record System.\n";

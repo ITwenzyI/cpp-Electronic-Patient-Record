@@ -15,6 +15,7 @@ std::string getDate();
 std::string getTime();
 int random_number(int min, int max);
 
-
+int get_patient_id();
+void update_patient_id(int old_id);
 
 #endif //UTILS_HPP
