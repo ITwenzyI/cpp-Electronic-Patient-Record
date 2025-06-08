@@ -50,6 +50,6 @@ void Assistant::displayMenu() {
 void Assistant::createNewPatient(const std::string& firstName, const std::string& lastName) {
     std::filesystem::create_directories("data");
     std::ofstream out("data/patient_id.txt");
-    std::ofstream file("data/" + firstName + "/" + lastName + ".txt");
+    //std::ofstream file("data/" + firstName + "/" + lastName + ".txt");
 
 }

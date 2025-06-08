@@ -4,6 +4,8 @@
 #include <ctime>
 #include <chrono>
 #include <thread>
+#include <filesystem>
+#include <fstream>
 
 #include <windows.h>
 #include <io.h>
@@ -32,6 +34,14 @@ int main() {
         std::this_thread::sleep_for(std::chrono::milliseconds(900));
         std::cout << "Booting up System...\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(900));
+
+
+        if (!std::filesystem::exists("data/patient_id.txt")) {
+            std::ofstream out("data/patient_id.txt");
+            out << "1"; // Initialwert
+            out.close();
+        }
+
 
         std::cout << "Welcome to the Electronic Patient Record System.\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(1500));
