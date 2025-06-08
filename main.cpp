@@ -42,7 +42,8 @@ int main() {
             out.close();
         }
 
-        Assistant::createNewPatient("test1", "test2");
+        //Assistant::createNewPatient("test1", "test2");
+        User::get_patient_info("P00000006");
 
 
         std::cout << "Welcome to the Electronic Patient Record System.\n";
