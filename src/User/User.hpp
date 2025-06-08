@@ -7,6 +7,7 @@
 
 class User {
 protected:
+    std::string id;
     std::string firstName;
     std::string lastName;
     std::string role;

@@ -16,4 +16,6 @@ add_executable(patient_record main.cpp
         src/Assistant/Assistant.hpp
         src/Utils/Utils.cpp
         src/Utils/Utils.hpp
+        src/IDs/IDs.cpp
+        src/IDs/IDs.hpp
 )
