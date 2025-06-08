@@ -16,6 +16,10 @@ public:
     
 
     void displayMenu() override;
+
+    void printPatient() const;
+
+
 };
 
 #endif //PATIENT_HPP

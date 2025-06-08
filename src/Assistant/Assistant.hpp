@@ -12,6 +12,8 @@ class Assistant : public User {
     virtual ~Assistant();
 
     void displayMenu() override;
+
+    static void createNewPatient(const std::string& firstName, const std::string& lastName);
 };
 
 

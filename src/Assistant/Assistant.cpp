@@ -2,6 +2,9 @@
 
 #include "Assistant.hpp"
 #include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 
 Assistant::Assistant(const std::string& firstName, const std::string& lastName) 
     : User(firstName, lastName, "Assistant") {
@@ -41,4 +44,12 @@ void Assistant::displayMenu() {
 
 
     } while (choice != 0);
+}
+
+
+void Assistant::createNewPatient(const std::string& firstName, const std::string& lastName) {
+    std::filesystem::create_directories("data");
+    std::ofstream out("data/patient_id.txt");
+    std::ofstream file("data/" + firstName + "/" + lastName + ".txt");
+
 }

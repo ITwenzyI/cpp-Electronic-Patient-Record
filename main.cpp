@@ -1,6 +1,12 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <ctime>
+#include <chrono>
+#include <thread>
+
+#include <windows.h>
+#include <io.h>
 
 
 
@@ -8,17 +14,33 @@
 #include "src/Patient/Patient.hpp"
 #include "src/Doctor/Doctor.hpp"
 #include "src/Assistant/Assistant.hpp"
+#include "src/Utils/Utils.hpp"
 
 int main() {
-    Patient p = Patient("Kilian1", "Second");
-    User *k = new Patient("Kilian2", "König");
-    std::cout << p.getFirstName() << std::endl;
-    std::cout << k->getFirstName() << std::endl;
-    std::cout << p.getRole() << std::endl;
-
-    delete k;
+    SetConsoleOutputCP(CP_UTF8);
+    //Patient p = Patient("Kilian1", "Second");
+    //User *k = new Patient("Kilian2", "König");
+    //std::cout << p.getFirstName() << std::endl;
+    //std::cout << k->getFirstName() << std::endl;
+    //std::cout << p.getRole() << std::endl;
 
     while (true) {
+
+        std::cout << "Booting up System.\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(900));
+        std::cout << "Booting up System..\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(900));
+        std::cout << "Booting up System...\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(900));
+
+        std::cout << "Welcome to the Electronic Patient Record System.\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        std::cout << "Please choice your role:\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(900));
+
+        Assistant::createNewPatient("testfirstname", "testlastName");
+
+
         std::cout << "=== ELECTRONIC PATIENT RECORD SYSTEM ===\n";
         std::cout << "1. Patient\n";
         std::cout << "2. Doctor\n";
@@ -42,17 +64,17 @@ int main() {
 
         switch (choice) {
                 case 1: {
-                std::unique_ptr<User> patient = std::make_unique<Patient>(firstName, lastName);
+                const std::unique_ptr<User> patient = std::make_unique<Patient>(firstName, lastName);
                 patient->displayMenu();
                 break;
             }
                 case 2: {
-                std::unique_ptr<User> doctor = std::make_unique<Doctor>(firstName, lastName);
+                const std::unique_ptr<User> doctor = std::make_unique<Doctor>(firstName, lastName);
                 doctor->displayMenu();
                 break;
             }
                 case 3: {
-                std::unique_ptr<User> assistant = std::make_unique<Assistant>(firstName, lastName);
+                const std::unique_ptr<User> assistant = std::make_unique<Assistant>(firstName, lastName);
                 assistant->displayMenu();
                 break;
             }

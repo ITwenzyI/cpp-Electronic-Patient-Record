@@ -17,6 +17,8 @@ void Patient::displayMenu() {
 
     do {
         std::cout << "\n=== Patient Menu ===" << std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << std::endl;
+        std::cout << "-----------------------------" << std::endl;
         std::cout << "1. View Medical Record" << std::endl;
         std::cout << "2. View Documents" << std::endl;
         std::cout << "3. Book Appointment" << std::endl;
@@ -27,6 +29,7 @@ void Patient::displayMenu() {
                 case 0:
                 std::cout << "Logging out..." << std::endl;
                 case 1:
+                printPatient();
                 break;
                 case 2:
                 break;
@@ -41,4 +44,8 @@ void Patient::displayMenu() {
 
 
     } while (choice != 0);
+}
+
+void Patient::printPatient() const {
+    std::cout << "First Name: " << getFirstName() << std::endl;
 }

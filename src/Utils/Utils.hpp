@@ -6,11 +6,13 @@
 #define UTILS_HPP
 
 /* Todo
- * TIME function
- * Date function
- * Random Number function
  * Patient ID function
 */
 
+#include <string>
+
+std::string getDate();
+std::string getTime();
+int random_number(int min, int max);
 
 #endif //UTILS_HPP
