@@ -35,7 +35,7 @@ int main() {
         std::cout << "Booting up System...\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(900));
 
-
+        std::filesystem::create_directories("data");
         if (!std::filesystem::exists("data/patient_id.txt")) {
             std::ofstream out("data/patient_id.txt");
             out << "1"; // Initialwert
@@ -48,7 +48,6 @@ int main() {
         std::cout << "Please choice your role:\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(900));
 
-        Assistant::createNewPatient("testfirstname", "testlastName");
 
 
         std::cout << "=== ELECTRONIC PATIENT RECORD SYSTEM ===\n";

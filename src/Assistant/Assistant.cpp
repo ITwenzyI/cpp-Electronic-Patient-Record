@@ -48,8 +48,24 @@ void Assistant::displayMenu() {
 
 
 void Assistant::createNewPatient(const std::string& firstName, const std::string& lastName) {
-    std::filesystem::create_directories("data");
-    std::ofstream out("data/patient_id.txt");
-    //std::ofstream file("data/" + firstName + "/" + lastName + ".txt");
+
+    std::ifstream file_in("data/patient_id.txt");
+    int id;
+    if (file_in.is_open()) {
+        file_in >> id;
+        file_in.close();
+    } else {
+        std::cerr << "Faild to open!\n";
+    }
+
+    std::ofstream file_out("data/patient_id.txt");
+    if (file_out.is_open()) {
+        file_out << id + 1;
+        file_out.close();
+    } else {
+        std::cerr << "Faild to open!\n";
+    }
+
+
 
 }

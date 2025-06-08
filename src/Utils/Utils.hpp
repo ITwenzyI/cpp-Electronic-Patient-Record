@@ -15,4 +15,6 @@ std::string getDate();
 std::string getTime();
 int random_number(int min, int max);
 
+
+
 #endif //UTILS_HPP
