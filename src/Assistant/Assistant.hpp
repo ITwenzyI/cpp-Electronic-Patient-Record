@@ -11,9 +11,13 @@ class Assistant : public User {
             const std::string& lastName);
 
     //Desturctor
-    virtual ~Assistant();
+
 
     void displayMenu() override;
+
+    // Patient Folder Actions
+    static void createNewAssistant(const std::string& firstName, const std::string& lastName);
+    static void get_assistant_info(const std::string &assistant_full_id);
 
 };
 

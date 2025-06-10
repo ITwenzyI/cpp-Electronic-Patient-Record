@@ -14,7 +14,7 @@ public:
             const std::string& lastName);
 
     // Destructor
-    virtual ~Patient();
+
     
 
     void displayMenu() override;
@@ -26,9 +26,9 @@ public:
     // Patient Folder Actions
     static void createNewPatient(const std::string& firstName, const std::string& lastName);
     static void get_patient_info(const std::string &patient_full_id);
-    static void get_patient_appointments(const std::string &patient_full_id);
-    static void get_patient_medications(const std::string &patient_full_id);
-    static void get_patient_records(const std::string &patient_full_id);
+    //static void get_patient_appointments(const std::string &patient_full_id);
+    //static void get_patient_medications(const std::string &patient_full_id);
+    //static void get_patient_records(const std::string &patient_full_id);
 
 
 };
