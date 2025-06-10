@@ -5,6 +5,7 @@
 #include <chrono>
 
 #include "../Utils/Utils.hpp"
+#include "../IDs/IDs.hpp"
 
 
 #include <iostream>
@@ -57,8 +58,9 @@ void Assistant::displayMenu() {
 void Assistant::createNewPatient(const std::string& firstName, const std::string& lastName) {
 
 
-    int patient_id = get_patient_id(); // get new Patient ID
-    std::string folderName = "data/P" + std::string(8 - std::to_string(patient_id).length(), '0') + std::to_string(patient_id); // Style: P00000001
+    int patient_id = Patient_ID::get_patient_id(); // get new Patient ID
+    std::filesystem::create_directories("data/Patients");
+    std::string folderName = "data/Patients/P" + std::string(8 - std::to_string(patient_id).length(), '0') + std::to_string(patient_id); // Style: P00000001
     //std::string folderName = std::format("data/P{:08}", patient_id); // If you have C++20
     std::filesystem::create_directories(folderName);
 
@@ -131,7 +133,7 @@ void Assistant::createNewPatient(const std::string& firstName, const std::string
 
     // -----------------------------------------
     // Update Patient ID for new Patient (+1)
-    update_patient_id(patient_id);
+    Patient_ID::update_patient_id(patient_id);
     // -----------------------------------------
 
 
