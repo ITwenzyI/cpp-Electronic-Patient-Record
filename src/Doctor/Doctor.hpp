@@ -12,9 +12,12 @@ class Doctor : public User {
             const std::string& lastName);
 
     //Destructor
-    virtual ~Doctor();
 
     void displayMenu() override;
+
+    // Doctor Folder Actions
+    static void createNewDoctor(const std::string& firstName, const std::string& lastName);
+    static void get_doctor_info(const std::string &doctor_full_id);
 
 };
 

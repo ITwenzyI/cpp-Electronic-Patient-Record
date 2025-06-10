@@ -113,8 +113,8 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
     if (!std::filesystem::exists(folderName + "/appointments.txt")) {
         std::ofstream out( folderName + "/appointments.txt");
         out << "--- Example ---" << patient_full_id << "\n"; // PatientID
-        out << "[2025-06-12] [09:30] – Dr. Schmitt" << "\n"; // Example
-        out << "[2025-06-13] [14:00] - Dr. Meier (control)" << "\n"; // Example
+        out << "[2025-06-12 09:30] – Dr. Schmitt" << "\n"; // Example
+        out << "[2025-06-13 14:00] - Dr. Meier (control)" << "\n"; // Example
         out.close();
     }
 
