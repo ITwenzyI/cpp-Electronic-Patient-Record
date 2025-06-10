@@ -58,12 +58,6 @@ public:
     // Abstract method
     virtual void displayMenu() = 0;
 
-
-    // Patient Folder Actions
-    static void get_patient_info(const std::string &patient_full_id);
-    void get_patient_appointments(const std::string &patient_full_id);
-    void get_patient_medications(const std::string &patient_full_id);
-    void get_patient_records(const std::string &patient_full_id);
 };
 
 #endif // USER_HPP

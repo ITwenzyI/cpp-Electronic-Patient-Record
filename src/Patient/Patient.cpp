@@ -139,5 +139,22 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
     // -----------------------------------------
 
 
+}
 
+void Patient::get_patient_info(const std::string &patient_full_id) {
+    std::string path = "data/Patients/" + patient_full_id + "/info.txt"; // To call: User::get_patient_info("P00000006");
+    std::ifstream file_in(path);
+    std::string line;
+    std::vector<std::string> content;
+
+    if (file_in) {
+        std::cout << "File Content:" << std::endl; // Ausgabe: Dateiinhalt:
+        while (std::getline(file_in, line)) {
+            std::cout << line << std::endl;        // Ausgabe: Zeile n
+            content.push_back(line);                // Zeile speichern
+        }
+        file_in.close();
+    } else {
+        std::cerr << "Faild to read file!" << std::endl;
+    }
 }

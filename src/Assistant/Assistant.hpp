@@ -15,7 +15,6 @@ class Assistant : public User {
 
     void displayMenu() override;
 
-    static void createNewPatient(const std::string& firstName, const std::string& lastName);
 };
 
 
