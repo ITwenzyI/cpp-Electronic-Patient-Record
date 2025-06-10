@@ -41,8 +41,18 @@ int main() {
             out << "1"; // Initialvalue
             out.close();
         }
+        if (!std::filesystem::exists("data/assistant_id.txt")) {
+            std::ofstream out("data/assistant_id.txt");
+            out << "1"; // Initialvalue
+            out.close();
+        }
+        if (!std::filesystem::exists("data/doctor_id.txt")) {
+            std::ofstream out("data/doctor_id.txt");
+            out << "1"; // Initialvalue
+            out.close();
+        }
 
-        Assistant::createNewPatient("test1", "test2");
+        //Assistant::createNewPatient("test1", "test2");
         //User::get_patient_info("P00000006");
 
 
