@@ -11,7 +11,7 @@
 #include <io.h>
 
 
-
+#include "src/Admin/Admin.hpp"
 #include "src/User/User.hpp"
 #include "src/Patient/Patient.hpp"
 #include "src/Doctor/Doctor.hpp"
@@ -55,7 +55,7 @@ int main() {
     //Doctor::createNewDoctor("FirstName", "LastName");
     //Doctor::get_doctor_info("D0001");
 
-    while (true) {
+    while (Admin::checkInitialSetup()) {
 
 
         std::cout << "Welcome to the Electronic Patient Record System.\n";

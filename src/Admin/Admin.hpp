@@ -16,6 +16,8 @@ public:
     Admin();
     ~Admin();
 
+    static bool checkInitialSetup();
+
     static void createNewPatient(const std::string& firstName, const std::string& lastName);
 
     static void createNewAssistant(const std::string& firstName, const std::string& lastName);
