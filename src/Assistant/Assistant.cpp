@@ -14,10 +14,11 @@
 #include <sstream>
 #include <format>  // Nur in C++20
 
-Assistant::Assistant(const std::string& firstName, const std::string& lastName) 
-    : User(firstName, lastName, "Assistant") {
-
-};
+Assistant::Assistant(const std::string& patient_id,
+                 const std::string& firstName,
+                 const std::string& lastName)
+    : User(patient_id, "patient", firstName, lastName,
+           "", "", "", "", "", "", "", "") {}
 
 Assistant::~Assistant() = default;
 

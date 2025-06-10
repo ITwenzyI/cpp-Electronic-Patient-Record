@@ -53,6 +53,7 @@ int main() {
         }
 
         //Assistant::createNewPatient("test1", "test2");
+        Patient::createNewPatient("FirstName", "LastName");
         //User::get_patient_info("P00000006");
 
 
@@ -86,18 +87,18 @@ int main() {
 
         switch (choice) {
                 case 1: {
-                const std::unique_ptr<User> patient = std::make_unique<Patient>(firstName, lastName);
-                patient->displayMenu();
+                //const std::unique_ptr<User> patient = std::make_unique<Patient>(firstName, lastName);
+                //patient->displayMenu();
                 break;
             }
                 case 2: {
-                const std::unique_ptr<User> doctor = std::make_unique<Doctor>(firstName, lastName);
-                doctor->displayMenu();
+                //const std::unique_ptr<User> doctor = std::make_unique<Doctor>(firstName, lastName);
+                //doctor->displayMenu();
                 break;
             }
                 case 3: {
-                const std::unique_ptr<User> assistant = std::make_unique<Assistant>(firstName, lastName);
-                assistant->displayMenu();
+                //const std::unique_ptr<User> assistant = std::make_unique<Assistant>(firstName, lastName);
+                //assistant->displayMenu();
                 break;
             }
                 default: {

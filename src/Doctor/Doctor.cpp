@@ -2,10 +2,11 @@
 #include "Doctor.hpp"
 #include <iostream>
 
-Doctor::Doctor(const std::string& firstName, const std::string& lastName) : 
-    User(firstName, lastName, "Doctor") {
-
-};
+Doctor::Doctor(const std::string& patient_id,
+                 const std::string& firstName,
+                 const std::string& lastName)
+    : User(patient_id, "patient", firstName, lastName,
+           "", "", "", "", "", "", "", "") {}
 
 Doctor::~Doctor() = default;
 

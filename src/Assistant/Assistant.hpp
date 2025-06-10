@@ -6,7 +6,9 @@
 class Assistant : public User {
     public:
 
-    Assistant(const std::string& firstName, const std::string& lastName);
+    Assistant(const std::string& patient_id,
+            const std::string& firstName,
+            const std::string& lastName);
 
     //Desturctor
     virtual ~Assistant();

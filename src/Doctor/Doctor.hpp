@@ -7,7 +7,9 @@ class Doctor : public User {
     public:
 
     // Constructor
-    Doctor(const std::string& firstName, const std::string& lastName);
+    Doctor(const std::string& patient_id,
+            const std::string& firstName,
+            const std::string& lastName);
 
     //Destructor
     virtual ~Doctor();
