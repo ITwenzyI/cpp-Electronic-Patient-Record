@@ -20,42 +20,35 @@
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
-    //Patient p = Patient("Kilian1", "Second");
-    //User *k = new Patient("Kilian2", "König");
-    //std::cout << p.getFirstName() << std::endl;
-    //std::cout << k->getFirstName() << std::endl;
-    //std::cout << p.getRole() << std::endl;
+
+    std::cout << "Booting up System.\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(900));
+    std::cout << "Booting up System..\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(900));
+    std::cout << "Booting up System...\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(900));
+
+    std::filesystem::create_directories("data");
+    if (!std::filesystem::exists("data/patient_id.txt")) {
+        std::ofstream out("data/patient_id.txt");
+        out << "1"; // Initialvalue
+        out.close();
+    }
+    if (!std::filesystem::exists("data/assistant_id.txt")) {
+        std::ofstream out("data/assistant_id.txt");
+        out << "1"; // Initialvalue
+        out.close();
+    }
+    if (!std::filesystem::exists("data/doctor_id.txt")) {
+        std::ofstream out("data/doctor_id.txt");
+        out << "1"; // Initialvalue
+        out.close();
+    }
+
+    //Patient::createNewPatient("FirstName", "LastName");
+    //Patient::get_patient_info("P00000001");
 
     while (true) {
-
-        std::cout << "Booting up System.\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(900));
-        std::cout << "Booting up System..\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(900));
-        std::cout << "Booting up System...\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(900));
-
-        std::filesystem::create_directories("data");
-        if (!std::filesystem::exists("data/patient_id.txt")) {
-            std::ofstream out("data/patient_id.txt");
-            out << "1"; // Initialvalue
-            out.close();
-        }
-        if (!std::filesystem::exists("data/assistant_id.txt")) {
-            std::ofstream out("data/assistant_id.txt");
-            out << "1"; // Initialvalue
-            out.close();
-        }
-        if (!std::filesystem::exists("data/doctor_id.txt")) {
-            std::ofstream out("data/doctor_id.txt");
-            out << "1"; // Initialvalue
-            out.close();
-        }
-
-        //Assistant::createNewPatient("test1", "test2");
-        //Patient::createNewPatient("FirstName", "LastName");
-        //User::get_patient_info("P00000006");
-        Patient::get_patient_info("P00000001");
 
 
         std::cout << "Welcome to the Electronic Patient Record System.\n";
@@ -75,7 +68,7 @@ int main() {
         int choice;
         std::cin >> choice;
 
-        std::string firstName, lastName;
+        std::string firstName, lastName, id;
 
         if (choice == 0) {
             break;
@@ -85,21 +78,23 @@ int main() {
         std::cin >> firstName;
         std::cout << "Enter Last Name: " << std::endl;
         std::cin >> lastName;
+        std::cout << "Enter ID: " << std::endl;
+        std::cin >> id;
 
         switch (choice) {
                 case 1: {
-                //const std::unique_ptr<User> patient = std::make_unique<Patient>(firstName, lastName);
-                //patient->displayMenu();
+                const std::unique_ptr<User> patient = std::make_unique<Patient>(id, firstName, lastName);
+                patient->displayMenu();
                 break;
             }
                 case 2: {
-                //const std::unique_ptr<User> doctor = std::make_unique<Doctor>(firstName, lastName);
-                //doctor->displayMenu();
+                const std::unique_ptr<User> doctor = std::make_unique<Doctor>(id, firstName, lastName);
+                doctor->displayMenu();
                 break;
             }
                 case 3: {
-                //const std::unique_ptr<User> assistant = std::make_unique<Assistant>(firstName, lastName);
-                //assistant->displayMenu();
+                const std::unique_ptr<User> assistant = std::make_unique<Assistant>(id, firstName, lastName);
+                assistant->displayMenu();
                 break;
             }
                 default: {
