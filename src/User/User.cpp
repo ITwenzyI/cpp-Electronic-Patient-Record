@@ -52,6 +52,11 @@ std::string User::getRole() const {
     return role;
 }
 
+std::string User::getID() const {
+    return user_id;
+}
+
+
 // Setters
 
 void User::setFirstName(const std::string& firstName) {

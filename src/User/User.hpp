@@ -47,13 +47,14 @@ public:
     virtual ~User();
 
     // Getters
-    std::string getFirstName() const;
-    std::string getLastName() const;
+    virtual std::string getFirstName() const;
+    virtual std::string getLastName() const;
     virtual std::string getRole() const;
+    virtual std::string getID() const;
 
     // Setters
-    void setFirstName(const std::string& firstName);
-    void setLastName(const std::string& lastName);
+    virtual void setFirstName(const std::string& firstName);
+    virtual void setLastName(const std::string& lastName);
 
     // Abstract method
     virtual void displayMenu() = 0;

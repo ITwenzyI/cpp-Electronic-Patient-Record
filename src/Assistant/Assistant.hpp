@@ -6,7 +6,7 @@
 class Assistant : public User {
     public:
 
-    Assistant(const std::string& patient_id,
+    Assistant(const std::string& assistant_id,
             const std::string& firstName,
             const std::string& lastName);
 

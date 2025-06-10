@@ -7,10 +7,10 @@
 #include <sstream>
 #include <chrono>
 
-Doctor::Doctor(const std::string& patient_id,
+Doctor::Doctor(const std::string& doctor_id,
                  const std::string& firstName,
                  const std::string& lastName)
-    : User(patient_id, "patient", firstName, lastName,
+    : User(doctor_id, "Doctor", firstName, lastName,
            "", "", "", "", "", "", "", "") {}
 
 

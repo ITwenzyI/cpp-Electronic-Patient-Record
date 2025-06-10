@@ -13,12 +13,11 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
-#include <format>  // Nur in C++20
 
-Assistant::Assistant(const std::string& patient_id,
+Assistant::Assistant(const std::string& assistant_id,
                  const std::string& firstName,
                  const std::string& lastName)
-    : User(patient_id, "patient", firstName, lastName,
+    : User(assistant_id, "Assistant", firstName, lastName,
            "", "", "", "", "", "", "", "") {}
 
 void Assistant::displayMenu() {

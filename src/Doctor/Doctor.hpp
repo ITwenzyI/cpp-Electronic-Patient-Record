@@ -7,7 +7,7 @@ class Doctor : public User {
     public:
 
     // Constructor
-    Doctor(const std::string& patient_id,
+    Doctor(const std::string& doctor_id,
             const std::string& firstName,
             const std::string& lastName);
 

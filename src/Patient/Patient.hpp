@@ -19,8 +19,6 @@ public:
 
     void displayMenu() override;
 
-    void printPatient() const;
-
 
 
     // Patient Folder Actions

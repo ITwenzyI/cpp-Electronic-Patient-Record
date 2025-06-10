@@ -13,7 +13,7 @@
 Patient::Patient(const std::string& patient_id,
                  const std::string& firstName,
                  const std::string& lastName)
-    : User(patient_id, "patient", firstName, lastName,
+    : User(patient_id, "Patient", firstName, lastName,
            "", "", "", "", "", "", "", "") {}
 
 
@@ -22,7 +22,7 @@ void Patient::displayMenu() {
 
     do {
         std::cout << "\n=== Patient Menu ===" << std::endl;
-        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << getID() <<std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. View Medical Record" << std::endl;
         std::cout << "2. View Documents" << std::endl;
@@ -34,7 +34,6 @@ void Patient::displayMenu() {
                 case 0:
                 std::cout << "Logging out..." << std::endl;
                 case 1:
-                printPatient();
                 break;
                 case 2:
                 break;
@@ -49,10 +48,6 @@ void Patient::displayMenu() {
 
 
     } while (choice != 0);
-}
-
-void Patient::printPatient() const {
-    std::cout << "First Name: " << getFirstName() << std::endl;
 }
 
 void Patient::createNewPatient(const std::string& firstName, const std::string& lastName) {
