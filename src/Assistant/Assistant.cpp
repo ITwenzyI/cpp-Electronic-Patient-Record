@@ -82,12 +82,12 @@ void Assistant::createNewAssistant(const std::string& firstName, const std::stri
 
     int assistant_id = Assistant_ID::get_assistant_id(); // get new Assistant ID
     std::filesystem::create_directories("data/Assistants");
-    std::string folderName = "data/Assistants/A" + std::string(4 - std::to_string(assistant_id).length(), '0') + std::to_string(assistant_id); // Style: A0001
+    std::string folderName = std::format("data/Doctors/A{:04}", assistant_id); // Style: A0001
     std::filesystem::create_directories(folderName);
 
 
     // Full Assistant ID = A0001
-    std::string assistant_full_id = "A" + std::string(4 - std::to_string(assistant_id).length(), '0') + std::to_string(assistant_id);
+    std::string assistant_full_id = std::format("A{:04}", assistant_id); // Style: A0001
 
 
     // -----------------------------------------
@@ -97,7 +97,7 @@ void Assistant::createNewAssistant(const std::string& firstName, const std::stri
     // Creating file with all the Infos from the Assistant
     if (!std::filesystem::exists(folderName + "/info.txt")) {
         std::ofstream out( folderName + "/info.txt");
-        out << "PatientID: " << assistant_full_id << "\n\n"; // AssistantID
+        out << "PatientID: " << assistant_full_id << "\n\n"; // AssistantID A0001
         out << "--- Personal Infos ---"  << "\n";
         out << "Full Name: " << firstName << " " << lastName << "\n";
         out << "First Name: " << firstName << "\n"; // First Name
@@ -107,9 +107,9 @@ void Assistant::createNewAssistant(const std::string& firstName, const std::stri
         out << "Nationality: " << lastName << "\n";
 
         out << "\n" << "--- Contact Infos ---"  << "\n";
-        out << "Adress: " << lastName << "\n";
+        out << "Address: " << lastName << "\n";
         out << "Phone Number: " << lastName << "\n";
-        out << "Email Adress: " << lastName << "\n";
+        out << "Email Address: " << lastName << "\n";
 
         out << "\n" << "--- Insurance Infos ---"  << "\n";
         out << "InsuranceID: " << lastName << "\n";
@@ -124,7 +124,7 @@ void Assistant::createNewAssistant(const std::string& firstName, const std::stri
     // Creating file with all the Actions from the Assistant
     if (!std::filesystem::exists(folderName + "/actions.txt")) {
         std::ofstream out( folderName + "/actions.txt");
-        out << "AssistantID: " << assistant_full_id << "\n\n"; // AssistantID
+        out << "AssistantID: " << assistant_full_id << "\n\n"; // AssistantID A0001
 
         out << "\n" << "--- Example ---" << "\n";
         out << "\n" << "[2025-06-08 10:03] Created patient P00000012" << "\n";
@@ -139,7 +139,7 @@ void Assistant::createNewAssistant(const std::string& firstName, const std::stri
 
     // -----------------------------------------
     // Update Assistant ID for new Assistant (+1)
-    Assistant_ID::update_assistant_id(assistant_id);
+    Assistant_ID::update_assistant_id(assistant_id); // without A
     // -----------------------------------------
 
 

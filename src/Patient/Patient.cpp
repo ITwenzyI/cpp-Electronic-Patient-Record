@@ -82,13 +82,12 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
 
     int patient_id = Patient_ID::get_patient_id(); // get new Patient ID
     std::filesystem::create_directories("data/Patients");
-    std::string folderName = "data/Patients/P" + std::string(8 - std::to_string(patient_id).length(), '0') + std::to_string(patient_id); // Style: P00000001
-    //std::string folderName = std::format("data/P{:08}", patient_id); // If you have C++20
+    std::string folderName = std::format("data/Patients/P{:08}", patient_id); // Style: P00000001
     std::filesystem::create_directories(folderName);
 
 
     // Full Patient ID = P00000001
-    std::string patient_full_id = "P" + std::string(8 - std::to_string(patient_id).length(), '0') + std::to_string(patient_id);
+    std::string patient_full_id = std::format("P{:08}", patient_id);
 
 
     // -----------------------------------------
@@ -98,7 +97,7 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
     // Creating file with all the Infos from the Patient
     if (!std::filesystem::exists(folderName + "/info.txt")) {
         std::ofstream out( folderName + "/info.txt");
-        out << "PatientID: " << patient_full_id << "\n\n"; // PatientID
+        out << "PatientID: " << patient_full_id << "\n\n"; // PatientID P00000001
         out << "--- Personal Infos ---"  << "\n";
         out << "Full Name: " << firstName << " " << lastName << "\n";
         out << "First Name: " << firstName << "\n"; // First Name
@@ -108,9 +107,9 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
         out << "Nationality: " << lastName << "\n";
 
         out << "\n" << "--- Contact Infos ---"  << "\n";
-        out << "Adress: " << lastName << "\n";
+        out << "Address: " << lastName << "\n";
         out << "Phone Number: " << lastName << "\n";
-        out << "Email Adress: " << lastName << "\n";
+        out << "Email Address: " << lastName << "\n";
 
         out << "\n" << "--- Insurance Infos ---"  << "\n";
         out << "InsuranceID: " << lastName << "\n";
@@ -125,7 +124,7 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
     // Creating file with a list of all the records from the Patient
     if (!std::filesystem::exists(folderName + "/records.txt")) {
         std::ofstream out( folderName + "/records.txt");
-        out << "--- Example ---" << patient_full_id << "\n"; // PatientID
+        out << "--- Example ---" << patient_full_id << "\n"; // PatientID P00000001
         out << "[2025-06-08] Dr. Schmitt: Blood pressure too high, recommended: Exercise & diet." << "\n"; // Example
         out << "[2025-06-15] Dr. Schmitt: Control: blood pressure decreased, no medication necessary." << "\n"; // Example
         out.close();
@@ -134,7 +133,7 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
     // Creating file with a list of all appointments from the Patient
     if (!std::filesystem::exists(folderName + "/appointments.txt")) {
         std::ofstream out( folderName + "/appointments.txt");
-        out << "--- Example ---" << patient_full_id << "\n"; // PatientID
+        out << "--- Example ---" << patient_full_id << "\n"; // PatientID P00000001
         out << "[2025-06-12 09:30] – Dr. Schmitt" << "\n"; // Example
         out << "[2025-06-13 14:00] - Dr. Meier (control)" << "\n"; // Example
         out.close();
@@ -143,7 +142,7 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
     // Creating file with all the medications the Patient needs
     if (!std::filesystem::exists(folderName + "/medications.txt")) {
         std::ofstream out( folderName + "/medication.txt");
-        out << "--- Example ---" << patient_full_id << "\n"; // PatientID
+        out << "--- Example ---" << patient_full_id << "\n"; // PatientID P00000001
         out << "Ibuprofen 400 mg - 3x daily - from 2025-06-08 to 2025-06-12" << "\n"; // Example
         out << "Ramipril 5 mg – 1x daily in the morning - permanently" << "\n"; // Example
         out.close();
@@ -155,7 +154,7 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
 
     // -----------------------------------------
     // Update Patient ID for new Patient (+1)
-    Patient_ID::update_patient_id(patient_id);
+    Patient_ID::update_patient_id(patient_id); // without P
     // -----------------------------------------
 
 

@@ -8,6 +8,11 @@
 
 #include "Admin.hpp"
 
+Admin::Admin() = default;
+
+Admin::~Admin() = default;
+
+
 
 void Admin::checkInitialSetup() {
     if (!std::filesystem::exists("data/Patients") && !std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {

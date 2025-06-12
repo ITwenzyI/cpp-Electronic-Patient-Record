@@ -1,5 +1,10 @@
+#include "src/Admin/Admin.hpp"
+#include "src/Patient/Patient.hpp"
+#include "src/Doctor/Doctor.hpp"
+#include "src/Assistant/Assistant.hpp"
+#include "src/Utils/Utils.hpp"
+
 #include <iostream>
-#include <memory>
 #include <string>
 #include <ctime>
 #include <chrono>
@@ -9,15 +14,6 @@
 
 #include <windows.h>
 #include <io.h>
-
-
-#include "src/Admin/Admin.hpp"
-#include "src/User/User.hpp"
-#include "src/Patient/Patient.hpp"
-#include "src/Doctor/Doctor.hpp"
-#include "src/Assistant/Assistant.hpp"
-#include "src/IDs/IDs.hpp"
-#include "src/Utils/Utils.hpp"
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);
@@ -46,14 +42,8 @@ int main() {
         out.close();
     }
 
-    //Patient::createNewPatient("FirstName", "LastName");
-    //Patient::get_patient_info("P00000001");
-
-    //Assistant::createNewAssistant("FirstName", "Lastname");
-    //Assistant::get_assistant_info("A0001");
-
-    //Doctor::createNewDoctor("FirstName", "LastName");
-    //Doctor::get_doctor_info("D0001");
+    //Patient::createNewPatient("test21", "test24");
+    Doctor::createNewDoctor("test21", "test24");
 
     Admin::checkInitialSetup();
 
