@@ -105,8 +105,8 @@ int main() {
                     break;
                 }
                 case 2: {
-                    //Doctor d(ID, firstName, lastName);
-                   // d.check_id_name(ID, firstName, lastName);
+                    Doctor d(ID, firstName, lastName);
+                    d.check_id_name(ID, firstName, lastName);
                     break;
                 }
                 case 3: {
