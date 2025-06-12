@@ -54,6 +54,43 @@ void Assistant::displayMenu() {
     } while (choice != 0);
 }
 
+void Assistant::check_id_name(std::string id, std::string firstName, std::string lastName) {
+
+    std::string path = "data/Assistants/" + id + "/info.txt";
+    std::ifstream file_in(path);
+    std::vector<std::string> content;
+
+    if (file_in) {
+        std::string line;
+        std::string fileFirstName, fileLastName;
+        while (std::getline(file_in, line)) {
+            if (line.starts_with("First Name:")) {
+                fileFirstName = line.substr(11);  // all after "First Name:"
+            } else if (line.starts_with("Last Name:")) {
+                fileLastName = line.substr(10);    // all after "Last Name:"
+            }
+        }
+        file_in.close();
+
+
+
+        if (cleaned(fileFirstName) == cleaned(firstName) &&
+            cleaned(fileLastName) == cleaned(lastName)) {
+            std::cout << std::endl;
+            std::cout << "Login successful.\n";
+            displayMenu();
+            }
+        else {
+            std::cout << std::endl;
+            std::cout << "Name does not match the ID.\n";
+        }
+    } else {
+        std::cout << std::endl;
+        std::cerr << "Failed to read file!" << std::endl;
+    }
+    displayMenu();
+}
+
 void Assistant::createNewAssistant(const std::string& firstName, const std::string& lastName) {
 
 
@@ -123,12 +160,12 @@ void Assistant::createNewAssistant(const std::string& firstName, const std::stri
 }
 
 void Assistant::get_assistant_info(const std::string &assistant_full_id) {
-    std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";  // To call Assistant::get_assistant_info("A0001")
+    const std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";  // To call Assistant::get_assistant_info("A0001")
     std::ifstream file_in(path);
-    std::string line;
-    std::vector<std::string> content;
 
     if (file_in) {
+        std::string line;
+        std::vector<std::string> content;
         std::cout << "File Content:" << std::endl; // Ausgabe: Dateiinhalt:
         while (std::getline(file_in, line)) {
             std::cout << line << std::endl;        // Ausgabe: Zeile n
@@ -136,7 +173,7 @@ void Assistant::get_assistant_info(const std::string &assistant_full_id) {
         }
         file_in.close();
     } else {
-        std::cerr << "Faild to read file!" << std::endl;
+        std::cerr << "Failed to read file!" << std::endl;
     }
 }
 

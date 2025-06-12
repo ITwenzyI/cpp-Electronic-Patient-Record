@@ -14,6 +14,7 @@ class Assistant : public User {
 
 
     void displayMenu() override;
+    void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
     // Assistant Folder Actions
     static void createNewAssistant(const std::string& firstName, const std::string& lastName);

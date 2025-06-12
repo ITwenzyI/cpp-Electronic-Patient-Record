@@ -110,8 +110,8 @@ int main() {
                     break;
                 }
                 case 3: {
-                    //Assistant a(ID, firstName, lastName);
-                    //a.check_id_name(ID, firstName, lastName);
+                    Assistant a(ID, firstName, lastName);
+                    a.check_id_name(ID, firstName, lastName);
                     break;
                 }
                 case 0:
