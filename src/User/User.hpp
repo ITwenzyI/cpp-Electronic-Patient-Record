@@ -58,6 +58,7 @@ public:
 
     // Abstract method
     virtual void displayMenu() = 0;
+    virtual void check_id_name(std::string id, std::string firstName, std::string lastName) = 0;
 
 };
 

@@ -38,6 +38,9 @@ User::User(std::string user_id,
 User::~User() = default;
 
 
+
+
+
 // Getters
 
 std::string User::getFirstName() const {

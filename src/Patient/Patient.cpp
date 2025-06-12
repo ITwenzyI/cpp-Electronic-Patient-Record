@@ -50,6 +50,43 @@ void Patient::displayMenu() {
     } while (choice != 0);
 }
 
+void Patient::check_id_name(std::string id, std::string firstName, std::string lastName) {
+
+    std::string path = "data/Patients/" + id + "/info.txt";
+    std::ifstream file_in(path);
+    std::string line;
+    std::vector<std::string> content;
+    std::string fileFirstName, fileLastName;
+
+    if (file_in) {
+        while (std::getline(file_in, line)) {
+            if (line.starts_with("First Name:")) {
+                fileFirstName = line.substr(11);  // all after "First Name:"
+            } else if (line.starts_with("Last Name:")) {
+                fileLastName = line.substr(10);    // all after "Last Name:"
+            }
+        }
+        file_in.close();
+
+
+
+        if (cleaned(fileFirstName) == cleaned(firstName) &&
+            cleaned(fileLastName) == cleaned(lastName)) {
+            std::cout << std::endl;
+            std::cout << "Login successful.\n";
+            displayMenu();
+            }
+        else {
+            std::cout << std::endl;
+            std::cout << "Name does not match the ID.\n";
+        }
+    } else {
+        std::cout << std::endl;
+        std::cerr << "Faild to read file!" << std::endl;
+    }
+    displayMenu();
+}
+
 void Patient::createNewPatient(const std::string& firstName, const std::string& lastName) {
 
 

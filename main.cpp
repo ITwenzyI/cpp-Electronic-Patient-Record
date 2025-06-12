@@ -99,16 +99,21 @@ int main() {
             std::cin >> lastName;
 
             switch (choice) {
-                case 1:
+                case 1: {
                     Patient p(ID, firstName, lastName);
-                    p.displayMenu();
+                    p.check_id_name(ID, firstName, lastName);
                     break;
-                case 2:
-                    // Doctor login/start
+                }
+                case 2: {
+                    //Doctor d(ID, firstName, lastName);
+                   // d.check_id_name(ID, firstName, lastName);
                     break;
-                case 3:
-                    // Assistant login/start
+                }
+                case 3: {
+                    //Assistant a(ID, firstName, lastName);
+                    //a.check_id_name(ID, firstName, lastName);
                     break;
+                }
                 case 0:
                     std::cout << "Exiting...\n";
                     return 0;
