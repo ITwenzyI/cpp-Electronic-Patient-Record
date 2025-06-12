@@ -16,7 +16,11 @@ public:
     Admin();
     ~Admin();
 
-    static bool checkInitialSetup();
+    static void checkInitialSetup();
+
+    static void create_adminaccount();
+
+    static void admin_setup();
 
     static void createNewPatient(const std::string& firstName, const std::string& lastName);
 

@@ -55,7 +55,10 @@ int main() {
     //Doctor::createNewDoctor("FirstName", "LastName");
     //Doctor::get_doctor_info("D0001");
 
-    while (Admin::checkInitialSetup()) {
+    Admin::checkInitialSetup();
+
+
+    while (true) {
 
 
         std::cout << "Welcome to the Electronic Patient Record System.\n";
@@ -65,53 +68,54 @@ int main() {
 
 
 
+        std::string input;
         std::cout << "=== ELECTRONIC PATIENT RECORD SYSTEM ===\n";
         std::cout << "1. Patient\n";
         std::cout << "2. Doctor\n";
         std::cout << "3. Assistant\n";
         std::cout << "0. Exit\n";
-        std::cout << "Please enter your choice: ";
+        std::cout << "Please enter your choice (or #admin): ";
+        std::cin >> input;
 
-        int choice;
-        std::cin >> choice;
+        std::string ID;
+        std::cout << "Please enter your ID: ";
+        std::cin >> ID;
 
-        std::string firstName, lastName, id;
-
-        if (choice == 0) {
-            break;
-        }
-
-        std::cout << "Enter First Name: " << std::endl;
-        std::cin >> firstName;
-        std::cout << "Enter Last Name: " << std::endl;
-        std::cin >> lastName;
-        std::cout << "Enter ID: " << std::endl;
-        std::cin >> id;
-
-        switch (choice) {
-                case 1: {
-                const std::unique_ptr<User> patient = std::make_unique<Patient>(id, firstName, lastName);
-                patient->displayMenu();
-                break;
+        if (input == "#admin") {
+            Admin::admin_setup();
+        } else {
+            int choice;
+            try {
+                choice = std::stoi(input);  // string to int
+            } catch (...) {
+                std::cout << "Invalid input.\n";
+                return 0;
             }
-                case 2: {
-                const std::unique_ptr<User> doctor = std::make_unique<Doctor>(id, firstName, lastName);
-                doctor->displayMenu();
-                break;
-            }
-                case 3: {
-                const std::unique_ptr<User> assistant = std::make_unique<Assistant>(id, firstName, lastName);
-                assistant->displayMenu();
-                break;
-            }
-                default: {
-                std::cout << "Invalid Choice\n";
-                break;
+
+            std::string firstName, lastName;
+            std::cout << "Please enter your first name: ";
+            std::cin >> firstName;
+            std::cout << "Please enter your last name: ";
+            std::cin >> lastName;
+
+            switch (choice) {
+                case 1:
+                    Patient p(ID, firstName, lastName);
+                    p.displayMenu();
+                    break;
+                case 2:
+                    // Doctor login/start
+                    break;
+                case 3:
+                    // Assistant login/start
+                    break;
+                case 0:
+                    std::cout << "Exiting...\n";
+                    return 0;
+                default:
+                    std::cout << "Invalid selection.\n";
+                    break;
             }
         }
     }
-
-
-    std::cout << "Program Exit.\n" << std::endl;
-    return 0;
 }
