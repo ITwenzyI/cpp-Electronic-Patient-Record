@@ -43,7 +43,7 @@ int main() {
     }
 
     //Patient::createNewPatient("test21", "test24");
-    Doctor::createNewDoctor("test21", "test24");
+    //Doctor::createNewDoctor("test21", "test24");
 
     Admin::checkInitialSetup();
 

@@ -4,6 +4,13 @@
 #define USER_HPP
 
 #include <string>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <utility>
 
 class User {
 protected:
