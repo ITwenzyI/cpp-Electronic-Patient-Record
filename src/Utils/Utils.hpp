@@ -14,6 +14,7 @@
 std::string getDate();
 std::string getTime();
 int random_number(int min, int max);
+std::string cleaned(const std::string& str);
 
 
 

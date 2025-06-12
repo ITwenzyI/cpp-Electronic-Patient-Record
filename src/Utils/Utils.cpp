@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <algorithm>
 
 std::string getDate() {
     std::time_t t = std::time(nullptr);
@@ -37,4 +38,13 @@ int random_number(int min, int max) {
     int random = dist(gen);
 
     return random;
+}
+
+std::string cleaned(const std::string& str) {
+    std::string result = str;
+    result.erase(std::remove(result.begin(), result.end(), '\r'), result.end());
+    result.erase(std::remove_if(result.begin(), result.end(), [](char c) {
+        return std::isspace(static_cast<unsigned char>(c));
+    }), result.end());
+    return result;
 }
