@@ -9,7 +9,15 @@
 #ifndef ADMIN_HPP
 #define ADMIN_HPP
 
+#include "Admin.hpp"
+#include "../Utils/Utils.hpp"
+
+
 #include <string>
+#include <filesystem>
+#include <iostream>
+#include <fstream>
+
 
 class Admin {
 public:

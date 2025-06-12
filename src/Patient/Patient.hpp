@@ -3,8 +3,15 @@
 #ifndef PATIENT_HPP
 #define PATIENT_HPP
 
-#include <string>
 #include "../User/User.hpp"
+#include "../Utils/Utils.hpp"
+#include "../IDs/IDs.hpp"
+
+#include <string>
+#include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <chrono>
 
 class Patient : public User {
 public:

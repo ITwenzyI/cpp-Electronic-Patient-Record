@@ -1,10 +1,5 @@
 
 #include "Doctor.hpp"
-#include "../IDs/IDs.hpp"
-#include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <chrono>
 
 Doctor::Doctor(const std::string& doctor_id,
                  const std::string& firstName,
@@ -169,10 +164,10 @@ void Doctor::get_doctor_info(const std::string &doctor_full_id) {
     if (file_in) {
         std::string line;
         std::vector<std::string> content;
-        std::cout << "File Content:" << std::endl; // Ausgabe: Dateiinhalt:
+        std::cout << "File Content:" << std::endl;
         while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;        // Ausgabe: Zeile n
-            content.push_back(line);                // Zeile speichern
+            std::cout << line << std::endl;        // Output: line
+            content.push_back(line);               // safe line in vector
         }
         file_in.close();
     } else {

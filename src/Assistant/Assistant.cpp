@@ -1,18 +1,4 @@
-
-
 #include "Assistant.hpp"
-#include "../Patient/Patient.hpp"
-
-#include <chrono>
-
-#include "../Utils/Utils.hpp"
-#include "../IDs/IDs.hpp"
-
-
-#include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
 
 Assistant::Assistant(const std::string& assistant_id,
                  const std::string& firstName,
@@ -166,10 +152,10 @@ void Assistant::get_assistant_info(const std::string &assistant_full_id) {
     if (file_in) {
         std::string line;
         std::vector<std::string> content;
-        std::cout << "File Content:" << std::endl; // Ausgabe: Dateiinhalt:
+        std::cout << "File Content:" << std::endl;
         while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;        // Ausgabe: Zeile n
-            content.push_back(line);                // Zeile speichern
+            std::cout << line << std::endl;       // Output: line
+            content.push_back(line);                // safe line in vector
         }
         file_in.close();
     } else {

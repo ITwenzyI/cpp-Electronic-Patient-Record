@@ -1,7 +1,18 @@
 
 #ifndef ASSISTANT_HPP
 #define ASSISTANT_HPP
+
 #include "../User/User.hpp"
+#include "../Patient/Patient.hpp"
+#include "../Utils/Utils.hpp"
+#include "../IDs/IDs.hpp"
+
+
+#include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <chrono>
 
 class Assistant : public User {
     public:
