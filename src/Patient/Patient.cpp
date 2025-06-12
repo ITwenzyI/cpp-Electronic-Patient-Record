@@ -22,7 +22,7 @@ void Patient::displayMenu() {
 
     do {
         std::cout << "\n=== Patient Menu ===" << std::endl;
-        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << getID() <<std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. View Medical Record" << std::endl;
         std::cout << "2. View Documents" << std::endl;
@@ -54,11 +54,11 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
 
     std::string path = "data/Patients/" + id + "/info.txt";
     std::ifstream file_in(path);
-    std::string line;
     std::vector<std::string> content;
-    std::string fileFirstName, fileLastName;
 
     if (file_in) {
+        std::string line;
+        std::string fileFirstName, fileLastName;
         while (std::getline(file_in, line)) {
             if (line.starts_with("First Name:")) {
                 fileFirstName = line.substr(11);  // all after "First Name:"
@@ -82,7 +82,7 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
         }
     } else {
         std::cout << std::endl;
-        std::cerr << "Faild to read file!" << std::endl;
+        std::cerr << "Failed to read file!" << std::endl;
     }
     displayMenu();
 }
@@ -141,7 +141,7 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
         out.close();
     }
 
-    // Creating fike with a list of all appointments from the Patient
+    // Creating file with a list of all appointments from the Patient
     if (!std::filesystem::exists(folderName + "/appointments.txt")) {
         std::ofstream out( folderName + "/appointments.txt");
         out << "--- Example ---" << patient_full_id << "\n"; // PatientID
@@ -174,17 +174,17 @@ void Patient::createNewPatient(const std::string& firstName, const std::string& 
 void Patient::get_patient_info(const std::string &patient_full_id) {
     std::string path = "data/Patients/" + patient_full_id + "/info.txt"; // To call: Patient::get_patient_info("P00000006");
     std::ifstream file_in(path);
-    std::string line;
-    std::vector<std::string> content;
 
     if (file_in) {
-        std::cout << "File Content:" << std::endl; // Ausgabe: Dateiinhalt:
+        std::string line;
+        std::vector<std::string> content;
+        std::cout << "File Content:" << std::endl;
         while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;        // Ausgabe: Zeile n
-            content.push_back(line);                // Zeile speichern
+            std::cout << line << std::endl;        // Output: line
+            content.push_back(line);                // safe line in vector
         }
         file_in.close();
     } else {
-        std::cerr << "Faild to read file!" << std::endl;
+        std::cerr << "Failed to read file!" << std::endl;
     }
 }
