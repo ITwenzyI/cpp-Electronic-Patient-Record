@@ -8,6 +8,8 @@
 
 #include "Admin.hpp"
 
+#include <thread>
+
 Admin::Admin() = default;
 
 Admin::~Admin() = default;
@@ -34,7 +36,6 @@ void Admin::admin_setup() {
     std::string firstName, lastName;
     std::string id;
 
-    do {
         std::cout << "=== Admin Logging | EPR SYSTEM ===\n";
         std::cout << "1. Create Patient\n";
         std::cout << "2. Info Patient\n";
@@ -45,16 +46,17 @@ void Admin::admin_setup() {
         std::cout << "0. Exit\n";
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
-    } while (choice != 0);
 
     switch (choice) {
         case 1:
             admin_getNames( firstName, lastName);
             Patient::createNewPatient(firstName, lastName);
+            std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
 
         case 2:
-            std::cout << "Please enter the ID: ";
+            std::cout << "Please enter the full Patient-ID: ";
             std::cin >> id;
             Patient::get_patient_info(id);
             break;
@@ -62,10 +64,12 @@ void Admin::admin_setup() {
         case 3:
             admin_getNames(firstName, lastName);
             Doctor::createNewDoctor(firstName, lastName);
+            std::cout << "Doctor: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
 
         case 4:
-            std::cout << "Please enter the ID: ";
+            std::cout << "Please enter the full Doctor-ID: ";
             std::cin >> id;
             Doctor::get_doctor_info(id);
             break;
@@ -73,13 +77,19 @@ void Admin::admin_setup() {
         case 5:
             admin_getNames(firstName, lastName);
             Assistant::createNewAssistant(firstName, lastName);
+            std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
 
         case 6:
-            std::cout << "Please enter the ID: ";
+            std::cout << "Please enter the full Assistant-ID: ";
             std::cin >> id;
             Assistant::get_assistant_info(id);
             break;
+
+        case 0:
+            std::cout << "Exiting...\n";
+            return;
 
         default: {
                 std::cout << "Invalid choice.\n";

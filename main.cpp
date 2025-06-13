@@ -67,10 +67,6 @@ int main() {
         std::cout << "Please enter your choice (or #admin): ";
         std::cin >> input;
 
-        std::string ID;
-        std::cout << "Please enter your ID: ";
-        std::cin >> ID;
-
         if (input == "#admin") {
             Admin::admin_setup();
         } else {
@@ -82,6 +78,9 @@ int main() {
                 return 0;
             }
 
+            std::string ID;
+            std::cout << "Please enter your ID: ";
+            std::cin >> ID;
             std::string firstName, lastName;
             std::cout << "Please enter your first name: ";
             std::cin >> firstName;
