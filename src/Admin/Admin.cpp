@@ -76,7 +76,9 @@ void Admin::admin_setup() {
 
         case 5:
             admin_getNames(firstName, lastName);
-            Assistant::createNewAssistant(firstName, lastName);
+            Assistant a("", firstName, lastName);
+            Assistant::create_assistant(a);
+            //Assistant::createNewAssistant(firstName, lastName);
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
