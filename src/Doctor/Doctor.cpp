@@ -98,21 +98,22 @@ void Doctor::createNewDoctor() const{
         std::ofstream out( folderName + "/info.txt");
         out << "PatientID: " << doctor_full_id << "\n\n"; // DoctorID D0001
         out << "--- Personal Infos ---"  << "\n";
+        out << "--- Personal Infos ---"  << "\n";
         out << "Full Name: " << firstName << " " << lastName << "\n";
         out << "First Name: " << firstName << "\n"; // First Name
         out << "Last Name: " << lastName << "\n"; // Last Name
-        out << "Date of Birth: " << lastName << "\n";
-        out << "Gender: " << lastName << "\n";
-        out << "Nationality: " << lastName << "\n";
+        out << "Date of Birth: " << dateOfBirth << "\n";
+        out << "Gender: " << gender << "\n";
+        out << "Nationality: " << nationality << "\n";
 
         out << "\n" << "--- Contact Infos ---"  << "\n";
-        out << "Address: " << lastName << "\n";
-        out << "Phone Number: " << lastName << "\n";
-        out << "Email Address: " << lastName << "\n";
+        out << "Address: " << address << "\n";
+        out << "Phone Number: " << phoneNumber << "\n";
+        out << "Email Address: " << email << "\n";
 
         out << "\n" << "--- Insurance Infos ---"  << "\n";
-        out << "InsuranceID: " << lastName << "\n";
-        out << "InsuranceType: " << lastName << "\n";
+        out << "InsuranceID: " << insuranceID << "\n";
+        out << "InsuranceType: " << insuranceType << "\n";
 
         out << "\n" << "--- Extra Infos ---"  << "\n";
 

@@ -67,6 +67,7 @@ void Assistant::createNewAssistant() const {
         std::ofstream out( folderName + "/info.txt");
         out << "PatientID: " << assistant_full_id << "\n\n"; // AssistantID A0001
         out << "--- Personal Infos ---"  << "\n";
+        out << "--- Personal Infos ---"  << "\n";
         out << "Full Name: " << firstName << " " << lastName << "\n";
         out << "First Name: " << firstName << "\n"; // First Name
         out << "Last Name: " << lastName << "\n"; // Last Name
@@ -75,13 +76,13 @@ void Assistant::createNewAssistant() const {
         out << "Nationality: " << nationality << "\n";
 
         out << "\n" << "--- Contact Infos ---"  << "\n";
-        out << "Address: " << "Unknown" << "\n";
-        out << "Phone Number: " << "Unknown" << "\n";
-        out << "Email Address: " << "Unknown" << "\n";
+        out << "Address: " << address << "\n";
+        out << "Phone Number: " << phoneNumber << "\n";
+        out << "Email Address: " << email << "\n";
 
         out << "\n" << "--- Insurance Infos ---"  << "\n";
-        out << "InsuranceID: " << "Unknown" << "\n";
-        out << "InsuranceType: " << "Unknown" << "\n";
+        out << "InsuranceID: " << insuranceID << "\n";
+        out << "InsuranceType: " << insuranceType << "\n";
 
         out << "\n" << "--- Extra Infos ---"  << "\n";
 
