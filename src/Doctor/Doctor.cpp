@@ -175,4 +175,24 @@ void Doctor::get_doctor_info(const std::string &doctor_full_id) {
     }
 }
 
+void Doctor::fill_doctor_info() {
+    std::cout << "\nPlease provide all Infos of the Doctor!\n" << std::endl;
+    std::cout << "Date of Birth: ";
+    std::getline(std::cin >> std::ws, dateOfBirth);
+    std::cout << "Gender: ";
+    std::getline(std::cin, gender);
+    std::cout << "Nationality: ";
+    std::getline(std::cin, nationality);
+    std::cout << "Address: ";
+    std::getline(std::cin, address);
+    std::cout << "Phone Number: ";
+    std::getline(std::cin, phoneNumber);
+    std::cout << "Email Address: ";
+    std::getline(std::cin, email);
+    std::cout << "Insurance ID: ";
+    std::getline(std::cin, insuranceID);
+    std::cout << "InsuranceType: ";
+    std::getline(std::cin, insuranceType);
+}
+
 

@@ -28,6 +28,7 @@ class Doctor : public User {
     // Doctor Folder Actions
     void createNewDoctor() const;
     static void get_doctor_info(const std::string &doctor_full_id);
+    void fill_doctor_info();
 
 };
 
