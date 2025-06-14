@@ -1,5 +1,6 @@
 #include "Utils.hpp"
 
+// Returns Date in Format: YYYY-MM-DD
 std::string getDate() {
     const std::time_t t = std::time(nullptr);
     const std::tm tm = *std::localtime(&t);
@@ -9,6 +10,8 @@ std::string getDate() {
     return dateStr;
 }
 
+
+// Returns Time in Format: HH:MM:SS
 std::string getTime() {
     const std::time_t t = std::time(nullptr);
     const std::tm tm = *std::localtime(&t);
@@ -18,6 +21,8 @@ std::string getTime() {
     return timeStr;
 }
 
+
+// Returns Random Number between min and max
 int random_number(const int min, const int max) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -27,6 +32,8 @@ int random_number(const int min, const int max) {
     return random;
 }
 
+
+// Cleans a string from \r and white spaces ike \n \t ...
 std::string cleaned(const std::string& str) {
     std::string result = str;
     std::erase(result, '\r');
@@ -36,6 +43,9 @@ std::string cleaned(const std::string& str) {
     return result;
 }
 
+
+
+// Gets the correct Path from the ID so for D0001 it's Doctors...
 std::string get_file_path_from_id(const std::string& id) {
     if (id.empty()) return "";
 

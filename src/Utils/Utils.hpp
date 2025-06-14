@@ -13,7 +13,7 @@
 #include <format>
 
 
-// Returns Date in Format: DD.MM.YYYY
+// Returns Date in Format: YYYY-MM-DD
 std::string getDate();
 
 
@@ -29,7 +29,7 @@ int random_number(int min, int max);
 std::string cleaned(const std::string& str);
 
 
-// Gets the correct Path from the ID so for D0001 it's Doctors....
+// Gets the correct Path from the ID so for D0001 it's Doctors...
 std::string get_file_path_from_id(const std::string& id);
 
 
