@@ -168,7 +168,7 @@ void Assistant::get_assistant_info(const std::string &assistant_full_id) {
 }
 
 // Assistant::create_assistant(a);
-void Assistant::create_assistant(Assistant &_assistant) {
+void Assistant::create_assistant() {
 
 
     int assistant_id = Assistant_ID::get_assistant_id(); // get new Assistant ID
@@ -190,12 +190,12 @@ void Assistant::create_assistant(Assistant &_assistant) {
         std::ofstream out( folderName + "/info.txt");
         out << "PatientID: " << assistant_full_id << "\n\n"; // AssistantID A0001
         out << "--- Personal Infos ---"  << "\n";
-        out << "Full Name: " << _assistant.firstName << " " << _assistant.lastName << "\n";
-        out << "First Name: " << _assistant.firstName << "\n"; // First Name
-        out << "Last Name: " << _assistant.lastName << "\n"; // Last Name
-        out << "Date of Birth: " << _assistant.dateOfBirth << "\n";
-        out << "Gender: " << _assistant.gender << "\n";
-        out << "Nationality: " << _assistant.nationality << "\n";
+        out << "Full Name: " << firstName << " " << lastName << "\n";
+        out << "First Name: " << firstName << "\n"; // First Name
+        out << "Last Name: " << lastName << "\n"; // Last Name
+        out << "Date of Birth: " << dateOfBirth << "\n";
+        out << "Gender: " << gender << "\n";
+        out << "Nationality: " << nationality << "\n";
 
         out << "\n" << "--- Contact Infos ---"  << "\n";
         out << "Address: " << "Unknown" << "\n";

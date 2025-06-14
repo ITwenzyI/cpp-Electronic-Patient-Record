@@ -32,7 +32,7 @@ class Assistant : public User {
     static void createNewAssistant(const std::string& firstName, const std::string& lastName);
     static void get_assistant_info(const std::string &assistant_full_id);
 
-    static void create_assistant(Assistant &_assistant);
+    void create_assistant();
 
 };
 

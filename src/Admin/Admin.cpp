@@ -48,46 +48,52 @@ void Admin::admin_setup() {
         std::cin >> choice;
 
     switch (choice) {
-        case 1:
+        case 1: {
             admin_getNames( firstName, lastName);
             Patient::createNewPatient(firstName, lastName);
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
+        }
 
-        case 2:
+        case 2: {
             std::cout << "Please enter the full Patient-ID: ";
             std::cin >> id;
             Patient::get_patient_info(id);
             break;
+        }
 
-        case 3:
+        case 3: {
             admin_getNames(firstName, lastName);
             Doctor::createNewDoctor(firstName, lastName);
-            std::cout << "Doctor: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
+            std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
+        }
 
-        case 4:
+        case 4: {
             std::cout << "Please enter the full Doctor-ID: ";
             std::cin >> id;
             Doctor::get_doctor_info(id);
             break;
+        }
 
-        case 5:
+        case 5: {
             admin_getNames(firstName, lastName);
             Assistant a("", firstName, lastName);
-            Assistant::create_assistant(a);
+            a.create_assistant();
             //Assistant::createNewAssistant(firstName, lastName);
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
+        }
 
-        case 6:
+        case 6: {
             std::cout << "Please enter the full Assistant-ID: ";
             std::cin >> id;
             Assistant::get_assistant_info(id);
             break;
+        }
 
         case 0:
             std::cout << "Exiting...\n";
