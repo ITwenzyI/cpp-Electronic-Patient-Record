@@ -16,6 +16,7 @@ Admin::~Admin() = default;
 
 
 
+// Checks if any Folder of Patients, Assistants or Docots is already created
 void Admin::checkInitialSetup() {
     if (!std::filesystem::exists("data/Patients") && !std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {
 
@@ -32,6 +33,8 @@ void Admin::checkInitialSetup() {
     }
 }
 
+
+// Admin Menu with all the Options
 void Admin::admin_setup() {
     int choice;
     std::string firstName, lastName;
@@ -68,6 +71,7 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             std::cout << "Please enter the full Patient-ID: ";
             std::cin >> id;
+            std::cout << std::endl;
             Patient::get_patient_info(id);
             break;
         }
@@ -135,6 +139,8 @@ void Admin::admin_setup() {
     }
 }
 
+
+// Just a simple function to get the Names
 void Admin::admin_getNames(std::string &firstName, std::string &lastName) {
     std::cout << "Enter first name: ";
     std::cin >> firstName;

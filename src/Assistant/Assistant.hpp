@@ -6,6 +6,7 @@
 #include "../Patient/Patient.hpp"
 #include "../Utils/Utils.hpp"
 #include "../IDs/IDs.hpp"
+#include "../Admin/Admin.hpp"
 
 
 #include <iostream>

@@ -6,18 +6,24 @@ Assistant::Assistant(const std::string& assistant_id,
     : User(assistant_id, "Assistant", firstName, lastName,
            "", "", "", "", "", "", "", "") {}
 
+
+// The Assistant Menu
 void Assistant::displayMenu() {
     int choice;
+    std::string id;
 
     do {
         std::cout << "\n=== Assistant Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
-        std::cout << "1. View Medical Records" << std::endl;
-        std::cout << "2. View Documents" << std::endl;
-        std::cout << "3. View open Doctors" << std::endl;
-        std::cout << "4. Create Patient" << std::endl;
-        std::cout << "5. Book Appointment for Patient" << std::endl;
-        std::cout << "7. Update Field in File\n";
+        std::cout << "1. Create New Patient" << std::endl;
+        std::cout << "2. Update Field in File\n";
+        std::cout << "3. Book Appointment for Patient" << std::endl;
+        std::cout << "4. Add Medications for Patient" << std::endl;
+        std::cout << "5. Add Records for Patient" << std::endl;
+        std::cout << "6. Patient Info" << std::endl;
+        std::cout << "7. Patient Appointments" << std::endl;
+        std::cout << "8. Patient Medications" << std::endl;
+        std::cout << "9. Patient Records" << std::endl;
         std::cout << "0. Logout" << std::endl;
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -25,28 +31,94 @@ void Assistant::displayMenu() {
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
-
-                break;
+                return;
             case 1: {
-                std::string id;
-                std::cout << "Enter the Full-ID to add Extra Infos: ";
-                std::cin >> id;
-                add_extra_info(id);
+                std::cout << std::endl;
+                std::cout << "Create New Patient\n";
+                Admin::admin_getNames( firstName, lastName);
+                Patient p("", firstName, lastName);
+                p.fill_patient_info();
+                p.createNewPatient();
+                std::cout << std::endl;
+                std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
-            case 2:
-
+            case 2: {
+                std::string field, newInput;
+                std::cout << std::endl;
+                std::cout << "Update Field in File\n";
+                std::cout << "Enter full ID: ";
+                std::cin >> id;
+                std::cout << std::endl;
+                std::cout << "Enter Field: ";
+                std::cin >> field;
+                std::cout << std::endl;
+                std::cout << "Enter New Input: ";
+                std::cin >> newInput;
+                std::cout << std::endl;
+                update_field_in_file(id, field, newInput);
                 break;
-            case 3:
+            }
 
+            case 3: {
+                std::cout << std::endl;
+                std::cout << "Book Appointment\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
+                std::cout << std::endl;
+                Patient::add_patient_appointment(id);
                 break;
+            }
+
+            case 4: {
+                std::cout << std::endl;
+                std::cout << "Add Medication\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::add_patient_medication(id);
+                break;
+            }
 
             case 5: {
-                std::string patientId;
-                std::cout << "Enter the full ID of the Patient, to book the Appointment: ";
-                std::cin >> patientId;
-                Patient::add_patient_appointment(patientId);
+                std::cout << std::endl;
+                std::cout << "Add Records\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::add_patient_record(id);
+                break;
             }
+
+            case 6: {
+                std::cout << std::endl;
+                std::cout << "Patient Info\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_info(id);
+                break;
+            }
+
+            case 7: {
+                std::cout << std::endl;
+                std::cout << "Patient Appointments\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_appointments(id);
+                break;
+            }
+
+            case 8: {
+                std::cout << std::endl;
+                std::cout << "Patient Medications\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_medications(id);
+                break;
+            }
+
+            case 9: {
+                std::cout << std::endl;
+                std::cout << "Patient Records\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_records(id);
+                break;
+            }
+
             default:
                 std::cout << "Invalid Choice." << std::endl;
                 break;

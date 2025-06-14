@@ -26,16 +26,22 @@ int main() {
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
 
     std::filesystem::create_directories("data");
+
+    // Stores the IDs for Patients
     if (!std::filesystem::exists("data/patient_id.txt")) {
         std::ofstream out("data/patient_id.txt");
         out << "1"; // Initial Value
         out.close();
     }
+
+    // Stores the IDs for Assistants
     if (!std::filesystem::exists("data/assistant_id.txt")) {
         std::ofstream out("data/assistant_id.txt");
         out << "1"; // Initial Value
         out.close();
     }
+
+    // Stores the IDs for Doctors
     if (!std::filesystem::exists("data/doctor_id.txt")) {
         std::ofstream out("data/doctor_id.txt");
         out << "1"; // Initial Value
