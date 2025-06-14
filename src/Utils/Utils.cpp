@@ -4,7 +4,7 @@ std::string getDate() {
     const std::time_t t = std::time(nullptr);
     const std::tm tm = *std::localtime(&t);
     std::ostringstream oss;
-    oss << std::put_time(&tm, "%d.%m.%Y"); // Example 13.06.2006
+    oss << std::put_time(&tm,  "%Y-%m-%d"); // Example 2025-06-01
     std::string dateStr = oss.str();
     return dateStr;
 }
