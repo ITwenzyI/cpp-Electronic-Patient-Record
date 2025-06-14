@@ -49,6 +49,8 @@ std::string get_file_path_from_id(const std::string& id) {
         default: return "";  // Unknown Type
     }
 
-    return std::format("data/{}/{}/info.txt", folder, id);
+    std::string path = "data/" + folder + "/" + id + "/info.txt";
+
+    return path;
 }
 
