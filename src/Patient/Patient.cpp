@@ -77,7 +77,7 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
     displayMenu();
 }
 
-void Patient::createNewPatient(const std::string& firstName, const std::string& lastName) {
+void Patient::createNewPatient() const{
 
 
     int patient_id = Patient_ID::get_patient_id(); // get new Patient ID
