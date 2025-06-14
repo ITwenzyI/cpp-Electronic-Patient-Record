@@ -98,6 +98,7 @@ void Admin::admin_setup() {
             Assistant a("", firstName, lastName);
             a.fill_assistant_info();
             a.createNewAssistant();
+            std::cout << std::endl;
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;

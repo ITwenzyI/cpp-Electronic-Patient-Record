@@ -258,5 +258,38 @@ void Patient::add_patient_medication(const std::string &patient_full_id) {
     std::cout << "Medication added:\n" << medicationLine << '\n';
 }
 
+void Patient::add_patient_record(const std::string &patient_full_id) {
+    std::string date, doctor, type, content;
+
+    std::cout << "Enter date of record (YYYY-MM-DD): ";
+    std::getline(std::cin >> std::ws, date);
+
+    std::cout << "Enter doctor name: ";
+    std::getline(std::cin, doctor);
+
+    std::cout << "Enter type of record: ";
+    std::getline(std::cin, type);
+
+    std::cout << "Enter record details/notes: ";
+    std::getline(std::cin, content);
+
+    // Final format: [2025-06-15] Dr. Schmitt: Control: blood pressure decreased, no medication necessary.
+    std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
+
+    std::string filePath = "data/Patients/" + patient_full_id + "/records.txt";
+    std::ofstream out(filePath, std::ios::app);  // append mode
+
+    if (!out.is_open()) {
+        std::cerr << "Could not open records file for writing.\n";
+        return;
+    }
+
+    out << recordLine << '\n';
+    out.close();
+
+    std::cout << "Record added:\n" << recordLine << '\n';
+}
+
+
 
 
