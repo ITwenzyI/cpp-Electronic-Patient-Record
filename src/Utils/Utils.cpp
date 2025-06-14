@@ -35,3 +35,20 @@ std::string cleaned(const std::string& str) {
     });
     return result;
 }
+
+std::string get_file_path_from_id(const std::string& id) {
+    if (id.empty()) return "";
+
+    const char rolePrefix = id[0];  // Example: 'P', 'D', 'A'
+    std::string folder;
+
+    switch (rolePrefix) {
+        case 'P': folder = "Patients"; break;
+        case 'D': folder = "Doctors"; break;
+        case 'A': folder = "Assistants"; break;
+        default: return "";  // Unknown Type
+    }
+
+    return std::format("data/{}/{}/info.txt", folder, id);
+}
+

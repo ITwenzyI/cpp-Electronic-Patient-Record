@@ -32,12 +32,6 @@ public:
     static void admin_setup();
 
     static void admin_getNames(std::string &firstName, std::string &lastName);
-
-    //static void createNewPatient(const std::string& firstName, const std::string& lastName);
-
-    //static void createNewAssistant(const std::string& firstName, const std::string& lastName);
-
-    //static void createNewDoctor(const std::string& firstName, const std::string& lastName);
 };
 
 #endif //ADMIN_HPP
