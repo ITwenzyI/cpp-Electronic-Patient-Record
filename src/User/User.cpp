@@ -88,7 +88,7 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
     // Read each line and replace the target field with the new Input
     while (std::getline(inFile, line)) {
         // Check if the line starts with the field name (Example: "Address: ")
-        if (line.substr(0, field.length() + 2) == field + ": ") {
+        if (line.substr(0, field.length() + 2) == field + ": ") { // +2, because of the ": "
             line = field + ": " + newInput; // Update the line with the new Input
             updated = true;
         }
