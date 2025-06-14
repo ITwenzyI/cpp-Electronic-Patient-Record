@@ -76,7 +76,7 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
     displayMenu();
 }
 
-void Doctor::createNewDoctor(const std::string& firstName, const std::string& lastName) {
+void Doctor::createNewDoctor() const{
 
 
     int doctor_id = Doctor_ID::get_doctor_id(); // get new Doctor ID
@@ -157,7 +157,7 @@ void Doctor::createNewDoctor(const std::string& firstName, const std::string& la
 }
 
 void Doctor::get_doctor_info(const std::string &doctor_full_id) {
-    std::string path = "data/Doctors/" + doctor_full_id + "/info.txt";  // To call Doctor::get_doctor_info("D0001")
+    const std::string path = "data/Doctors/" + doctor_full_id + "/info.txt";  // To call Doctor::get_doctor_info("D0001")
     std::ifstream file_in(path);
 
     if (file_in) {

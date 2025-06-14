@@ -26,7 +26,7 @@ class Doctor : public User {
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
     // Doctor Folder Actions
-    static void createNewDoctor(const std::string& firstName, const std::string& lastName);
+    void createNewDoctor() const;
     static void get_doctor_info(const std::string &doctor_full_id);
 
 };
