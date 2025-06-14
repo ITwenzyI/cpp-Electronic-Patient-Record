@@ -27,7 +27,7 @@ public:
     Admin();
     ~Admin();
 
-    static void checkInitialSetup();
+    static bool checkInitialSetup();
 
     static void admin_setup();
 

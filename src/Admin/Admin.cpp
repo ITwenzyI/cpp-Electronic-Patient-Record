@@ -17,20 +17,35 @@ Admin::~Admin() = default;
 
 
 // Checks if any Folder of Patients, Assistants or Doctors is already created, if not then the System needs an Initialization
-void Admin::checkInitialSetup() {
-    if (!std::filesystem::exists("data/Patients") && !std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {
+bool Admin::checkInitialSetup() {
+    if (!std::filesystem::exists("data/Assistants") || !std::filesystem::exists("data/Doctors")) {
 
         std::ofstream out("data/admin_logging.txt");
         out << "EPR-System Setup from Admin: " << getDate() << " " << getTime() << "\n\n"; // Initial Value
         out.close();
 
         std::cout << "[!] System is not initialized yet.\n";
-        std::cout << "[!] No user structure found.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        if (!std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {
+            std::cout << "[!] No Assistant and Doctor structure found.\n";
+        }
+        else if (!std::filesystem::exists("data/Assistants")) {
+            std::cout << "[!] No Assistant structure found.\n";
+        }
+        else if (!std::filesystem::exists("data/Doctors")) {
+            std::cout << "[!] No Doctor structure found.\n";
+        }
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
         std::cout << "→ Entering admin setup mode...\n";
         std::this_thread::sleep_for(std::chrono::seconds(3));
         admin_setup();
 
+        return false;
+
     }
+    return true;
 }
 
 

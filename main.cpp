@@ -48,8 +48,8 @@ int main() {
         out.close();
     }
 
-    // Checks if any Folder of Patients or Doctors or Assistant is already created.
-    Admin::checkInitialSetup();
+    // Checks if the Folders of Doctors and Assistants are already created.
+    while (!Admin::checkInitialSetup()) {}
 
 
     while (true) {
