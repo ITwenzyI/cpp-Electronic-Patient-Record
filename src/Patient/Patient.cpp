@@ -203,12 +203,16 @@ void Patient::add_patient_appointment(const std::string &patient_full_id) {
 
     std::cout << "Enter appointment date (YYYY-MM-DD): ";
     std::getline(std::cin >> std::ws, date);
+    std::cout << std::endl;
     std::cout << "Enter appointment time (HH:MM): ";
     std::getline(std::cin, time);
+    std::cout << std::endl;
     std::cout << "Enter doctor name: ";
     std::getline(std::cin, doctorName);
+    std::cout << std::endl;
     std::cout << "Enter reason for appointment: ";
     std::getline(std::cin, reason);
+    std::cout << std::endl;
 
     // Final format: [2025-06-13 14:00] - Dr. Meier (control)
     std::string appointmentLine = "[" + date + " " + time + "] - " + doctorName + " (" + reason + ")";
@@ -217,6 +221,7 @@ void Patient::add_patient_appointment(const std::string &patient_full_id) {
     std::ofstream out(filePath, std::ios::app);  // append mode
     if (!out.is_open()) {
         std::cerr << "Could not open appointment file for writing.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
@@ -224,6 +229,7 @@ void Patient::add_patient_appointment(const std::string &patient_full_id) {
     out.close();
 
     std::cout << "Appointment added:\n" << appointmentLine << '\n';
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
 void Patient::add_patient_medication(const std::string &patient_full_id) {
@@ -231,15 +237,19 @@ void Patient::add_patient_medication(const std::string &patient_full_id) {
 
     std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
     std::getline(std::cin >> std::ws, nameAndDose);
+    std::cout << std::endl;
 
     std::cout << "Enter intake frequency (Example: 3x daily): ";
     std::getline(std::cin, frequency);
+    std::cout << std::endl;
 
     std::cout << "Enter start date (YYYY-MM-DD): ";
     std::getline(std::cin, startDate);
+    std::cout << std::endl;
 
     std::cout << "Enter end date (YYYY-MM-DD): ";
     std::getline(std::cin, endDate);
+    std::cout << std::endl;
 
     // Final format: Ibuprofen 400 mg - 3x daily - from 2025-06-08 to 2025-06-12
     std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
@@ -249,6 +259,7 @@ void Patient::add_patient_medication(const std::string &patient_full_id) {
 
     if (!out.is_open()) {
         std::cerr << "Could not open medication file for writing.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
@@ -256,6 +267,7 @@ void Patient::add_patient_medication(const std::string &patient_full_id) {
     out.close();
 
     std::cout << "Medication added:\n" << medicationLine << '\n';
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
 void Patient::add_patient_record(const std::string &patient_full_id) {
@@ -263,15 +275,19 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
 
     std::cout << "Enter date of record (YYYY-MM-DD): ";
     std::getline(std::cin >> std::ws, date);
+    std::cout << std::endl;
 
     std::cout << "Enter doctor name: ";
     std::getline(std::cin, doctor);
+    std::cout << std::endl;
 
     std::cout << "Enter type of record: ";
     std::getline(std::cin, type);
+    std::cout << std::endl;
 
     std::cout << "Enter record details/notes: ";
     std::getline(std::cin, content);
+    std::cout << std::endl;
 
     // Final format: [2025-06-15] Dr. Schmitt: Control: blood pressure decreased, no medication necessary.
     std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
@@ -281,6 +297,7 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
 
     if (!out.is_open()) {
         std::cerr << "Could not open records file for writing.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
@@ -288,6 +305,61 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
     out.close();
 
     std::cout << "Record added:\n" << recordLine << '\n';
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+}
+
+void Patient::get_patient_appointments(const std::string &patient_full_id) {
+    const std::string path = "data/Patients/" + patient_full_id + "/appointments.txt";
+    std::ifstream file_in(path);
+
+    if (file_in) {
+        std::string line;
+        std::vector<std::string> content;
+        std::cout << std::endl;
+        while (std::getline(file_in, line)) {
+            std::cout << line << std::endl;        // Output: line
+            content.push_back(line);                // safe line in vector
+        }
+        file_in.close();
+    } else {
+        std::cerr << "Failed to read file!" << std::endl;
+    }
+}
+
+void Patient::get_patient_medications(const std::string &patient_full_id) {
+    const std::string path = "data/Patients/" + patient_full_id + "/medications.txt";
+    std::ifstream file_in(path);
+
+    if (file_in) {
+        std::string line;
+        std::vector<std::string> content;
+        std::cout << std::endl;
+        while (std::getline(file_in, line)) {
+            std::cout << line << std::endl;        // Output: line
+            content.push_back(line);                // safe line in vector
+        }
+        file_in.close();
+    } else {
+        std::cerr << "Failed to read file!" << std::endl;
+    }
+}
+
+void Patient::get_patient_records(const std::string &patient_full_id) {
+    const std::string path = "data/Patients/" + patient_full_id + "/records.txt";
+    std::ifstream file_in(path);
+
+    if (file_in) {
+        std::string line;
+        std::vector<std::string> content;
+        std::cout << std::endl;
+        while (std::getline(file_in, line)) {
+            std::cout << line << std::endl;        // Output: line
+            content.push_back(line);                // safe line in vector
+        }
+        file_in.close();
+    } else {
+        std::cerr << "Failed to read file!" << std::endl;
+    }
 }
 
 
