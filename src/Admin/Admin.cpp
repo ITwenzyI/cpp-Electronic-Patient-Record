@@ -16,7 +16,7 @@ Admin::~Admin() = default;
 
 
 
-// Checks if any Folder of Patients, Assistants or Docots is already created
+// Checks if any Folder of Patients, Assistants or Doctors is already created, if not then the System needs an Initialization
 void Admin::checkInitialSetup() {
     if (!std::filesystem::exists("data/Patients") && !std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {
 
