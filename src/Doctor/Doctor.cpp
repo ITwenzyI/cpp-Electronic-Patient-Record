@@ -7,17 +7,20 @@ Doctor::Doctor(const std::string& doctor_id,
            "", "", "", "", "", "", "", "") {}
 
 
+// The Doctor Menu
 void Doctor::displayMenu() {
     int choice;
+    std::string id;
 
-    do {
         std::cout << "\n=== Doctor Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
-        std::cout << "1. View Medical Records" << std::endl;
-        std::cout << "2. View Documents" << std::endl;
-        std::cout << "3. View open Appointments" << std::endl;
-        std::cout << "4. View Calender" << std::endl;
-        std::cout << "7. Update Field in File\n";
+        std::cout << "1. Add Medications for Patient" << std::endl;
+        std::cout << "2. Add Records for Patient" << std::endl;
+        std::cout << "3. View Patient Info" << std::endl;
+        std::cout << "4. View Patient Appointments" << std::endl;
+        std::cout << "5. View Patient Medications" << std::endl;
+        std::cout << "6. View Patient Records" << std::endl;
+        std::cout << "7. Update Field in Info\n";
         std::cout << "0. Logout" << std::endl;
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -25,23 +28,82 @@ void Doctor::displayMenu() {
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
-            case 1:
+                return;
+
+            case 1: {
+                std::cout << std::endl;
+                std::cout << "Add Medication\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::add_patient_medication(id);
                 break;
-            case 2:
+            }
+
+            case 2: {
+                std::cout << std::endl;
+                std::cout << "Add Records\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::add_patient_record(id);
                 break;
-            case 3:
+            }
+
+            case 3: {
+                std::cout << std::endl;
+                std::cout << "Patient Info\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_info(id);
                 break;
+            }
+
+            case 4: {
+                std::cout << std::endl;
+                std::cout << "Patient Appointments\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_appointments(id);
+                break;
+            }
+
+            case 5: {
+                std::cout << std::endl;
+                std::cout << "Patient Medications\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_medications(id);
+                break;
+            }
+
+            case 6: {
+                std::cout << std::endl;
+                std::cout << "Patient Records\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                Patient::get_patient_records(id);
+                break;
+            }
+
+            case 7: {
+                std::string field, newInput;
+                std::cout << std::endl;
+                std::cout << "Update Field in File\n";
+                std::cout << "Enter full ID: ";
+                std::cin >> id;
+                std::cout << std::endl;
+                std::cout << "Enter Field: ";
+                std::cin >> field;
+                std::cout << std::endl;
+                std::cout << "Enter New Input: ";
+                std::cin >> newInput;
+                std::cout << std::endl;
+                update_field_in_file(id, field, newInput);
+                break;
+            }
+
             default:
                 std::cout << "Invalid Choice." << std::endl;
                 break;
 
         }
-
-
-
-    } while (choice != 0);
 }
 
+
+// Checks if the Login Details are correct.
 void Doctor::check_id_name(std::string id, std::string firstName, std::string lastName) {
 
     std::string path = "data/Patients/" + id + "/info.txt";
@@ -79,6 +141,8 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
     displayMenu();
 }
 
+
+// Creates new Doctor
 void Doctor::createNewDoctor() const{
 
 
@@ -99,8 +163,6 @@ void Doctor::createNewDoctor() const{
     // Creating file with all the Infos from the Doctor
     if (!std::filesystem::exists(folderName + "/info.txt")) {
         std::ofstream out( folderName + "/info.txt");
-        out << "PatientID: " << doctor_full_id << "\n\n"; // DoctorID D0001
-        out << "--- Personal Infos ---"  << "\n";
         out << "--- Personal Infos ---"  << "\n";
         out << "Full Name: " << firstName << " " << lastName << "\n";
         out << "First Name: " << firstName << "\n"; // First Name
@@ -124,11 +186,9 @@ void Doctor::createNewDoctor() const{
         out.close();
     }
 
-    // Creating file with all the Actions from the Doctor
+    // Creating file with all the Actions from the Doctor (currently not available)
     if (!std::filesystem::exists(folderName + "/actions.txt")) {
         std::ofstream out( folderName + "/actions.txt");
-        out << "DoctorID: " << doctor_full_id << "\n\n"; // DoctorID D0001
-
         out << "\n" << "--- Example ---" << "\n";
         out << "\n" << "[2025-06-08 10:03] Created patient P00000012" << "\n";
 
@@ -136,11 +196,9 @@ void Doctor::createNewDoctor() const{
         out.close();
     }
 
-    // Creating file with all the Patients seen from the Doctor
+    // Creating file with all the Patients seen from the Doctor (currently not available)
     if (!std::filesystem::exists(folderName + "/patients_seen.txt")) {
         std::ofstream out( folderName + "/patients_seen.txt");
-        out << "DoctorID: " << doctor_full_id << "\n\n"; // DoctorID D0001
-
         out << "\n" << "--- Example ---" << "\n";
         out << "\n" << "[2025-06-08] P00000013 - Follow-up appointment aftercare" << "\n";
 
@@ -160,6 +218,8 @@ void Doctor::createNewDoctor() const{
 
 }
 
+
+// Prints out all the Infos from info.txt
 void Doctor::get_doctor_info(const std::string &doctor_full_id) {
     const std::string path = "data/Doctors/" + doctor_full_id + "/info.txt";  // To call Doctor::get_doctor_info("D0001")
     std::ifstream file_in(path);
@@ -178,6 +238,8 @@ void Doctor::get_doctor_info(const std::string &doctor_full_id) {
     }
 }
 
+
+// Gets all the Infos for info.txt
 void Doctor::fill_doctor_info() {
     std::cout << "\nPlease provide all Infos from the Doctor!\n" << std::endl;
     std::cout << "Date of Birth: ";

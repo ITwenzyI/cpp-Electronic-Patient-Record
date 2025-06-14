@@ -4,6 +4,7 @@
 #include "../User/User.hpp"
 #include "../Utils/Utils.hpp"
 #include "../IDs/IDs.hpp"
+#include "../Patient/Patient.hpp"
 
 #include <iostream>
 #include <filesystem>
