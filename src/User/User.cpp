@@ -63,6 +63,62 @@ void User::setLastName(const std::string& lastName) {
     this->lastName = lastName;
 }
 
+void User::update_field_in_file(const std::string& id, const std::string& field, const std::string& newInput) {
+
+    // Determine the correct file path based on the ID (e.g., P0001 → Patients/P0001/info.txt)
+    std::string path = get_file_path_from_id(id);
+
+    if (path.empty()) {
+        std::cerr << "Invalid ID: " << id << std::endl;
+        return;
+    }
+
+    std::ifstream inFile(path);
+    if (!inFile.is_open()) {
+        std::cerr << "Could not open file: " << path << std::endl;
+        return;
+    }
+
+    std::vector<std::string> lines;
+    std::string line;
+    bool updated = false;
+
+    // Read each line and replace the target field with the new Input, if found
+    while (std::getline(inFile, line)) {
+        // Check if the line starts with the field name (Example: "Address: ")
+        if (line.substr(0, field.length() + 2) == field + ": ") {
+            line = field + ": " + newInput; // Update the line with the new Input
+            updated = true;
+        }
+        lines.push_back(line); // Store the lines in the vector (modified or not)
+    }
+
+    inFile.close();
+
+    // If the field was not found, inform the user and stop
+    if (!updated) {
+        std::cerr << "Field \"" << field << "\" not found in file.\n";
+        return;
+    }
+
+    // Overwrite new File
+    std::ofstream outFile(path);
+    if (!outFile.is_open()) {
+        std::cerr << "Failed to open file for writing: " << path << std::endl;
+        return;
+    }
+
+    // Write all lines back to the file, including the updated one
+    for (const auto& newline : lines) {
+        outFile << newline << '\n';
+    }
+
+    outFile.close();
+    std::cout << field << " successfully updated.\n";
+}
+
+
+
 
 
 

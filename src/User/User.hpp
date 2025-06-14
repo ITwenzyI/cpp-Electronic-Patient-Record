@@ -3,6 +3,8 @@
 #ifndef USER_HPP
 #define USER_HPP
 
+#include "../Utils/Utils.hpp"
+
 #include <string>
 #include <filesystem>
 #include <fstream>
@@ -11,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <format>
 
 class User {
 protected:
@@ -66,6 +69,7 @@ public:
     // Abstract method
     virtual void displayMenu() = 0;
     virtual void check_id_name(std::string id, std::string firstName, std::string lastName) = 0;
+    static void update_field_in_file(const std::string& id, const std::string& field, const std::string& newInput);
 
 };
 
