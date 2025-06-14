@@ -65,7 +65,8 @@ void Admin::admin_setup() {
 
         case 3: {
             admin_getNames(firstName, lastName);
-            Doctor::createNewDoctor(firstName, lastName);
+            const Doctor d("", firstName, lastName);
+            d.createNewDoctor();
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
