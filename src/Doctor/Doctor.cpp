@@ -16,6 +16,7 @@ void Doctor::displayMenu() {
         std::cout << "2. View Documents" << std::endl;
         std::cout << "3. View open Appointments" << std::endl;
         std::cout << "4. View Calender" << std::endl;
+        std::cout << "7. Update Field in File\n";
         std::cout << "0. Logout" << std::endl;
         std::cin >> choice;
 

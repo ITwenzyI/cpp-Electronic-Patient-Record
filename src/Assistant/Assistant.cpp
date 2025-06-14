@@ -15,7 +15,8 @@ void Assistant::displayMenu() {
         std::cout << "2. View Documents" << std::endl;
         std::cout << "3. View open Doctors" << std::endl;
         std::cout << "4. Create Patient" << std::endl;
-        std::cout << "5. Book Appointment" << std::endl;
+        std::cout << "5. Book Appointment for Patient" << std::endl;
+        std::cout << "7. Update Field in File\n";
         std::cout << "0. Logout" << std::endl;
         std::cin >> choice;
 

@@ -198,3 +198,32 @@ void Patient::fill_patient_info() {
     std::getline(std::cin, insuranceType);
 }
 
+void Patient::add_patient_appointment(const std::string &patient_full_id) {
+    std::string date, time, doctorName, reason;
+
+    std::cout << "Enter appointment date (YYYY-MM-DD): ";
+    std::getline(std::cin >> std::ws, date);
+    std::cout << "Enter appointment time (HH:MM): ";
+    std::getline(std::cin, time);
+    std::cout << "Enter doctor name: ";
+    std::getline(std::cin, doctorName);
+    std::cout << "Enter reason for appointment: ";
+    std::getline(std::cin, reason);
+
+    // Final format: [2025-06-13 14:00] - Dr. Meier (control)
+    std::string appointmentLine = "[" + date + " " + time + "] - " + doctorName + " (" + reason + ")";
+
+    std::string filePath = "data/Patients/" + patient_full_id + "/appointments.txt";
+    std::ofstream out(filePath, std::ios::app);  // append mode
+    if (!out.is_open()) {
+        std::cerr << "Could not open appointment file for writing.\n";
+        return;
+    }
+
+    out << appointmentLine << '\n';
+    out.close();
+
+    std::cout << "Appointment added:\n" << appointmentLine << '\n';
+}
+
+

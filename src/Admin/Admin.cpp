@@ -26,6 +26,7 @@ void Admin::checkInitialSetup() {
         std::cout << "[!] System is not initialized yet.\n";
         std::cout << "[!] No user structure found.\n";
         std::cout << "→ Entering admin setup mode...\n";
+        std::this_thread::sleep_for(std::chrono::seconds(3));
         admin_setup();
 
     }
