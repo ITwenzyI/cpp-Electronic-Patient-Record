@@ -176,7 +176,7 @@ void Doctor::get_doctor_info(const std::string &doctor_full_id) {
 }
 
 void Doctor::fill_doctor_info() {
-    std::cout << "\nPlease provide all Infos of the Doctor!\n" << std::endl;
+    std::cout << "\nPlease provide all Infos from the Doctor!\n" << std::endl;
     std::cout << "Date of Birth: ";
     std::getline(std::cin >> std::ws, dateOfBirth);
     std::cout << "Gender: ";

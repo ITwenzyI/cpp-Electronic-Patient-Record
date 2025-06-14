@@ -31,6 +31,7 @@ class Assistant : public User {
     // Assistant Folder Actions
     void createNewAssistant() const;
     static void get_assistant_info(const std::string &assistant_full_id);
+    void fill_assistant_info();
 
 };
 

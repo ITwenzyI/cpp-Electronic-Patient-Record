@@ -52,12 +52,14 @@ void Admin::admin_setup() {
             admin_getNames( firstName, lastName);
             Patient p("", firstName, lastName);
             p.createNewPatient();
+            std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
         }
 
         case 2: {
+            std::cout << std::endl;
             std::cout << "Please enter the full Patient-ID: ";
             std::cin >> id;
             Patient::get_patient_info(id);
@@ -69,12 +71,14 @@ void Admin::admin_setup() {
             Doctor d("", firstName, lastName);
             d.fill_doctor_info();
             d.createNewDoctor();
+            std::cout << std::endl;
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
         }
 
         case 4: {
+            std::cout << std::endl;
             std::cout << "Please enter the full Doctor-ID: ";
             std::cin >> id;
             Doctor::get_doctor_info(id);
@@ -83,7 +87,8 @@ void Admin::admin_setup() {
 
         case 5: {
             admin_getNames(firstName, lastName);
-            const Assistant a("", firstName, lastName);
+            Assistant a("", firstName, lastName);
+            a.fill_assistant_info();
             a.createNewAssistant();
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
