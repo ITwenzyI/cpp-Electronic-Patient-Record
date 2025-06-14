@@ -229,6 +229,8 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     } else {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        return;
     }
     displayMenu();
 }
