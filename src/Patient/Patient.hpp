@@ -35,7 +35,7 @@ public:
     void createNewPatient() const;
     static void get_patient_info(const std::string &patient_full_id);
     void fill_patient_info();
-    void add_patient_appointment(const std::string &patient_full_id);
+    static void add_patient_appointment(const std::string &patient_full_id);
     void add_patient_medication(const std::string &patient_full_id);
     void add_patient_record(const std::string &patient_full_id);
     //static void get_patient_appointments(const std::string &patient_full_id);

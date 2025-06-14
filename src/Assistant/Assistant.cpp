@@ -8,6 +8,7 @@ Assistant::Assistant(const std::string& assistant_id,
 
 void Assistant::displayMenu() {
     int choice;
+    std::string patientId;
 
     do {
         std::cout << "\n=== Assistant Menu ===" << std::endl;
@@ -34,6 +35,12 @@ void Assistant::displayMenu() {
             case 3:
 
                 break;
+
+            case 5: {
+                std::cout << "Enter the full Patient ID: ";
+                std::cin >> patientId;
+                Patient::add_patient_appointment(patientId);
+            }
             default:
                 std::cout << "Invalid Choice." << std::endl;
                 break;
