@@ -29,10 +29,8 @@ class Assistant : public User {
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
     // Assistant Folder Actions
-    static void createNewAssistant(const std::string& firstName, const std::string& lastName);
+    void createNewAssistant() const;
     static void get_assistant_info(const std::string &assistant_full_id);
-
-    void create_assistant();
 
 };
 

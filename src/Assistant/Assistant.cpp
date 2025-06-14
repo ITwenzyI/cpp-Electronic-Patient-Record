@@ -44,131 +44,8 @@ void Assistant::displayMenu() {
     } while (choice != 0);
 }
 
-void Assistant::check_id_name(std::string id, std::string firstName, std::string lastName) {
-
-    std::string path = "data/Assistants/" + id + "/info.txt";
-    std::ifstream file_in(path);
-    std::vector<std::string> content;
-
-    if (file_in) {
-        std::string line;
-        std::string fileFirstName, fileLastName;
-        while (std::getline(file_in, line)) {
-            if (line.starts_with("First Name:")) {
-                fileFirstName = line.substr(11);  // all after "First Name:"
-            } else if (line.starts_with("Last Name:")) {
-                fileLastName = line.substr(10);    // all after "Last Name:"
-            }
-        }
-        file_in.close();
-
-
-
-        if (cleaned(fileFirstName) == cleaned(firstName) &&
-            cleaned(fileLastName) == cleaned(lastName)) {
-            std::cout << std::endl;
-            std::cout << "Login successful.\n";
-            displayMenu();
-            }
-        else {
-            std::cout << std::endl;
-            std::cout << "Name does not match the ID.\n";
-        }
-    } else {
-        std::cout << std::endl;
-        std::cerr << "Failed to read file!" << std::endl;
-    }
-    displayMenu();
-}
-
-void Assistant::createNewAssistant(const std::string& firstName, const std::string& lastName) {
-
-
-    int assistant_id = Assistant_ID::get_assistant_id(); // get new Assistant ID
-    std::filesystem::create_directories("data/Assistants");
-    std::string folderName = std::format("data/Assistants/A{:04}", assistant_id); // Style: A0001
-    std::filesystem::create_directories(folderName);
-
-
-    // Full Assistant ID = A0001
-    std::string assistant_full_id = std::format("A{:04}", assistant_id); // Style: A0001
-
-
-    // -----------------------------------------
-    // File creation for Assistant
-
-
-    // Creating file with all the Infos from the Assistant
-    if (!std::filesystem::exists(folderName + "/info.txt")) {
-        std::ofstream out( folderName + "/info.txt");
-        out << "PatientID: " << assistant_full_id << "\n\n"; // AssistantID A0001
-        out << "--- Personal Infos ---"  << "\n";
-        out << "Full Name: " << firstName << " " << lastName << "\n";
-        out << "First Name: " << firstName << "\n"; // First Name
-        out << "Last Name: " << lastName << "\n"; // Last Name
-        out << "Date of Birth: " << "Unknown" << "\n";
-        out << "Gender: " << "Unknown" << "\n";
-        out << "Nationality: " << "Unknown" << "\n";
-
-        out << "\n" << "--- Contact Infos ---"  << "\n";
-        out << "Address: " << "Unknown" << "\n";
-        out << "Phone Number: " << "Unknown" << "\n";
-        out << "Email Address: " << "Unknown" << "\n";
-
-        out << "\n" << "--- Insurance Infos ---"  << "\n";
-        out << "InsuranceID: " << "Unknown" << "\n";
-        out << "InsuranceType: " << "Unknown" << "\n";
-
-        out << "\n" << "--- Extra Infos ---"  << "\n";
-
-
-        out.close();
-    }
-
-    // Creating file with all the Actions from the Assistant
-    if (!std::filesystem::exists(folderName + "/actions.txt")) {
-        std::ofstream out( folderName + "/actions.txt");
-        out << "AssistantID: " << assistant_full_id << "\n\n"; // AssistantID A0001
-
-        out << "\n" << "--- Example ---" << "\n";
-        out << "\n" << "[2025-06-08 10:03] Created patient P00000012" << "\n";
-
-
-        out.close();
-    }
-
-    // -----------------------------------------
-
-
-
-    // -----------------------------------------
-    // Update Assistant ID for new Assistant (+1)
-    Assistant_ID::update_assistant_id(assistant_id); // without A
-    // -----------------------------------------
-
-
-}
-
-void Assistant::get_assistant_info(const std::string &assistant_full_id) {
-    const std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";  // To call Assistant::get_assistant_info("A0001")
-    std::ifstream file_in(path);
-
-    if (file_in) {
-        std::string line;
-        std::vector<std::string> content;
-        std::cout << "File Content:" << std::endl;
-        while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;       // Output: line
-            content.push_back(line);                // safe line in vector
-        }
-        file_in.close();
-    } else {
-        std::cerr << "Failed to read file!" << std::endl;
-    }
-}
-
-// Assistant::create_assistant(a);
-void Assistant::create_assistant() {
+// Assistant::createNewAssistant();
+void Assistant::createNewAssistant() const {
 
 
     int assistant_id = Assistant_ID::get_assistant_id(); // get new Assistant ID
@@ -233,6 +110,60 @@ void Assistant::create_assistant() {
     Assistant_ID::update_assistant_id(assistant_id); // without A
     // -----------------------------------------
 
+}
 
+void Assistant::check_id_name(std::string id, std::string firstName, std::string lastName) {
+
+    std::string path = "data/Assistants/" + id + "/info.txt";
+    std::ifstream file_in(path);
+    std::vector<std::string> content;
+
+    if (file_in) {
+        std::string line;
+        std::string fileFirstName, fileLastName;
+        while (std::getline(file_in, line)) {
+            if (line.starts_with("First Name:")) {
+                fileFirstName = line.substr(11);  // all after "First Name:"
+            } else if (line.starts_with("Last Name:")) {
+                fileLastName = line.substr(10);    // all after "Last Name:"
+            }
+        }
+        file_in.close();
+
+
+
+        if (cleaned(fileFirstName) == cleaned(firstName) &&
+            cleaned(fileLastName) == cleaned(lastName)) {
+            std::cout << std::endl;
+            std::cout << "Login successful.\n";
+            displayMenu();
+            }
+        else {
+            std::cout << std::endl;
+            std::cout << "Name does not match the ID.\n";
+        }
+    } else {
+        std::cout << std::endl;
+        std::cerr << "Failed to read file!" << std::endl;
+    }
+    displayMenu();
+}
+
+void Assistant::get_assistant_info(const std::string &assistant_full_id) {
+    const std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";  // To call Assistant::get_assistant_info("A0001")
+    std::ifstream file_in(path);
+
+    if (file_in) {
+        std::string line;
+        std::vector<std::string> content;
+        std::cout << "File Content:" << std::endl;
+        while (std::getline(file_in, line)) {
+            std::cout << line << std::endl;       // Output: line
+            content.push_back(line);                // safe line in vector
+        }
+        file_in.close();
+    } else {
+        std::cerr << "Failed to read file!" << std::endl;
+    }
 }
 
