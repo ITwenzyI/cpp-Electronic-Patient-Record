@@ -12,6 +12,7 @@ void Doctor::displayMenu() {
     int choice;
     std::string id;
 
+    while (true) {
         std::cout << "\n=== Doctor Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "-----------------------------" << std::endl;
@@ -101,13 +102,14 @@ void Doctor::displayMenu() {
                 break;
 
         }
+    }
 }
 
 
 // Checks if the Login Details are correct.
 void Doctor::check_id_name(std::string id, std::string firstName, std::string lastName) {
 
-    std::string path = "data/Patients/" + id + "/info.txt";
+    std::string path = "data/Doctors/" + id + "/info.txt";
     std::ifstream file_in(path);
     std::vector<std::string> content;
 

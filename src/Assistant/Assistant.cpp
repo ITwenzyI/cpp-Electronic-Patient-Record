@@ -12,6 +12,7 @@ void Assistant::displayMenu() {
     int choice;
     std::string id;
 
+    while (true) {
         std::cout << "\n=== Assistant Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "-----------------------------" << std::endl;
@@ -124,6 +125,7 @@ void Assistant::displayMenu() {
                 break;
 
         }
+    }
 }
 
 // Assistant::createNewAssistant();

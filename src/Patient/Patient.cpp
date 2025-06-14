@@ -12,6 +12,8 @@ void Patient::displayMenu() {
     int choice;
     std::string id;
 
+    while (true) {
+
         std::cout << "\n=== Patient Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "-----------------------------" << std::endl;
@@ -32,6 +34,7 @@ void Patient::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Appointments\n";
                 std::cout << "Enter your full ID: ";
+                std::cin >> id;
                 get_patient_appointments(id);
                 break;
             }
@@ -40,6 +43,7 @@ void Patient::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Medications\n";
                 std::cout << "Enter your full ID: ";
+                std::cin >> id;
                 get_patient_medications(id);
                 break;
             }
@@ -48,6 +52,7 @@ void Patient::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Records\n";
                 std::cout << "Enter your full ID: ";
+                std::cin >> id;
                 get_patient_records(id);
                 break;
             }
@@ -57,6 +62,8 @@ void Patient::displayMenu() {
                 break;
 
         }
+
+    }
 }
 
 
@@ -94,6 +101,7 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
     } else {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
+        return;
     }
     displayMenu();
 }
