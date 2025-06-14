@@ -50,7 +50,8 @@ void Admin::admin_setup() {
     switch (choice) {
         case 1: {
             admin_getNames( firstName, lastName);
-            Patient::createNewPatient(firstName, lastName);
+            Patient p("", firstName, lastName);
+            p.createNewPatient();
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;

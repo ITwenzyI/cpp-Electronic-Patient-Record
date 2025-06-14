@@ -161,7 +161,7 @@ void Patient::createNewPatient() const{
 }
 
 void Patient::get_patient_info(const std::string &patient_full_id) {
-    std::string path = "data/Patients/" + patient_full_id + "/info.txt"; // To call: Patient::get_patient_info("P00000006");
+    const std::string path = "data/Patients/" + patient_full_id + "/info.txt"; // To call: Patient::get_patient_info("P00000006");
     std::ifstream file_in(path);
 
     if (file_in) {
