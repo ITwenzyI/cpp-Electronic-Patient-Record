@@ -57,6 +57,7 @@ int main() {
 
 
         std::string input;
+        std::cout << std::endl;
         std::cout << "=== ELECTRONIC PATIENT RECORD SYSTEM ===\n";
         std::cout << "1. Patient\n";
         std::cout << "2. Doctor\n";

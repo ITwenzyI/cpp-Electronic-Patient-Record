@@ -36,6 +36,8 @@ void Admin::admin_setup() {
     std::string firstName, lastName;
     std::string id;
 
+
+        std::cout << std::endl;
         std::cout << "=== Admin Logging | EPR SYSTEM ===\n";
         std::cout << "1. Create Patient\n";
         std::cout << "2. Info Patient\n";
@@ -50,6 +52,7 @@ void Admin::admin_setup() {
 
     switch (choice) {
         case 1: {
+            std::cout << std::endl;
             admin_getNames( firstName, lastName);
             Patient p("", firstName, lastName);
             p.fill_patient_info();
@@ -69,6 +72,7 @@ void Admin::admin_setup() {
         }
 
         case 3: {
+            std::cout << std::endl;
             admin_getNames(firstName, lastName);
             Doctor d("", firstName, lastName);
             d.fill_doctor_info();
@@ -88,6 +92,7 @@ void Admin::admin_setup() {
         }
 
         case 5: {
+            std::cout << std::endl;
             admin_getNames(firstName, lastName);
             Assistant a("", firstName, lastName);
             a.fill_assistant_info();
@@ -98,6 +103,7 @@ void Admin::admin_setup() {
         }
 
         case 6: {
+            std::cout << std::endl;
             std::cout << "Please enter the full Assistant-ID: ";
             std::cin >> id;
             Assistant::get_assistant_info(id);

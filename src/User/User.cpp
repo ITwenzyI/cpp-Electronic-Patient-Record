@@ -70,12 +70,14 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
 
     if (path.empty()) {
         std::cerr << "Invalid ID: " << id << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
     std::ifstream inFile(path);
     if (!inFile.is_open()) {
         std::cerr << "Could not open file: " << path << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
@@ -98,6 +100,7 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
     // If the field was not found, inform the user and stop
     if (!updated) {
         std::cerr << "Field \"" << field << "\" not found in file.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
@@ -105,6 +108,7 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
     std::ofstream outFile(path);
     if (!outFile.is_open()) {
         std::cerr << "Failed to open file for writing: " << path << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
@@ -115,6 +119,7 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
 
     outFile.close();
     std::cout << field << " successfully updated.\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
 
