@@ -14,6 +14,7 @@ void Assistant::displayMenu() {
 
         std::cout << "\n=== Assistant Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
+        std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Create New Patient" << std::endl;
         std::cout << "2. Update Field in Info\n";
         std::cout << "3. Book Appointment for Patient" << std::endl;

@@ -14,6 +14,7 @@ void Doctor::displayMenu() {
 
         std::cout << "\n=== Doctor Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
+        std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Add Medications for Patient" << std::endl;
         std::cout << "2. Add Records for Patient" << std::endl;
         std::cout << "3. View Patient Info" << std::endl;

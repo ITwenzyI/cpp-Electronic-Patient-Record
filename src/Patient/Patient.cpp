@@ -7,40 +7,60 @@ Patient::Patient(const std::string& patient_id,
            "", "", "", "", "", "", "", "") {}
 
 
+// Patient Menu
 void Patient::displayMenu() {
     int choice;
+    std::string id;
 
-    do {
         std::cout << "\n=== Patient Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "-----------------------------" << std::endl;
-        std::cout << "1. View Medical Record" << std::endl;
-        std::cout << "2. View Documents" << std::endl;
-        std::cout << "3. Book Appointment" << std::endl;
+        std::cout << "1. View Appointments" << std::endl;
+        std::cout << "2. View Medications" << std::endl;
+        std::cout << "3. View Records" << std::endl;
+        //std::cout << "4. Book Appointment" << std::endl;
         std::cout << "0. Logout" << std::endl;
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
 
         switch (choice) {
-                case 0:
+            case 0:
                 std::cout << "Logging out..." << std::endl;
-                case 1:
+                return;
+
+            case 1: {
+                std::cout << std::endl;
+                std::cout << "Appointments\n";
+                std::cout << "Enter your full ID: ";
+                get_patient_appointments(id);
                 break;
-                case 2:
+            }
+
+            case 2: {
+                std::cout << std::endl;
+                std::cout << "Medications\n";
+                std::cout << "Enter your full ID: ";
+                get_patient_medications(id);
                 break;
-                case 3:
+            }
+
+            case 3: {
+                std::cout << std::endl;
+                std::cout << "Records\n";
+                std::cout << "Enter your full ID: ";
+                get_patient_records(id);
                 break;
-                default:
+            }
+
+            default:
                 std::cout << "Invalid Choice." << std::endl;
                 break;
 
         }
-
-
-
-    } while (choice != 0);
 }
 
+
+// Checks if the Login Details are correct.
 void Patient::check_id_name(std::string id, std::string firstName, std::string lastName) {
 
     std::string path = "data/Patients/" + id + "/info.txt";
@@ -78,6 +98,8 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
     displayMenu();
 }
 
+
+// Creates New Patient for Assistant
 void Patient::createNewPatient() const{
 
 
@@ -125,27 +147,21 @@ void Patient::createNewPatient() const{
     // Creating file with a list of all the records from the Patient
     if (!std::filesystem::exists(folderName + "/records.txt")) {
         std::ofstream out( folderName + "/records.txt");
-        out << "--- Example ---" << patient_full_id << "\n"; // PatientID P00000001
-        out << "[2025-06-08] Dr. Schmitt: Blood pressure too high, recommended: Exercise & diet." << "\n"; // Example
-        out << "[2025-06-15] Dr. Schmitt: Control: blood pressure decreased, no medication necessary." << "\n"; // Example
+        out << "--- Records ---" << "\n"; // PatientID P00000001
         out.close();
     }
 
     // Creating file with a list of all appointments from the Patient
     if (!std::filesystem::exists(folderName + "/appointments.txt")) {
         std::ofstream out( folderName + "/appointments.txt");
-        out << "--- Example ---" << patient_full_id << "\n"; // PatientID P00000001
-        out << "[2025-06-12 09:30] – Dr. Schmitt" << "\n"; // Example
-        out << "[2025-06-13 14:00] - Dr. Meier (control)" << "\n"; // Example
+        out << "--- Appointments ---" << "\n"; // PatientID P00000001
         out.close();
     }
 
     // Creating file with all the medications the Patient needs
     if (!std::filesystem::exists(folderName + "/medications.txt")) {
-        std::ofstream out( folderName + "/medication.txt");
-        out << "--- Example ---" << patient_full_id << "\n"; // PatientID P00000001
-        out << "Ibuprofen 400 mg - 3x daily - from 2025-06-08 to 2025-06-12" << "\n"; // Example
-        out << "Ramipril 5 mg – 1x daily in the morning - permanently" << "\n"; // Example
+        std::ofstream out( folderName + "/medications.txt");
+        out << "--- Medications ---" << "\n"; // PatientID P00000001
         out.close();
     }
 
@@ -161,6 +177,8 @@ void Patient::createNewPatient() const{
 
 }
 
+
+// Prints out all the Infos from info.txt
 void Patient::get_patient_info(const std::string &patient_full_id) {
     const std::string path = "data/Patients/" + patient_full_id + "/info.txt"; // To call: Patient::get_patient_info("P00000006");
     std::ifstream file_in(path);
@@ -179,6 +197,8 @@ void Patient::get_patient_info(const std::string &patient_full_id) {
     }
 }
 
+
+// Gets all the Infos for info.txt
 void Patient::fill_patient_info() {
     std::cout << "\nPlease provide all Infos from the Patient!\n" << std::endl;
     std::cout << "Date of Birth: ";
@@ -199,6 +219,8 @@ void Patient::fill_patient_info() {
     std::getline(std::cin, insuranceType);
 }
 
+
+// Add new Appointments to appointments.txt
 void Patient::add_patient_appointment(const std::string &patient_full_id) {
     std::string date, time, doctorName, reason;
 
@@ -233,6 +255,8 @@ void Patient::add_patient_appointment(const std::string &patient_full_id) {
     std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
+
+// Add new medications to medications.txt
 void Patient::add_patient_medication(const std::string &patient_full_id) {
     std::string nameAndDose, frequency, startDate, endDate;
 
@@ -271,6 +295,8 @@ void Patient::add_patient_medication(const std::string &patient_full_id) {
     std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
+
+// Add new Records to records.txt
 void Patient::add_patient_record(const std::string &patient_full_id) {
     std::string date, doctor, type, content;
 
@@ -309,6 +335,8 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
     std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
+
+// Prints out all the appointments from the Patient
 void Patient::get_patient_appointments(const std::string &patient_full_id) {
     const std::string path = "data/Patients/" + patient_full_id + "/appointments.txt";
     std::ifstream file_in(path);
@@ -327,6 +355,8 @@ void Patient::get_patient_appointments(const std::string &patient_full_id) {
     }
 }
 
+
+// Prints out all the Medications from the Patient
 void Patient::get_patient_medications(const std::string &patient_full_id) {
     const std::string path = "data/Patients/" + patient_full_id + "/medications.txt";
     std::ifstream file_in(path);
@@ -345,6 +375,8 @@ void Patient::get_patient_medications(const std::string &patient_full_id) {
     }
 }
 
+
+// Print out all the Records from the Patient
 void Patient::get_patient_records(const std::string &patient_full_id) {
     const std::string path = "data/Patients/" + patient_full_id + "/records.txt";
     std::ifstream file_in(path);
