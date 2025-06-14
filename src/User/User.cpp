@@ -63,6 +63,8 @@ void User::setLastName(const std::string& lastName) {
     this->lastName = lastName;
 }
 
+
+// Updates a specific field in info.txt of the id
 void User::update_field_in_file(const std::string& id, const std::string& field, const std::string& newInput) {
 
     // Determine the correct file path based on the ID (Example: P0001 = Patients/P0001/info.txt)
@@ -122,6 +124,9 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
     std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
+
+
+// Adds an Extra Info in info.txt for the ID
 void User::add_extra_info(const std::string &id) {
 
     // Determine the correct file path based on the ID (Example: P0001 = Patients/P0001/info.txt)
