@@ -12,12 +12,14 @@ void Doctor::displayMenu() {
 
     do {
         std::cout << "\n=== Doctor Menu ===" << std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "1. View Medical Records" << std::endl;
         std::cout << "2. View Documents" << std::endl;
         std::cout << "3. View open Appointments" << std::endl;
         std::cout << "4. View Calender" << std::endl;
         std::cout << "7. Update Field in File\n";
         std::cout << "0. Logout" << std::endl;
+        std::cout << "Please enter your choice: ";
         std::cin >> choice;
 
         switch (choice) {

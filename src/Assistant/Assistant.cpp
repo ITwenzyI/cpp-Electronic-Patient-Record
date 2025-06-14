@@ -8,10 +8,10 @@ Assistant::Assistant(const std::string& assistant_id,
 
 void Assistant::displayMenu() {
     int choice;
-    std::string patientId;
 
     do {
         std::cout << "\n=== Assistant Menu ===" << std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
         std::cout << "1. View Medical Records" << std::endl;
         std::cout << "2. View Documents" << std::endl;
         std::cout << "3. View open Doctors" << std::endl;
@@ -19,6 +19,7 @@ void Assistant::displayMenu() {
         std::cout << "5. Book Appointment for Patient" << std::endl;
         std::cout << "7. Update Field in File\n";
         std::cout << "0. Logout" << std::endl;
+        std::cout << "Please enter your choice: ";
         std::cin >> choice;
 
         switch (choice) {
@@ -26,9 +27,13 @@ void Assistant::displayMenu() {
                 std::cout << "Logging out..." << std::endl;
 
                 break;
-            case 1:
-
+            case 1: {
+                std::string id;
+                std::cout << "Enter the Full-ID to add Extra Infos: ";
+                std::cin >> id;
+                add_extra_info(id);
                 break;
+            }
             case 2:
 
                 break;
@@ -37,6 +42,7 @@ void Assistant::displayMenu() {
                 break;
 
             case 5: {
+                std::string patientId;
                 std::cout << "Enter the full ID of the Patient, to book the Appointment: ";
                 std::cin >> patientId;
                 Patient::add_patient_appointment(patientId);

@@ -18,6 +18,7 @@ void Patient::displayMenu() {
         std::cout << "2. View Documents" << std::endl;
         std::cout << "3. Book Appointment" << std::endl;
         std::cout << "0. Logout" << std::endl;
+        std::cout << "Please enter your choice: ";
         std::cin >> choice;
 
         switch (choice) {
