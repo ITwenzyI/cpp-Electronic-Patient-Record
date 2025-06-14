@@ -37,7 +37,7 @@ void Assistant::displayMenu() {
                 break;
 
             case 5: {
-                std::cout << "Enter the full Patient ID: ";
+                std::cout << "Enter the full ID of the Patient, to book the Appointment: ";
                 std::cin >> patientId;
                 Patient::add_patient_appointment(patientId);
             }

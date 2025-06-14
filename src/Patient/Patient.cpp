@@ -226,4 +226,37 @@ void Patient::add_patient_appointment(const std::string &patient_full_id) {
     std::cout << "Appointment added:\n" << appointmentLine << '\n';
 }
 
+void Patient::add_patient_medication(const std::string &patient_full_id) {
+    std::string nameAndDose, frequency, startDate, endDate;
+
+    std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
+    std::getline(std::cin >> std::ws, nameAndDose);
+
+    std::cout << "Enter intake frequency (Example: 3x daily): ";
+    std::getline(std::cin, frequency);
+
+    std::cout << "Enter start date (YYYY-MM-DD): ";
+    std::getline(std::cin, startDate);
+
+    std::cout << "Enter end date (YYYY-MM-DD): ";
+    std::getline(std::cin, endDate);
+
+    // Final format: Ibuprofen 400 mg - 3x daily - from 2025-06-08 to 2025-06-12
+    std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
+
+    std::string filePath = "data/Patients/" + patient_full_id + "/medications.txt";
+    std::ofstream out(filePath, std::ios::app);  // append mode
+
+    if (!out.is_open()) {
+        std::cerr << "Could not open medication file for writing.\n";
+        return;
+    }
+
+    out << medicationLine << '\n';
+    out.close();
+
+    std::cout << "Medication added:\n" << medicationLine << '\n';
+}
+
+
 
