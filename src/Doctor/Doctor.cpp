@@ -36,6 +36,7 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Add Medication\n";
                 std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
                 Patient::add_patient_medication(id);
                 break;
             }
@@ -44,6 +45,7 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Add Records\n";
                 std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
                 Patient::add_patient_record(id);
                 break;
             }
@@ -52,6 +54,7 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Patient Info\n";
                 std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
                 Patient::get_patient_info(id);
                 break;
             }
@@ -60,6 +63,7 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Patient Appointments\n";
                 std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
                 Patient::get_patient_appointments(id);
                 break;
             }
@@ -68,6 +72,7 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Patient Medications\n";
                 std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
                 Patient::get_patient_medications(id);
                 break;
             }
@@ -76,6 +81,7 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Patient Records\n";
                 std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
                 Patient::get_patient_records(id);
                 break;
             }
