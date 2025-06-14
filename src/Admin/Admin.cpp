@@ -51,6 +51,7 @@ void Admin::admin_setup() {
         case 1: {
             admin_getNames( firstName, lastName);
             Patient p("", firstName, lastName);
+            p.fill_patient_info();
             p.createNewPatient();
             std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";

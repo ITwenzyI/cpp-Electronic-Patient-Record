@@ -34,6 +34,7 @@ public:
     // Patient Folder Actions
     void createNewPatient() const;
     static void get_patient_info(const std::string &patient_full_id);
+    void fill_patient_info();
     //static void get_patient_appointments(const std::string &patient_full_id);
     //static void get_patient_medications(const std::string &patient_full_id);
     //static void get_patient_records(const std::string &patient_full_id);
