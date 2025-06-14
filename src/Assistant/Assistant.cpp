@@ -151,8 +151,6 @@ void Assistant::createNewAssistant() const {
     // Creating file with all the Infos from the Assistant
     if (!std::filesystem::exists(folderName + "/info.txt")) {
         std::ofstream out( folderName + "/info.txt");
-        out << "PatientID: " << assistant_full_id << "\n\n"; // AssistantID A0001
-        out << "--- Personal Infos ---"  << "\n";
         out << "--- Personal Infos ---"  << "\n";
         out << "Full Name: " << firstName << " " << lastName << "\n";
         out << "First Name: " << firstName << "\n"; // First Name
@@ -176,10 +174,9 @@ void Assistant::createNewAssistant() const {
         out.close();
     }
 
-    // Creating file with all the Actions from the Assistant
+    // Creating file with all the Actions from the Assistant (Currently not available)
     if (!std::filesystem::exists(folderName + "/actions.txt")) {
         std::ofstream out( folderName + "/actions.txt");
-        out << "AssistantID: " << assistant_full_id << "\n\n"; // AssistantID A0001
 
         out << "\n" << "--- Example ---" << "\n";
         out << "\n" << "[2025-06-08 10:03] Created patient P00000012" << "\n";
@@ -199,6 +196,8 @@ void Assistant::createNewAssistant() const {
 
 }
 
+
+// Checks if the Login Details are correct.
 void Assistant::check_id_name(std::string id, std::string firstName, std::string lastName) {
 
     std::string path = "data/Assistants/" + id + "/info.txt";
@@ -236,6 +235,8 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     displayMenu();
 }
 
+
+// Prints out all the Infos from info.txt
 void Assistant::get_assistant_info(const std::string &assistant_full_id) {
     const std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";  // To call Assistant::get_assistant_info("A0001")
     std::ifstream file_in(path);
@@ -254,8 +255,10 @@ void Assistant::get_assistant_info(const std::string &assistant_full_id) {
     }
 }
 
+
+// Gets all the Infos for info.txt
 void Assistant::fill_assistant_info() {
-    std::cout << "\nPlease provide all Infos from the Assistant!\n" << std::endl;
+    std::cout << "\nPlease provide all the Infos from the Assistant!\n" << std::endl;
     std::cout << "Date of Birth: ";
     std::getline(std::cin >> std::ws, dateOfBirth);
     std::cout << "Gender: ";
