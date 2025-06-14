@@ -122,6 +122,44 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
     std::this_thread::sleep_for(std::chrono::seconds(2));
 }
 
+void User::add_extra_info(const std::string &id) {
+
+    // Determine the correct file path based on the ID (Example: P0001 = Patients/P0001/info.txt)
+    std::string path = get_file_path_from_id(id);
+
+    if (path.empty()) {
+        std::cerr << "Invalid ID: " << id << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        return;
+    }
+
+    std::string extra_info;
+
+    std::cout << "ID: " << id << std::endl;
+    std::cout << "Enter the Extra Info: ";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::getline(std::cin, extra_info);
+    std::cout << std::endl;
+
+    // Final format: [2025-06-15] Extra Info.
+    std::string newLine = "[" + getDate() + "] " + extra_info + "\n";
+
+    std::ofstream out(path, std::ios::app);  // append mode
+
+    if (!out.is_open()) {
+        std::cerr << "Could not open file for writing.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        return;
+    }
+
+    out << newLine << '\n';
+    out.close();
+
+    std::cout << "Extra Info added:\n" << newLine << '\n';
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+}
+
+
 
 
 
