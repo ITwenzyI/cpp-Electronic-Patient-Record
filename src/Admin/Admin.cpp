@@ -43,6 +43,7 @@ void Admin::admin_setup() {
         std::cout << "4. Info Doctor\n";
         std::cout << "5. Create Assistant\n";
         std::cout << "6. Info Assistant\n";
+        std::cout << "7. Update Field in File\n";
         std::cout << "0. Exit\n";
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -101,6 +102,18 @@ void Admin::admin_setup() {
             std::cin >> id;
             Assistant::get_assistant_info(id);
             break;
+        }
+
+        case 7: {
+            std::string field, newInput;
+            std::cout << std::endl;
+            std::cout << "Please enter the full ID: ";
+            std::cin >> id;
+            std::cout << "Please enter the field to change: ";
+            std::cin >> field;
+            std::cout << "Please enter the new input: ";
+            std::cin >> newInput;
+            User::update_field_in_file(id, field, newInput);
         }
 
         case 0:

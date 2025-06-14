@@ -65,7 +65,7 @@ void User::setLastName(const std::string& lastName) {
 
 void User::update_field_in_file(const std::string& id, const std::string& field, const std::string& newInput) {
 
-    // Determine the correct file path based on the ID (e.g., P0001 → Patients/P0001/info.txt)
+    // Determine the correct file path based on the ID (Example: P0001 = Patients/P0001/info.txt)
     std::string path = get_file_path_from_id(id);
 
     if (path.empty()) {
@@ -83,7 +83,7 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
     std::string line;
     bool updated = false;
 
-    // Read each line and replace the target field with the new Input, if found
+    // Read each line and replace the target field with the new Input
     while (std::getline(inFile, line)) {
         // Check if the line starts with the field name (Example: "Address: ")
         if (line.substr(0, field.length() + 2) == field + ": ") {
