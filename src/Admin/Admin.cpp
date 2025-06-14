@@ -20,7 +20,7 @@ void Admin::checkInitialSetup() {
     if (!std::filesystem::exists("data/Patients") && !std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {
 
         std::ofstream out("data/admin_logging.txt");
-        out << "EPR-System Setup from Admin: " << getDate() << " " << getTime() << "\n\n"; // Initialvalue
+        out << "EPR-System Setup from Admin: " << getDate() << " " << getTime() << "\n\n"; // Initial Value
         out.close();
 
         std::cout << "[!] System is not initialized yet.\n";
@@ -80,9 +80,8 @@ void Admin::admin_setup() {
 
         case 5: {
             admin_getNames(firstName, lastName);
-            Assistant a("", firstName, lastName);
-            a.create_assistant();
-            //Assistant::createNewAssistant(firstName, lastName);
+            const Assistant a("", firstName, lastName);
+            a.createNewAssistant();
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
