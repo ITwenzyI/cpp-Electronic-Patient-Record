@@ -18,7 +18,7 @@ void Assistant::displayMenu() {
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Create New Patient" << std::endl;
         std::cout << "2. Update Field in Info\n";
-        std::cout << "3. Book Appointment for Patient" << std::endl;
+        std::cout << "3. Review Appointments" << std::endl;
         std::cout << "4. Add Medications for Patient" << std::endl;
         std::cout << "5. Add Records for Patient" << std::endl;
         std::cout << "6. View Patient Info" << std::endl;
@@ -65,11 +65,9 @@ void Assistant::displayMenu() {
 
             case 3: {
                 std::cout << std::endl;
-                std::cout << "Book Appointment\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                std::cout << "Review Appointments\n";
                 std::cout << std::endl;
-                Patient::add_patient_appointment(id);
+                review_appointments();
                 break;
             }
 
@@ -287,6 +285,107 @@ void Assistant::fill_assistant_info() {
     std::getline(std::cin, insuranceID);
     std::cout << "InsuranceType: ";
     std::getline(std::cin, insuranceType);
+}
+
+
+
+
+void Assistant::review_appointments() {
+    std::string requestFile = "data/Appointments/requests.txt";
+
+    std::ifstream in(requestFile);
+    if (!in.is_open()) {
+        std::cerr << "Error: Could not open " << requestFile << "\n";
+        return;
+    }
+
+    std::vector<std::string> lines;
+    std::string line;
+
+    // Read all requests
+    while (std::getline(in, line)) {
+        lines.push_back(line);
+    }
+    in.close();
+
+    bool changed = false;
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+        std::string& entry = lines[i];
+
+        if (entry.find("Status: pending") != std::string::npos) {
+            std::cout << "\n=== Appointment Request " << i + 1 << " ===\n";
+            std::cout << entry << "\n";
+            std::cout << "Accept (A), Reject (R), Skip (S)? ";
+            char choice;
+            std::cin >> choice;
+
+            if (choice == 'A' || choice == 'a') {
+                // Extract patient ID
+                size_t idStart = entry.find("P");
+                std::string patientID = entry.substr(idStart, 9); // Annahme: P0001
+
+                // Extract time
+                size_t bracketStart = entry.find('[');
+                size_t bracketEnd = entry.find(']');
+                std::string dateTime = entry.substr(bracketStart, bracketEnd - bracketStart + 1);
+
+                // Extract doctor's name from the entry
+                size_t drStart = entry.find("Dr. ");
+                if (drStart == std::string::npos) {
+                    std::cerr << "Doctor name not found.\n";
+                    return;
+                }
+
+                // Find the position of the next " -" after "Dr. "
+                size_t nameEnd = entry.find(" -", drStart);
+
+                // Extract the substring that represents the doctor's name
+                // Skip "Dr. " (4 characters), and take everything until the next " -"
+                std::string doctor = entry.substr(drStart + 4, nameEnd - (drStart + 4));
+
+
+                // Patient folder
+                std::string path = "data/Patients/" + patientID + "/appointments.txt";
+                std::filesystem::create_directories("data/Patients/" + patientID);
+
+                std::ofstream out(path, std::ios::app);
+                if (!out.is_open()) {
+                    std::cerr << "Error writing to " << path << "\n";
+                    continue;
+                }
+
+                out << dateTime << " - Dr. " << doctor << " (confirmed)\n";
+                out.close();
+
+                // === Anfrage aktualisieren ===
+                entry.replace(entry.find("pending"), 7, "confirmed");
+                changed = true;
+
+                std::cout << "Appointment confirmed and added to patient file.\n";
+            }
+            else if (choice == 'R' || choice == 'r') {
+                entry.replace(entry.find("pending"), 7, "rejected");
+                changed = true;
+                std::cout << "Appointment rejected.\n";
+            }
+            else {
+                std::cout << "Skipped.\n";
+            }
+        }
+    }
+
+    // Update file
+    if (changed) {
+        std::ofstream out(requestFile);
+        for (const auto& updated : lines) {
+            out << updated << "\n";
+        }
+        out.close();
+        std::cout << "\nAppointment file updated.\n";
+    } else {
+        std::cout << "\nNo changes made.\n";
+    }
 }
 
 

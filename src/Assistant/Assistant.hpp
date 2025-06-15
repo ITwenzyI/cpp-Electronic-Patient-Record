@@ -33,6 +33,7 @@ class Assistant : public User {
     void createNewAssistant() const;
     static void get_assistant_info(const std::string &assistant_full_id);
     void fill_assistant_info();
+    static void review_appointments();
 
 };
 
