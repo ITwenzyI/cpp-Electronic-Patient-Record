@@ -34,18 +34,18 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 - File-based storage using `std::filesystem`
 
 ### 🔹 Core Functionalities
-- System Inizialistaton on first Startup with Admin-Setup
+- System Initialization on first Startup with Admin-Setup
 - System needs to have 1 Assistant and 1 Doctor
 - Admin Menu which can be opened in the Main Menu with #admin
 - Simple Login System which checks if the FirstName and LastName are correct for the ID (Checks in info.txt from the ID)
-- Simple Booting Up Scenario with Threads (For realismus)
-- User is the over Class for Patient, Assistant, Doctors (Stores all the infos and the generally functions)
+- Simple Booting Up Scenario with Threads (For realism)
+- User is the base class for Patient, Assistant, Doctors (Stores all the infos and the generally functions)
 - Every Role has their own unique ID (Patient == P00000001, Assistant == A0001, Doctor == D0001)
 - IDs start with '1' and get updated for every new User. Stored in data/role_id.txt (patient_id.txt, ...)
 - Utils functions in seperate file.
 - IDs functions in seperate file and class for each role)
 - A lot of comments to understand each process
-- Threads to add realismus
+- Threads to add realism
 
 ---
 
@@ -126,7 +126,7 @@ Class Doctor_ID:
 │           ├── info.txt       
 │           ├── records.txt       
 │           └── appointments.txt    
-│   ├── Assistantss/
+│   ├── Assistants/
 │     └── /<assistant_id>/
 │           └── info.txt         
 │   ├── Doctors/
