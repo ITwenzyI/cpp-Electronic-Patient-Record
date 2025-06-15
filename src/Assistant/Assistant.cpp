@@ -32,7 +32,7 @@ void Assistant::displayMenu() {
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                std::this_thread::sleep_for(std::chrono::seconds(1));
                 return;
             case 1: {
                 std::cout << std::endl;

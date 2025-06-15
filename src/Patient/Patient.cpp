@@ -20,7 +20,7 @@ void Patient::displayMenu() {
         std::cout << "1. View Appointments" << std::endl;
         std::cout << "2. View Medications" << std::endl;
         std::cout << "3. View Records" << std::endl;
-        //std::cout << "4. Book Appointment" << std::endl;
+        std::cout << "4. Book Appointment" << std::endl;
         std::cout << "0. Logout" << std::endl;
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -55,6 +55,15 @@ void Patient::displayMenu() {
                 std::cout << "Enter your full ID: ";
                 std::cin >> id;
                 get_patient_records(id);
+                break;
+            }
+
+            case 4: {
+                std::cout << std::endl;
+                std::cout << "Book Appointment\n";
+                std::cout << "Enter your full ID: ";
+                std::cin >> id;
+                request_appointment(id);
                 break;
             }
 
@@ -413,6 +422,51 @@ void Patient::get_patient_records(const std::string &patient_full_id) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+}
+
+
+
+void Patient::request_appointment(const std::string &patient_full_id) {
+    std::string date, time, doctorName, reason;
+
+    // Entering the appointment data
+    std::cout << "=== Appointment Request ===\n";
+    std::cout << "Enter date (YYYY-MM-DD): ";
+    std::cin >> date;
+    std::cout << "Enter time (HH:MM): ";
+    std::cin >> time;
+    std::cin.ignore(); // Empties the input buffer
+
+    std::cout << "Enter doctor's name: ";
+    std::getline(std::cin, doctorName);
+
+    std::cout << "Enter reason (optional): ";
+    std::getline(std::cin, reason);
+
+    // Prepare file
+    std::filesystem::create_directories("data/Appointments");
+    std::string filePath = "data/Appointments/requests.txt";
+    std::ofstream out(filePath, std::ios::app);  // Open in append mode
+
+    if (!out.is_open()) {
+        std::cerr << "Error: could not open " << filePath << "\n";
+        return;
+    }
+
+    // Formatted entry
+    out << "[" << date << " " << time << "] - "
+        << patient_full_id << " - Dr. " << doctorName;
+
+    if (!reason.empty()) {
+        out << " - Reason: " << reason;
+    }
+
+    out << " - Status: pending\n";
+    out.close();
+
+    std::cout << std::endl;
+    std::cout << "Appointment request submitted. Waiting for confirmation.\n";
     std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 

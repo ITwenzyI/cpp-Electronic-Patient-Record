@@ -83,6 +83,11 @@ int main() {
                 return 0;
             }
 
+            if (choice == 0) {
+                std::cout << "Exiting...\n";
+                return 0;
+            }
+
             std::string ID;
             std::cout << "Please enter your ID: ";
             std::cin >> ID;

@@ -41,6 +41,7 @@ public:
     static void get_patient_appointments(const std::string &patient_full_id);
     static void get_patient_medications(const std::string &patient_full_id);
     static void get_patient_records(const std::string &patient_full_id);
+    static void request_appointment(const std::string &patient_full_id);
 
 
 };
