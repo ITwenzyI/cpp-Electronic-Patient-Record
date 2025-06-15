@@ -9,6 +9,8 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 ## 📍 Status
 🔧 Currently under development
 
+---
+
 ## 🛠️ Concepts Used
 
 - Classes & Inheritance
@@ -45,7 +47,9 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 - A lot of comments to understand each process
 - Threads to add realismus
 
-## IDs functions
+---
+
+## 🔹 IDs functions
 Class Patient_ID:
 - get_patient_id returns the ID which is stored in patient_id.txt
 - update_patient_id Updates the ID in patient_id.txt with +1
@@ -56,16 +60,14 @@ Class Doctor_ID:
 - get_docotr_id returns the ID which is stored in doctor_id.txt
 - update_doctor_id Updates the ID in doctor_id.txt with +1
 
-## Utils Functions
+## 🔹 Utils Functions
 - getDate in the Format YYYY-MM-DD
 - getTime in the Format HH:MM:SS
 - random_number, return a random int Number between min and max
 - cleaned, cleans a string from \r and all white spaces
 - get_file_path_from_id, gets the correct Path from the ID so for D0001 it's Doctors...
 
-
-
-## Admin Functions
+## 🔹 Admin Functions
 - Create Patients
 - Create Doctors
 - Create Assistants
@@ -74,11 +76,11 @@ Class Doctor_ID:
 - View Assistants
 - Update Field in all the info.txt
 
-## Patient Functions
+## 🔹 Patient Functions
 - Request Appointments, which need to be confirmed by Assistants
 - See all your Medications, Appointments, Records
 
-## Assistant Functions
+## 🔹 Assistant Functions
 - Create New Patient
 - Update a Field in the info.txt from a Patient with his ID
 - Review Appointments and confirm or reject them
@@ -90,7 +92,7 @@ Class Doctor_ID:
 - View Patient Records
 - Add Extra Info to a info.txt from a Patient
 
-## Doctor Functions
+## 🔹 Doctor Functions
 - Add Medications to a Patient
 - Add Records to a Patient
 - View Patient Info
