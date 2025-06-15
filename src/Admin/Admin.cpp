@@ -141,10 +141,12 @@ void Admin::admin_setup() {
             std::cout << "Please enter the new input: ";
             std::cin >> newInput;
             User::update_field_in_file(id, field, newInput);
+            break;
         }
 
         case 0:
             std::cout << "Exiting...\n";
+            std::this_thread::sleep_for(std::chrono::seconds(3));
             return;
 
         default: {

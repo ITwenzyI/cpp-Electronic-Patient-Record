@@ -32,6 +32,7 @@ void Assistant::displayMenu() {
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(3));
                 return;
             case 1: {
                 std::cout << std::endl;
@@ -226,11 +227,14 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
             cleaned(fileLastName) == cleaned(lastName)) {
             std::cout << std::endl;
             std::cout << "Login successful.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             displayMenu();
             }
         else {
             std::cout << std::endl;
             std::cout << "Name does not match the ID.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return;
         }
     } else {
         std::cout << std::endl;
@@ -258,7 +262,9 @@ void Assistant::get_assistant_info(const std::string &assistant_full_id) {
         file_in.close();
     } else {
         std::cerr << "Failed to read file!" << std::endl;
+        return;
     }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 

@@ -30,6 +30,7 @@ void Doctor::displayMenu() {
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(3));
                 return;
 
             case 1: {
@@ -137,11 +138,14 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
             cleaned(fileLastName) == cleaned(lastName)) {
             std::cout << std::endl;
             std::cout << "Login successful.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             displayMenu();
             }
         else {
             std::cout << std::endl;
             std::cout << "Name does not match the ID.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            return;
         }
     } else {
         std::cout << std::endl;
@@ -247,6 +251,7 @@ void Doctor::get_doctor_info(const std::string &doctor_full_id) {
     } else {
         std::cerr << "Failed to read file!" << std::endl;
     }
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 
