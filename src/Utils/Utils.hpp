@@ -25,7 +25,7 @@ std::string getTime();
 int random_number(int min, int max);
 
 
-// Cleans a string from \r and white spaces ike \n \t ...
+// Cleans a string from \r and white spaces like \n \t ...
 std::string cleaned(const std::string& str);
 
 

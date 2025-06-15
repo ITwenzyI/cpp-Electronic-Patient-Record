@@ -1,8 +1,14 @@
-# 🩺 Electronic Patient Record – C++ Project
+# 🩺 Electronic Patient Record (EPR) System – C++ Implementation
 
 ## 🧠 Project Goal
 
-This project simulates a simplified **electronic patient record** (EPR) system using C++. It was created to practice object-oriented programming, file handling, and structured data management. The software allows storing, editing, and displaying patient data, including appointments, medications, records, and more.
+This C++ project simulates a simple yet structured **Electronic Patient Record (EPR) System**, designed for hands-on practice in object-oriented programming, file handling, and user role management. It supports patients, doctors, assistants, and an admin role, each with role-specific functionality. The project features realistic ID systems, folder-based data storage and a modular architecture, making it ideal for learning practical C++ in a healthcare related context.
+
+---
+
+## 💡 Purpose
+This project was created for learning purposes in the field of medical informatics and to improve practical C++ development and architecture skills.
+It aims to simulate a real-world clinical information workflow on a simple and accessible level.
 
 ---
 
@@ -33,76 +39,85 @@ This project simulates a simplified **electronic patient record** (EPR) system u
 - Clear class separation with inheritance (User → Patient/Doctor/Assistant)
 - File-based storage using `std::filesystem`
 
-### 🔹 Core Functionalities
+## 🔹 Core Functionalities
 - System Initialization on first Startup with Admin-Setup
-- System needs to have 1 Assistant and 1 Doctor
+- System requires at least one Assistant and one Doctor to operate
 - Admin Menu which can be opened in the Main Menu with #admin
 - Simple Login System which checks if the FirstName and LastName are correct for the ID (Checks in info.txt from the ID)
 - Simple Booting Up Scenario with Threads (For realism)
 - User is the base class for Patient, Assistant, Doctors (Stores all the infos and the generally functions)
 - Every Role has their own unique ID (Patient == P00000001, Assistant == A0001, Doctor == D0001)
 - IDs start with '1' and get updated for every new User. Stored in data/role_id.txt (patient_id.txt, ...)
-- Utils functions in seperate file.
-- IDs functions in seperate file and class for each role)
-- A lot of comments to understand each process
+- Utils functions in separate file.
+- IDs functions in separate file and class for each role
+- Extensive code comments for learning
 - Threads to add realism
 
 ---
 
-### 🔹 IDs functions
-Class Patient_ID:
-- get_patient_id returns the ID which is stored in patient_id.txt
-- update_patient_id Updates the ID in patient_id.txt with +1
-Class Assistant_ID:
-- get_assistant_id returns the ID which is stored in assistant_id.txt
-- update_assistant_id Updates the ID in assistant_id.txt with +1
-Class Doctor_ID:
-- get_docotr_id returns the ID which is stored in doctor_id.txt
-- update_doctor_id Updates the ID in doctor_id.txt with +1
+## 🔹 IDs functions
+| Role      | Prefix | Example ID  |
+|-----------|--------|-------------|
+| Patient   | `P`    | `P00000001` |
+| Doctor    | `D`    | `D0001`     |
+| Assistant | `A`    | `A0001`     |
 
-### 🔹 Utils Functions
-- getDate in the Format YYYY-MM-DD
-- getTime in the Format HH:MM:SS
-- random_number, return a random int Number between min and max
-- cleaned, cleans a string from \r and all white spaces
-- get_file_path_from_id, gets the correct Path from the ID so for D0001 it's Doctors...
+#### Class Patient_ID:
+- get_patient_id returns the ID which is stored in ``patient_id.txt``
+- update_patient_id Updates the ID in ``patient_id.txt`` with +1
+#### Class Assistant_ID:
+- get_assistant_id returns the ID which is stored in ``assistant_id.txt``
+- update_assistant_id Updates the ID in ``assistant_id.txt`` with +1
+#### Class Doctor_ID:
+- get_doctor_id returns the ID which is stored in ``doctor_id.txt``
+- update_doctor_id Updates the ID in ``doctor_id.txt`` with +1
 
-### 🔹 Admin Functions
-- Create Patients
-- Create Doctors
-- Create Assistants
-- View Patients
-- View Doctors
-- View Assistants
-- Update Field in all the info.txt
+## 🔹 Utils Functions
+- getDate in the Format ``YYYY-MM-DD``
+- getTime in the Format ``HH:MM:SS``
+- random_number, return a random **int Number** between min and max
+- cleaned, removes ``\r`` and all ``whitespace`` characters to clear input before storage or comparison
+- get_file_path_from_id, gets the correct Path from the ID (Example: D0001 == Doctor)
 
-### 🔹 Patient Functions
-- Request Appointments, which need to be confirmed by Assistants
-- See all your Medications, Appointments, Records
+## 🔹 Admin Functions
+- Create New Patient | Creates a new Folder <Patient-ID> with ``info.txt``, ``medications.txt``, ``records.txt``, ``appointments.txt``
+- Create Doctors | Creates a new Folder <Doctor-ID> with ``info.txt``
+- Create Assistants | Creates a new Folder <Assistant-ID> with ``info.txt``
+- View Patient Info | Reads and displays `info.txt`
+- View Doctors Info | Reads and displays `info.txt`
+- View Assistants Info | Reads and displays `info.txt`
+- Update Info Field | Updates a field in `info.txt` by ID
 
-### 🔹 Assistant Functions
-- Create New Patient
-- Update a Field in the info.txt from a Patient with his ID
-- Review Appointments and confirm or reject them
-- Add Medications to a Patient
-- Add Records to a Patient
-- View Patient Info (All his Details like `name`, `address` ...)
-- View Patient Appointments
-- View Patient Medications
-- View Patient Records
-- Add Extra Info to a info.txt from a Patient
+## 🔹 Patient Functions
+- Request Appointments | Request in ``request.txt``. Needs Conformation to land in ``appointments.txt``
+- View Patient Appointments | Reads and displays `appointments.txt`
+- View Patient Medications | Reads and displays `medications.txt`
+- View Patient Records | Reads and displays `records.txt`
 
-### 🔹 Doctor Functions
-- Add Medications to a Patient
-- Add Records to a Patient
-- View Patient Info
-- View Patient Appointments
-- View Patient Medications
-- View Patient Records
-- Update a Field in the info.txt from a Patient with his ID
-- Add Extra Info to a info.txt from a Patient
+## 🔹 Assistant Functions
+- Create New Patient | Creates a new Folder <Patient-ID> with ``info.txt``, ``medications.txt``, ``records.txt``, ``appointments.txt``
+- Update Info Field | Updates a field in `info.txt` by ID
+- Review Appointments |  Reads and displays `request.txt`. Assistant can confirm, reject or skip
+- Add Medications | Adds a line to `medications.txt`
+- Add Records | Adds a line to `records.txt`
+- View Patient Info | Reads and displays `info.txt`
+- View Patient Appointments | Reads and displays `appointments.txt`
+- View Patient Medications | Reads and displays `medications.txt`
+- View Patient Records | Reads and displays `records.txt`
+- Add Extra Info | Reads and Updates `info.txt` with an Extra Info
+
+## 🔹 Doctor Functions
+- Add Medications | Adds a line to `medications.txt`
+- Add Records | Adds a line to `records.txt`
+- View Patient Info | Reads and displays `info.txt`
+- View Patient Appointments | Reads and displays `appointments.txt`
+- View Patient Medications | Reads and displays `medications.txt`
+- View Patient Records | Reads and displays `records.txt`
+- Update Info Field | Updates a field in `info.txt` by ID
+- Add Extra Info | Reads and Updates `info.txt` with an Extra Info
 
 ---
+
 
 ## 📦 Project Structure
 ```
@@ -140,10 +155,6 @@ Class Doctor_ID:
 │   ├── patient_id.txt
 │
 ```
-
-## 💡 Purpose
-This project was created for learning purposes in the field of medical informatics and to improve practical C++ development and architecture skills.
-It aims to simulate a real-world clinical information workflow on a simple and accessible level.
 
 ## 📬 Contact
 If you have questions, suggestions, or want to contribute, feel free to open an issue or contact me via GitHub.
