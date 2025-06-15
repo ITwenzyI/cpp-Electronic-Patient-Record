@@ -358,19 +358,22 @@ void Assistant::review_appointments() {
                 out << dateTime << " - Dr. " << doctor << " (confirmed)\n";
                 out.close();
 
-                // === Anfrage aktualisieren ===
+                // Update request
                 entry.replace(entry.find("pending"), 7, "confirmed");
                 changed = true;
 
                 std::cout << "Appointment confirmed and added to patient file.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
             }
             else if (choice == 'R' || choice == 'r') {
                 entry.replace(entry.find("pending"), 7, "rejected");
                 changed = true;
                 std::cout << "Appointment rejected.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
             }
             else {
                 std::cout << "Skipped.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
             }
         }
     }
