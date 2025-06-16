@@ -12,7 +12,7 @@ void Patient::displayMenu() {
     int choice;
     std::string id;
 
-    while (true) {
+    do {
 
         std::cout << "\n=== Patient Menu ===" << std::endl;
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() <<std::endl;
@@ -72,8 +72,8 @@ void Patient::displayMenu() {
                 break;
 
         }
+    }while (choice != 0);
 
-    }
 }
 
 
@@ -109,15 +109,12 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
             std::cout << std::endl;
             std::cout << "Name does not match the ID.\n";
             std::this_thread::sleep_for(std::chrono::seconds(3));
-            return;
         }
     } else {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
-        return;
     }
-    displayMenu();
 }
 
 
