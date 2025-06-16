@@ -56,6 +56,7 @@ void Admin::admin_setup() {
     std::string id;
 
 
+    do {
         std::cout << std::endl;
         std::cout << "=== Admin Logging | EPR SYSTEM ===\n";
         std::cout << "1. Create Patient\n";
@@ -154,6 +155,9 @@ void Admin::admin_setup() {
                 break;
             }
     }
+    } while (choice != 0);
+
+
 }
 
 
