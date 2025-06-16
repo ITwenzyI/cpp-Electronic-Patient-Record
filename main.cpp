@@ -52,9 +52,9 @@ int main() {
     while (!Admin::checkInitialSetup()) {}
 
 
-    while (true) {
+    int choice;
 
-
+    do {
         std::cout << "Welcome to the Electronic Patient Record System.\n";
         std::this_thread::sleep_for(std::chrono::milliseconds(1500));
         std::cout << "Please choice your role:\n";
@@ -75,7 +75,6 @@ int main() {
         if (input == "#admin") {
             Admin::admin_setup();
         } else {
-            int choice;
             try {
                 choice = std::stoi(input);  // string to int
             } catch (...) {
@@ -113,13 +112,13 @@ int main() {
                     a.check_id_name(ID, firstName, lastName);
                     break;
                 }
-                case 0:
-                    std::cout << "Exiting...\n";
-                    return 0;
                 default:
                     std::cout << "Invalid selection.\n";
                     break;
             }
         }
-    }
+    } while (choice != 0);
+
+    return 0;
+
 }
