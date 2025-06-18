@@ -142,6 +142,7 @@ void User::add_extra_info(const std::string &id) {
 
     std::cout << "ID: " << id << std::endl;
     std::cout << "Enter the Extra Info: ";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, extra_info);
     std::cout << std::endl;
 

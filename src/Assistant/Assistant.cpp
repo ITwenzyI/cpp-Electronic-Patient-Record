@@ -25,6 +25,7 @@ void Assistant::displayMenu() {
         std::cout << "7. View Patient Appointments" << std::endl;
         std::cout << "8. View Patient Medications" << std::endl;
         std::cout << "9. View Patient Records" << std::endl;
+        std::cout << "10. Add Extra Info" << std::endl;
         std::cout << "0. Logout" << std::endl;
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -123,6 +124,14 @@ void Assistant::displayMenu() {
                 std::cin >> id;
                 Patient::get_patient_records(id);
                 break;
+            }
+
+            case 10: {
+                std::cout << std::endl;
+                std::cout << "Add Extra Info\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
+                add_extra_info(id);
             }
 
             default:
