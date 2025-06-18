@@ -129,7 +129,7 @@ void User::update_field_in_file(const std::string& id, const std::string& field,
 // Adds an Extra Info in info.txt for the ID
 void User::add_extra_info(const std::string &id) {
 
-    // Determine the correct file path based on the ID (Example: P0001 = Patients/P0001/info.txt)
+    // Determine the correct file path based on the ID (Example: D0001 = Doctors/D0001/info.txt)
     std::string path = get_file_path_from_id(id);
 
     if (path.empty()) {
@@ -142,7 +142,6 @@ void User::add_extra_info(const std::string &id) {
 
     std::cout << "ID: " << id << std::endl;
     std::cout << "Enter the Extra Info: ";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::getline(std::cin, extra_info);
     std::cout << std::endl;
 
