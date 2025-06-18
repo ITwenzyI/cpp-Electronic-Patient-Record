@@ -23,6 +23,7 @@ void Doctor::displayMenu() {
         std::cout << "5. View Patient Medications" << std::endl;
         std::cout << "6. View Patient Records" << std::endl;
         std::cout << "7. Update Field in Info\n";
+        std::cout << "8. Add Extra Info" << std::endl;
         std::cout << "0. Logout" << std::endl;
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -102,6 +103,14 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 update_field_in_file(id, field, newInput);
                 break;
+            }
+
+            case 8: {
+                std::cout << std::endl;
+                std::cout << "Add Extra Info\n";
+                std::cout << "Enter the full ID of the Patient: ";
+                std::cin >> id;
+                add_extra_info(id);
             }
 
             default:
