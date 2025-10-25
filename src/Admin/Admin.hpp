@@ -32,6 +32,8 @@ public:
     static void admin_setup();
 
     static void admin_getNames(std::string &firstName, std::string &lastName);
+
+    static void exportUserData(const std::string& id);
 };
 
 #endif //ADMIN_HPP

@@ -66,6 +66,7 @@ void Admin::admin_setup() {
         std::cout << "5. Create Assistant\n";
         std::cout << "6. Info Assistant\n";
         std::cout << "7. Update Field in File\n";
+        std::cout << "8. Backup User Info\n";
         std::cout << "0. Exit\n";
         std::cout << "Please enter your choice: ";
         std::cin >> choice;
@@ -145,6 +146,14 @@ void Admin::admin_setup() {
             break;
         }
 
+        case 8: {
+            std::cout << std::endl;
+            std::cout << "Please enter the full ID to backup: ";
+            std::cin >> id;
+            exportUserData(id);
+            break;
+        }
+
         case 0:
             std::cout << "Exiting...\n";
             std::this_thread::sleep_for(std::chrono::seconds(3));
@@ -168,6 +177,53 @@ void Admin::admin_getNames(std::string &firstName, std::string &lastName) {
     std::cout << "Enter last name: ";
     std::cin >> lastName;
 }
+
+
+void Admin::exportUserData(const std::string& id) {
+
+    // Determine the correct file path based on the ID (Example: D0001 = Doctors/D0001/info.txt)
+    std::string path = get_file_path_from_id(id);
+
+    if (path.empty()) {
+        std::cerr << "Invalid ID: " << id << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        return;
+    }
+
+    std::ifstream file_in(path);
+    std::vector<std::string> content;
+
+    if (file_in) {
+        std::string line;
+        while (std::getline(file_in, line)) {
+            content.push_back(line);                // safe line in vector
+        }
+        file_in.close();
+    } else {
+        std::cerr << "Failed to read file!" << std::endl;
+        return;
+    }
+
+
+    std::filesystem::create_directories("data/Exports");
+    std::string folderName = std::format("data/Exports/{}", id); // Style: P00000001
+    std::filesystem::create_directories(folderName);
+
+    // Creating file with all the infos from the User
+    if (!std::filesystem::exists(folderName + "/backup_info.txt")) {
+        std::ofstream out( folderName + "/backup_info.txt");
+        for (const auto & i : content) {
+            out << i << "\n";
+        }
+        out.close();
+    }
+
+    std::cout << "Successfully created backup_info.txt file for: " << folderName << "\n";
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+}
+
 
 
 
