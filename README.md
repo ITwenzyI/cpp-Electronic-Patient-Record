@@ -156,6 +156,19 @@ It aims to simulate a real-world clinical information workflow on a simple and a
 │
 ```
 
+## 🧩 To-Do
+ - Save Users in Database
+ - Password for Login
+ - Debug-Mode
+ - Log-System
+ - Backup whole User
+ - Demo-System
+ - Tutorial
+ - Wards System with bed occupancy
+ - Medical visits Information
+ - Graph for Medication
+ - Complete Front-End 
+
 ## 📬 Contact
 If you have questions, suggestions, or want to contribute, feel free to open an issue or contact me via GitHub.
 
