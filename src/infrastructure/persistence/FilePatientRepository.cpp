@@ -10,6 +10,10 @@ std::string patientFilePath(const std::string& patientId, const std::string& fil
     return "data/Patients/" + patientId + "/" + filename;
 }
 
+std::string appointmentRequestsPath() {
+    return "data/Appointments/requests.txt";
+}
+
 std::vector<std::string> readLines(const std::string& path) {
     std::vector<std::string> lines;
     std::ifstream in(path);
@@ -32,6 +36,19 @@ bool appendLine(const std::string& path, const std::string& line) {
     }
 
     out << line << '\n';
+    return true;
+}
+
+bool writeLines(const std::string& path, const std::vector<std::string>& lines) {
+    std::ofstream out(path);
+    if (!out.is_open()) {
+        return false;
+    }
+
+    for (const auto& line : lines) {
+        out << line << '\n';
+    }
+
     return true;
 }
 } // namespace
@@ -62,5 +79,22 @@ bool FilePatientRepository::appendRecord(const std::string& patientId, const std
 
 bool FilePatientRepository::appendAppointmentRequest(const std::string& line) {
     std::filesystem::create_directories("data/Appointments");
-    return appendLine("data/Appointments/requests.txt", line);
+    return appendLine(appointmentRequestsPath(), line);
+}
+
+bool FilePatientRepository::appointmentRequestsExists() const {
+    return std::filesystem::exists(appointmentRequestsPath());
+}
+
+std::vector<std::string> FilePatientRepository::readAppointmentRequests() const {
+    return readLines(appointmentRequestsPath());
+}
+
+bool FilePatientRepository::writeAppointmentRequests(const std::vector<std::string>& lines) {
+    return writeLines(appointmentRequestsPath(), lines);
+}
+
+bool FilePatientRepository::ensurePatientDirectory(const std::string& patientId) {
+    return std::filesystem::create_directories("data/Patients/" + patientId) ||
+           std::filesystem::exists("data/Patients/" + patientId);
 }

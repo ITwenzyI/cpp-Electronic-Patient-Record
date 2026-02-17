@@ -1,9 +1,32 @@
 #include "domain/model/Assistant/Assistant.hpp"
+#include "infrastructure/persistence/FilePatientRepository.hpp"
+#include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/Admin/Admin.hpp"
 
 #include <chrono>
 #include <iostream>
 #include <thread>
+
+namespace {
+IUserRepository& userRepository() {
+    static FileUserRepository repository;
+    return repository;
+}
+
+IPatientRepository& patientRepository() {
+    static FilePatientRepository repository;
+    return repository;
+}
+
+std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
+    for (const auto& line : lines) {
+        if (line.starts_with(keyPrefix)) {
+            return line.substr(keyPrefix.size());
+        }
+    }
+    return "";
+}
+}
 
 // Assistant menu.
 void Assistant::displayMenu() {
@@ -135,58 +158,43 @@ void Assistant::displayMenu() {
 
 // Checks if login details are correct.
 void Assistant::check_id_name(std::string id, std::string firstName, std::string lastName) {
-    std::string path = "data/Assistants/" + id + "/info.txt";
-    std::ifstream file_in(path);
-    std::vector<std::string> content;
-
-    if (file_in) {
-        std::string line;
-        std::string fileFirstName, fileLastName;
-        while (std::getline(file_in, line)) {
-            if (line.starts_with("First Name:")) {
-                fileFirstName = line.substr(11);
-            } else if (line.starts_with("Last Name:")) {
-                fileLastName = line.substr(10);
-            }
-        }
-        file_in.close();
-
-        if (cleaned(fileFirstName) == cleaned(firstName) &&
-            cleaned(fileLastName) == cleaned(lastName)) {
-            std::cout << std::endl;
-            std::cout << "Login successful.\n";
-            std::this_thread::sleep_for(std::chrono::seconds(2));
-            displayMenu();
-        } else {
-            std::cout << std::endl;
-            std::cout << "Name does not match the ID.\n";
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-        }
-    } else {
+    const std::vector<std::string> info = userRepository().readInfo(id);
+    if (!userRepository().exists(id)) {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
+        return;
+    }
+
+    const std::string fileFirstName = extractField(info, "First Name:");
+    const std::string fileLastName = extractField(info, "Last Name:");
+
+    if (cleaned(fileFirstName) == cleaned(firstName) &&
+        cleaned(fileLastName) == cleaned(lastName)) {
+        std::cout << std::endl;
+        std::cout << "Login successful.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        displayMenu();
+    } else {
+        std::cout << std::endl;
+        std::cout << "Name does not match the ID.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(3));
     }
 }
 
 // Prints all infos from info.txt.
 void Assistant::get_assistant_info(const std::string& assistant_full_id) {
-    const std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";
-    std::ifstream file_in(path);
-
-    if (file_in) {
-        std::string line;
-        std::vector<std::string> content;
-        std::cout << "File Content:" << std::endl;
-        while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;
-            content.push_back(line);
-        }
-        file_in.close();
-    } else {
+    const std::vector<std::string> info = userRepository().readInfo(assistant_full_id);
+    if (info.empty()) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
+
+    std::cout << "File Content:" << std::endl;
+    for (const auto& line : info) {
+        std::cout << line << std::endl;
+    }
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
@@ -212,21 +220,11 @@ void Assistant::fill_assistant_info() {
 }
 
 void Assistant::review_appointments() {
-    std::string requestFile = "data/Appointments/requests.txt";
-
-    std::ifstream in(requestFile);
-    if (!in.is_open()) {
-        std::cerr << "Error: Could not open " << requestFile << "\n";
+    std::vector<std::string> lines = patientRepository().readAppointmentRequests();
+    if (!patientRepository().appointmentRequestsExists()) {
+        std::cerr << "Error: Could not open data/Appointments/requests.txt\n";
         return;
     }
-
-    std::vector<std::string> lines;
-    std::string line;
-
-    while (std::getline(in, line)) {
-        lines.push_back(line);
-    }
-    in.close();
 
     bool changed = false;
 
@@ -257,17 +255,11 @@ void Assistant::review_appointments() {
                 size_t nameEnd = entry.find(" -", drStart);
                 std::string doctor = entry.substr(drStart + 4, nameEnd - (drStart + 4));
 
-                std::string path = "data/Patients/" + patientID + "/appointments.txt";
-                std::filesystem::create_directories("data/Patients/" + patientID);
-
-                std::ofstream out(path, std::ios::app);
-                if (!out.is_open()) {
-                    std::cerr << "Error writing to " << path << "\n";
+                if (!patientRepository().ensurePatientDirectory(patientID) ||
+                    !patientRepository().appendAppointment(patientID, dateTime + " - Dr. " + doctor + " (confirmed)")) {
+                    std::cerr << "Error writing to data/Patients/" << patientID << "/appointments.txt\n";
                     continue;
                 }
-
-                out << dateTime << " - Dr. " << doctor << " (confirmed)\n";
-                out.close();
 
                 entry.replace(entry.find("pending"), 7, "confirmed");
                 changed = true;
@@ -287,11 +279,10 @@ void Assistant::review_appointments() {
     }
 
     if (changed) {
-        std::ofstream out(requestFile);
-        for (const auto& updated : lines) {
-            out << updated << "\n";
+        if (!patientRepository().writeAppointmentRequests(lines)) {
+            std::cerr << "\nFailed to update appointment file.\n";
+            return;
         }
-        out.close();
         std::cout << "\nAppointment file updated.\n";
     } else {
         std::cout << "\nNo changes made.\n";

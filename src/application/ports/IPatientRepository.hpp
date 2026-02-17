@@ -17,6 +17,10 @@ public:
     virtual bool appendRecord(const std::string& patientId, const std::string& line) = 0;
 
     virtual bool appendAppointmentRequest(const std::string& line) = 0;
+    virtual bool appointmentRequestsExists() const = 0;
+    virtual std::vector<std::string> readAppointmentRequests() const = 0;
+    virtual bool writeAppointmentRequests(const std::vector<std::string>& lines) = 0;
+    virtual bool ensurePatientDirectory(const std::string& patientId) = 0;
 };
 
 #endif //IPATIENT_REPOSITORY_HPP

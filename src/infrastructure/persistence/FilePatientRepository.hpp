@@ -14,6 +14,10 @@ public:
     bool appendRecord(const std::string& patientId, const std::string& line) override;
 
     bool appendAppointmentRequest(const std::string& line) override;
+    bool appointmentRequestsExists() const override;
+    std::vector<std::string> readAppointmentRequests() const override;
+    bool writeAppointmentRequests(const std::vector<std::string>& lines) override;
+    bool ensurePatientDirectory(const std::string& patientId) override;
 };
 
 #endif //FILE_PATIENT_REPOSITORY_HPP
