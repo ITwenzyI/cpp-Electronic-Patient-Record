@@ -270,22 +270,6 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     }
 }
 
-// Prints all infos from info.txt.
-void Assistant::get_assistant_info(const std::string& assistant_full_id) {
-    const std::vector<std::string> info = userRepository().readInfo(assistant_full_id);
-    if (info.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << "File Content:" << std::endl;
-    for (const auto& line : info) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-}
-
 // Gets all infos for info.txt.
 void Assistant::fill_assistant_info() {
     std::cout << "\nPlease provide all the Infos from the Assistant!\n" << std::endl;
