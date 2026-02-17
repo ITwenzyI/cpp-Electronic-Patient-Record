@@ -9,17 +9,7 @@
 #ifndef ADMIN_HPP
 #define ADMIN_HPP
 
-#include "Admin.hpp"
-#include "common/util/Utils/Utils.hpp"
-#include "domain/model/Assistant/Assistant.hpp"
-#include "domain/model/Patient/Patient.hpp"
-#include "domain/model/Doctor/Doctor.hpp"
-
-
 #include <string>
-#include <filesystem>
-#include <iostream>
-#include <fstream>
 
 
 class Admin {

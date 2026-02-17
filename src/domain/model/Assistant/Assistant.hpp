@@ -6,7 +6,6 @@
 #include "domain/model/Patient/Patient.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/IDs/IDs.hpp"
-#include "ui/cli/Admin/Admin.hpp"
 
 
 #include <iostream>

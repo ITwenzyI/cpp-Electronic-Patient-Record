@@ -1,4 +1,5 @@
 #include "domain/model/Assistant/Assistant.hpp"
+#include "ui/cli/Admin/Admin.hpp"
 
 #include <chrono>
 #include <iostream>

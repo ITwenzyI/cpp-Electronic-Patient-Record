@@ -29,7 +29,7 @@ build
 *.lib
 
 # Privat
-docs/
+# docs/ is tracked for architecture documentation.
 
 # Build-Ordner
 cmake-build-debug/
