@@ -1,24 +1,16 @@
 #include "application/EprApplication.hpp"
 
-#include "application/ports/ISystemRepository.hpp"
 #include "application/usecase/LoginDecisionUseCase.hpp"
+#include "application/usecase/SystemBootstrapUseCase.hpp"
 #include "application/usecase/UserSessionService.hpp"
 #include "ui/cli/Admin/Admin.hpp"
-#include "infrastructure/persistence/FileSystemRepository.hpp"
 
 #include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
 
-#include <windows.h>
-
 namespace {
-ISystemRepository& systemRepository() {
-    static FileSystemRepository repository;
-    return repository;
-}
-
 const UserSessionService& userSessionService() {
     static UserSessionService service;
     return service;
@@ -28,21 +20,15 @@ const LoginDecisionUseCase& loginDecisionUseCase() {
     static LoginDecisionUseCase useCase;
     return useCase;
 }
+
+const SystemBootstrapUseCase& systemBootstrapUseCase() {
+    static SystemBootstrapUseCase useCase;
+    return useCase;
+}
 }
 
 int EprApplication::run() {
-    SetConsoleOutputCP(CP_UTF8);
-
-    std::cout << "Booting up System.\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    std::cout << "Booting up System..\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-    std::cout << "Booting up System...\n";
-    std::this_thread::sleep_for(std::chrono::milliseconds(900));
-
-    systemRepository().ensureBootstrapData();
-
-    while (!Admin::checkInitialSetup()) {}
+    systemBootstrapUseCase().run();
 
     int choice;
 

@@ -11,6 +11,7 @@ set(PATIENT_RECORD_SOURCES
     src/main.cpp
     src/application/EprApplication.cpp
     src/application/usecase/LoginDecisionUseCase.cpp
+    src/application/usecase/SystemBootstrapUseCase.cpp
     src/application/usecase/UserSessionService.cpp
     src/domain/model/Patient/Patient.cpp
     src/domain/model/User/User.cpp
@@ -31,6 +32,7 @@ set(PATIENT_RECORD_SOURCES
 set(PATIENT_RECORD_HEADERS
     src/application/EprApplication.hpp
     src/application/usecase/LoginDecisionUseCase.hpp
+    src/application/usecase/SystemBootstrapUseCase.hpp
     src/application/usecase/UserSessionService.hpp
     src/application/ports/IUserRepository.hpp
     src/application/ports/IPatientRepository.hpp
