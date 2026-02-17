@@ -239,22 +239,6 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
     }
 }
 
-// Prints all info from info.txt.
-void Doctor::get_doctor_info(const std::string& doctor_full_id) {
-    const std::vector<std::string> info = userRepository().readInfo(doctor_full_id);
-    if (info.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << "File Content:" << std::endl;
-    for (const auto& line : info) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-}
-
 // Gets all info for info.txt.
 void Doctor::fill_doctor_info() {
     std::cout << "\nPlease provide all Infos from the Doctor!\n" << std::endl;

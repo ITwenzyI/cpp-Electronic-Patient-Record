@@ -18,7 +18,6 @@ class Doctor : public User {
     // Checks if ID and firstName and lastName of info.txt match.
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
-    static void get_doctor_info(const std::string &doctor_full_id);
     void fill_doctor_info();
 
 };
