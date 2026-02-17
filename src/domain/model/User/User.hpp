@@ -17,10 +17,16 @@
 #include <ctime>
 #include <thread>
 
+enum class UserRole {
+    Patient,
+    Doctor,
+    Assistant
+};
+
 class User {
 protected:
     std::string user_id; // Unique ID in the system
-    std::string role;
+    UserRole role;
 
     // --- Personal Infos ---
     std::string firstName;
@@ -41,7 +47,7 @@ protected:
 public:
     // Constructor
     User(std::string user_id,
-         std::string role,
+         UserRole role,
          std::string firstName,
          std::string lastName,
          std::string dateOfBirth,

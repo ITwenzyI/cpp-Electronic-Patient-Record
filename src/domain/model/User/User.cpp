@@ -1,7 +1,7 @@
 #include "User.hpp"
 
 User::User(std::string user_id,
-           std::string role,
+           UserRole role,
            std::string firstName,
            std::string lastName,
            std::string dateOfBirth,
@@ -45,7 +45,16 @@ std::string User::getLastName() const {
 }
 
 std::string User::getRole() const {
-    return role;
+    switch (role) {
+        case UserRole::Patient:
+            return "Patient";
+        case UserRole::Doctor:
+            return "Doctor";
+        case UserRole::Assistant:
+            return "Assistant";
+        default:
+            return "";
+    }
 }
 
 std::string User::getID() const {
