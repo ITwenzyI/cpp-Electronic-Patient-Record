@@ -11,7 +11,8 @@ void Doctor::displayMenu() {
 
     do {
         std::cout << "\n=== Doctor Menu ===" << std::endl;
-        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() << std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName()
+                  << "\nID: " << getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Add Medications for Patient" << std::endl;
         std::cout << "2. Add Records for Patient" << std::endl;
@@ -100,6 +101,7 @@ void Doctor::displayMenu() {
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
                 add_extra_info(id);
+                break;
             }
             default:
                 std::cout << "Invalid Choice." << std::endl;
@@ -145,7 +147,7 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
 }
 
 // Prints all info from info.txt.
-void Doctor::get_doctor_info(const std::string &doctor_full_id) {
+void Doctor::get_doctor_info(const std::string& doctor_full_id) {
     const std::string path = "data/Doctors/" + doctor_full_id + "/info.txt";
     std::ifstream file_in(path);
 

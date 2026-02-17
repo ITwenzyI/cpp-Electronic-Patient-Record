@@ -12,7 +12,8 @@ void Assistant::displayMenu() {
 
     do {
         std::cout << "\n=== Assistant Menu ===" << std::endl;
-        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() << std::endl;
+        std::cout << getRole() << ": " << getFirstName() << " " << getLastName()
+                  << "\nID: " << getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Create New Patient" << std::endl;
         std::cout << "2. Update Field in Info\n";
@@ -41,7 +42,8 @@ void Assistant::displayMenu() {
                 p.fill_patient_info();
                 p.createNewPatient();
                 std::cout << std::endl;
-                std::cout << "Patient: [" << firstName << " " << lastName << "] successfully created!" << "\n";
+                std::cout << "Patient: [" << firstName << " " << lastName
+                          << "] successfully created!" << "\n";
                 std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
@@ -122,6 +124,7 @@ void Assistant::displayMenu() {
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
                 add_extra_info(id);
+                break;
             }
             default:
                 std::cout << "Invalid Choice." << std::endl;
@@ -167,7 +170,7 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
 }
 
 // Prints all infos from info.txt.
-void Assistant::get_assistant_info(const std::string &assistant_full_id) {
+void Assistant::get_assistant_info(const std::string& assistant_full_id) {
     const std::string path = "data/Assistants/" + assistant_full_id + "/info.txt";
     std::ifstream file_in(path);
 
