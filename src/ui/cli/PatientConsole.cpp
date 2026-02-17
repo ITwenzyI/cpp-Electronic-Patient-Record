@@ -1,8 +1,31 @@
 #include "domain/model/Patient/Patient.hpp"
+#include "infrastructure/persistence/FilePatientRepository.hpp"
+#include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <chrono>
 #include <iostream>
 #include <thread>
+
+namespace {
+IUserRepository& userRepository() {
+    static FileUserRepository repository;
+    return repository;
+}
+
+IPatientRepository& patientRepository() {
+    static FilePatientRepository repository;
+    return repository;
+}
+
+std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
+    for (const auto& line : lines) {
+        if (line.starts_with(keyPrefix)) {
+            return line.substr(keyPrefix.size());
+        }
+    }
+    return "";
+}
+}
 
 // Patient menu.
 void Patient::displayMenu() {
@@ -67,58 +90,43 @@ void Patient::displayMenu() {
 
 // Checks if login details are correct.
 void Patient::check_id_name(std::string id, std::string firstName, std::string lastName) {
-    std::string path = "data/Patients/" + id + "/info.txt";
-    std::ifstream file_in(path);
-    std::vector<std::string> content;
-
-    if (file_in) {
-        std::string line;
-        std::string fileFirstName, fileLastName;
-        while (std::getline(file_in, line)) {
-            if (line.starts_with("First Name:")) {
-                fileFirstName = line.substr(11);
-            } else if (line.starts_with("Last Name:")) {
-                fileLastName = line.substr(10);
-            }
-        }
-        file_in.close();
-
-        if (cleaned(fileFirstName) == cleaned(firstName) &&
-            cleaned(fileLastName) == cleaned(lastName)) {
-            std::cout << std::endl;
-            std::cout << "Login successful.\n";
-            std::this_thread::sleep_for(std::chrono::seconds(2));
-            displayMenu();
-        } else {
-            std::cout << std::endl;
-            std::cout << "Name does not match the ID.\n";
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-        }
-    } else {
+    const std::vector<std::string> info = userRepository().readInfo(id);
+    if (!userRepository().exists(id)) {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
+        return;
+    }
+
+    const std::string fileFirstName = extractField(info, "First Name:");
+    const std::string fileLastName = extractField(info, "Last Name:");
+
+    if (cleaned(fileFirstName) == cleaned(firstName) &&
+        cleaned(fileLastName) == cleaned(lastName)) {
+        std::cout << std::endl;
+        std::cout << "Login successful.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+        displayMenu();
+    } else {
+        std::cout << std::endl;
+        std::cout << "Name does not match the ID.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(3));
     }
 }
 
 // Prints all info from info.txt.
 void Patient::get_patient_info(const std::string &patient_full_id) {
-    const std::string path = "data/Patients/" + patient_full_id + "/info.txt";
-    std::ifstream file_in(path);
-
-    if (file_in) {
-        std::string line;
-        std::vector<std::string> content;
-        std::cout << "File Content:" << std::endl;
-        while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;
-            content.push_back(line);
-        }
-        file_in.close();
-    } else {
+    const std::vector<std::string> info = userRepository().readInfo(patient_full_id);
+    if (info.empty()) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
+
+    std::cout << "File Content:" << std::endl;
+    for (const auto& line : info) {
+        std::cout << line << std::endl;
+    }
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
@@ -161,17 +169,11 @@ void Patient::add_patient_appointment(const std::string &patient_full_id) {
     std::cout << std::endl;
 
     std::string appointmentLine = "[" + date + " " + time + "] - " + doctorName + " (" + reason + ")";
-    std::string filePath = "data/Patients/" + patient_full_id + "/appointments.txt";
-
-    std::ofstream out(filePath, std::ios::app);
-    if (!out.is_open()) {
+    if (!patientRepository().appendAppointment(patient_full_id, appointmentLine)) {
         std::cerr << "Could not open appointment file for writing.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
-
-    out << appointmentLine << '\n';
-    out.close();
 
     std::cout << "Appointment added:\n" << appointmentLine << '\n';
     std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -198,17 +200,11 @@ void Patient::add_patient_medication(const std::string &patient_full_id) {
     std::cout << std::endl;
 
     std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
-    std::string filePath = "data/Patients/" + patient_full_id + "/medications.txt";
-
-    std::ofstream out(filePath, std::ios::app);
-    if (!out.is_open()) {
+    if (!patientRepository().appendMedication(patient_full_id, medicationLine)) {
         std::cerr << "Could not open medication file for writing.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
-
-    out << medicationLine << '\n';
-    out.close();
 
     std::cout << "Medication added:\n" << medicationLine << '\n';
     std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -235,17 +231,11 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
     std::cout << std::endl;
 
     std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
-    std::string filePath = "data/Patients/" + patient_full_id + "/records.txt";
-
-    std::ofstream out(filePath, std::ios::app);
-    if (!out.is_open()) {
+    if (!patientRepository().appendRecord(patient_full_id, recordLine)) {
         std::cerr << "Could not open records file for writing.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
-
-    out << recordLine << '\n';
-    out.close();
 
     std::cout << "Record added:\n" << recordLine << '\n';
     std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -253,64 +243,49 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
 
 // Prints all appointments from patient file.
 void Patient::get_patient_appointments(const std::string &patient_full_id) {
-    const std::string path = "data/Patients/" + patient_full_id + "/appointments.txt";
-    std::ifstream file_in(path);
-
-    if (file_in) {
-        std::string line;
-        std::vector<std::string> content;
-        std::cout << std::endl;
-        while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;
-            content.push_back(line);
-        }
-        file_in.close();
-    } else {
+    const std::vector<std::string> appointments = patientRepository().readAppointments(patient_full_id);
+    if (appointments.empty()) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
+
+    std::cout << std::endl;
+    for (const auto& line : appointments) {
+        std::cout << line << std::endl;
+    }
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 // Prints all medications from patient file.
 void Patient::get_patient_medications(const std::string &patient_full_id) {
-    const std::string path = "data/Patients/" + patient_full_id + "/medications.txt";
-    std::ifstream file_in(path);
-
-    if (file_in) {
-        std::string line;
-        std::vector<std::string> content;
-        std::cout << std::endl;
-        while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;
-            content.push_back(line);
-        }
-        file_in.close();
-    } else {
+    const std::vector<std::string> medications = patientRepository().readMedications(patient_full_id);
+    if (medications.empty()) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
+
+    std::cout << std::endl;
+    for (const auto& line : medications) {
+        std::cout << line << std::endl;
+    }
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 // Prints all records from patient file.
 void Patient::get_patient_records(const std::string &patient_full_id) {
-    const std::string path = "data/Patients/" + patient_full_id + "/records.txt";
-    std::ifstream file_in(path);
-
-    if (file_in) {
-        std::string line;
-        std::vector<std::string> content;
-        std::cout << std::endl;
-        while (std::getline(file_in, line)) {
-            std::cout << line << std::endl;
-            content.push_back(line);
-        }
-        file_in.close();
-    } else {
+    const std::vector<std::string> records = patientRepository().readRecords(patient_full_id);
+    if (records.empty()) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
+
+    std::cout << std::endl;
+    for (const auto& line : records) {
+        std::cout << line << std::endl;
+    }
+
     std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
@@ -330,24 +305,16 @@ void Patient::request_appointment(const std::string &patient_full_id) {
     std::cout << "Enter reason (optional): ";
     std::getline(std::cin, reason);
 
-    std::filesystem::create_directories("data/Appointments");
-    std::string filePath = "data/Appointments/requests.txt";
-    std::ofstream out(filePath, std::ios::app);
+    std::string requestLine = "[" + date + " " + time + "] - " + patient_full_id + " - Dr. " + doctorName;
+    if (!reason.empty()) {
+        requestLine += " - Reason: " + reason;
+    }
+    requestLine += " - Status: pending";
 
-    if (!out.is_open()) {
-        std::cerr << "Error: could not open " << filePath << "\n";
+    if (!patientRepository().appendAppointmentRequest(requestLine)) {
+        std::cerr << "Error: could not open data/Appointments/requests.txt\n";
         return;
     }
-
-    out << "[" << date << " " << time << "] - "
-        << patient_full_id << " - Dr. " << doctorName;
-
-    if (!reason.empty()) {
-        out << " - Reason: " << reason;
-    }
-
-    out << " - Status: pending\n";
-    out.close();
 
     std::cout << std::endl;
     std::cout << "Appointment request submitted. Waiting for confirmation.\n";

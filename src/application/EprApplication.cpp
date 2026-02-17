@@ -1,18 +1,25 @@
 #include "application/EprApplication.hpp"
 
+#include "application/ports/ISystemRepository.hpp"
 #include "ui/cli/Admin/Admin.hpp"
 #include "domain/model/Patient/Patient.hpp"
 #include "domain/model/Doctor/Doctor.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
+#include "infrastructure/persistence/FileSystemRepository.hpp"
 
 #include <chrono>
-#include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
 
 #include <windows.h>
+
+namespace {
+ISystemRepository& systemRepository() {
+    static FileSystemRepository repository;
+    return repository;
+}
+}
 
 int EprApplication::run() {
     SetConsoleOutputCP(CP_UTF8);
@@ -24,25 +31,7 @@ int EprApplication::run() {
     std::cout << "Booting up System...\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(900));
 
-    std::filesystem::create_directories("data");
-
-    if (!std::filesystem::exists("data/patient_id.txt")) {
-        std::ofstream out("data/patient_id.txt");
-        out << "1";
-        out.close();
-    }
-
-    if (!std::filesystem::exists("data/assistant_id.txt")) {
-        std::ofstream out("data/assistant_id.txt");
-        out << "1";
-        out.close();
-    }
-
-    if (!std::filesystem::exists("data/doctor_id.txt")) {
-        std::ofstream out("data/doctor_id.txt");
-        out << "1";
-        out.close();
-    }
+    systemRepository().ensureBootstrapData();
 
     while (!Admin::checkInitialSetup()) {}
 

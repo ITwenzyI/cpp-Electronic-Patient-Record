@@ -18,6 +18,7 @@ set(PATIENT_RECORD_SOURCES
     src/infrastructure/persistence/IDs/IDs.cpp
     src/infrastructure/persistence/FileUserRepository.cpp
     src/infrastructure/persistence/FilePatientRepository.cpp
+    src/infrastructure/persistence/FileSystemRepository.cpp
     src/ui/cli/UserConsole.cpp
     src/ui/cli/PatientConsole.cpp
     src/ui/cli/DoctorConsole.cpp
@@ -29,6 +30,7 @@ set(PATIENT_RECORD_HEADERS
     src/application/EprApplication.hpp
     src/application/ports/IUserRepository.hpp
     src/application/ports/IPatientRepository.hpp
+    src/application/ports/ISystemRepository.hpp
     src/domain/model/Patient/Patient.hpp
     src/domain/model/User/User.hpp
     src/domain/model/Doctor/Doctor.hpp
@@ -37,6 +39,7 @@ set(PATIENT_RECORD_HEADERS
     src/infrastructure/persistence/IDs/IDs.hpp
     src/infrastructure/persistence/FileUserRepository.hpp
     src/infrastructure/persistence/FilePatientRepository.hpp
+    src/infrastructure/persistence/FileSystemRepository.hpp
     src/ui/cli/Admin/Admin.hpp
 )
 

@@ -8,15 +8,29 @@
 
 #include "Admin.hpp"
 
+#include "application/ports/ISystemRepository.hpp"
+#include "application/ports/IUserRepository.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Patient/Patient.hpp"
 #include "domain/model/Doctor/Doctor.hpp"
+#include "infrastructure/persistence/FileSystemRepository.hpp"
+#include "infrastructure/persistence/FileUserRepository.hpp"
 
-#include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <thread>
+
+namespace {
+ISystemRepository& systemRepository() {
+    static FileSystemRepository repository;
+    return repository;
+}
+
+IUserRepository& userRepository() {
+    static FileUserRepository repository;
+    return repository;
+}
+}
 
 Admin::Admin() = default;
 
@@ -26,22 +40,21 @@ Admin::~Admin() = default;
 
 // Checks if any Folder of Patients, Assistants or Doctors is already created, if not then the System needs an Initialization
 bool Admin::checkInitialSetup() {
-    if (!std::filesystem::exists("data/Assistants") || !std::filesystem::exists("data/Doctors")) {
-
-        std::ofstream out("data/admin_logging.txt");
-        out << "EPR-System Setup from Admin: " << getDate() << " " << getTime() << "\n\n"; // Initial Value
-        out.close();
+    if (!systemRepository().hasAssistantsDirectory() || !systemRepository().hasDoctorsDirectory()) {
+        systemRepository().writeAdminSetupLog(
+            "EPR-System Setup from Admin: " + getDate() + " " + getTime() + "\n\n"
+        );
 
         std::cout << "[!] System is not initialized yet.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
 
-        if (!std::filesystem::exists("data/Assistants") && !std::filesystem::exists("data/Doctors")) {
+        if (!systemRepository().hasAssistantsDirectory() && !systemRepository().hasDoctorsDirectory()) {
             std::cout << "[!] No Assistant and Doctor structure found.\n";
         }
-        else if (!std::filesystem::exists("data/Assistants")) {
+        else if (!systemRepository().hasAssistantsDirectory()) {
             std::cout << "[!] No Assistant structure found.\n";
         }
-        else if (!std::filesystem::exists("data/Doctors")) {
+        else if (!systemRepository().hasDoctorsDirectory()) {
             std::cout << "[!] No Doctor structure found.\n";
         }
 
@@ -189,41 +202,22 @@ void Admin::admin_getNames(std::string &firstName, std::string &lastName) {
 
 void Admin::exportUserData(const std::string& id) {
 
-    // Determine the correct file path based on the ID (Example: D0001 = Doctors/D0001/info.txt)
-    std::string path = get_file_path_from_id(id);
-
-    if (path.empty()) {
+    if (!userRepository().exists(id)) {
         std::cerr << "Invalid ID: " << id << std::endl;
         std::this_thread::sleep_for(std::chrono::seconds(2));
         return;
     }
 
-    std::ifstream file_in(path);
-    std::vector<std::string> content;
-
-    if (file_in) {
-        std::string line;
-        while (std::getline(file_in, line)) {
-            content.push_back(line);                // safe line in vector
-        }
-        file_in.close();
-    } else {
+    const std::vector<std::string> content = userRepository().readInfo(id);
+    if (content.empty()) {
         std::cerr << "Failed to read file!" << std::endl;
         return;
     }
 
-
-    std::filesystem::create_directories("data/Exports");
-    std::string folderName = std::format("data/Exports/{}", id); // Style: P00000001
-    std::filesystem::create_directories(folderName);
-
-    // Creating file with all the infos from the User
-    if (!std::filesystem::exists(folderName + "/backup_info.txt")) {
-        std::ofstream out( folderName + "/backup_info.txt");
-        for (const auto & i : content) {
-            out << i << "\n";
-        }
-        out.close();
+    std::string folderName;
+    if (!systemRepository().createUserBackupIfMissing(id, content, folderName)) {
+        std::cerr << "Failed to create backup file." << std::endl;
+        return;
     }
 
     std::cout << "Successfully created backup_info.txt file for: " << folderName << "\n";
