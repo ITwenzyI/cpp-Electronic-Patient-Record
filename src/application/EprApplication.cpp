@@ -1,10 +1,8 @@
 #include "application/EprApplication.hpp"
 
 #include "application/ports/ISystemRepository.hpp"
+#include "application/usecase/UserSessionService.hpp"
 #include "ui/cli/Admin/Admin.hpp"
-#include "domain/model/Patient/Patient.hpp"
-#include "domain/model/Doctor/Doctor.hpp"
-#include "domain/model/Assistant/Assistant.hpp"
 #include "infrastructure/persistence/FileSystemRepository.hpp"
 
 #include <chrono>
@@ -18,6 +16,11 @@ namespace {
 ISystemRepository& systemRepository() {
     static FileSystemRepository repository;
     return repository;
+}
+
+const UserSessionService& userSessionService() {
+    static UserSessionService service;
+    return service;
 }
 }
 
@@ -78,26 +81,7 @@ int EprApplication::run() {
             std::cout << "Please enter your last name: ";
             std::cin >> lastName;
 
-            switch (choice) {
-                case 1: {
-                    Patient p(id, firstName, lastName);
-                    p.check_id_name(id, firstName, lastName);
-                    break;
-                }
-                case 2: {
-                    Doctor d(id, firstName, lastName);
-                    d.check_id_name(id, firstName, lastName);
-                    break;
-                }
-                case 3: {
-                    Assistant a(id, firstName, lastName);
-                    a.check_id_name(id, firstName, lastName);
-                    break;
-                }
-                default:
-                    std::cout << "Invalid selection.\n";
-                    break;
-            }
+            userSessionService().runRoleSession(choice, id, firstName, lastName);
         }
     } while (choice != 0);
 
