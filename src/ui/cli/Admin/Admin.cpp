@@ -10,6 +10,7 @@
 
 #include "application/ports/ISystemRepository.hpp"
 #include "application/ports/IUserRepository.hpp"
+#include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "common/util/Utils/Utils.hpp"
@@ -17,6 +18,7 @@
 #include "domain/model/Patient/Patient.hpp"
 #include "domain/model/Doctor/Doctor.hpp"
 #include "infrastructure/persistence/FileSystemRepository.hpp"
+#include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
@@ -34,6 +36,11 @@ IUserRepository& userRepository() {
     return repository;
 }
 
+IPatientRepository& patientRepository() {
+    static FilePatientRepository repository;
+    return repository;
+}
+
 UserProvisioningService& userProvisioningService() {
     static FileUserProvisioningRepository repository;
     static UserProvisioningService service(repository);
@@ -42,6 +49,11 @@ UserProvisioningService& userProvisioningService() {
 
 UserRecordService& userRecordService() {
     static UserRecordService service(userRepository());
+    return service;
+}
+
+PatientRecordQueryService& patientRecordQueryService() {
+    static PatientRecordQueryService service(userRepository(), patientRepository());
     return service;
 }
 }
@@ -124,7 +136,18 @@ void Admin::admin_setup() {
             std::cout << "Please enter the full Patient-ID: ";
             std::cin >> id;
             std::cout << std::endl;
-            Patient::get_patient_info(id);
+            {
+                const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
+                if (info.empty()) {
+                    std::cerr << "Failed to read file!" << std::endl;
+                    break;
+                }
+                std::cout << "File Content:" << std::endl;
+                for (const auto& line : info) {
+                    std::cout << line << std::endl;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+            }
             break;
         }
 

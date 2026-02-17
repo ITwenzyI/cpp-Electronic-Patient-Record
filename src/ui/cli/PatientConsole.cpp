@@ -1,4 +1,5 @@
 #include "domain/model/Patient/Patient.hpp"
+#include "application/usecase/PatientRecordQueryService.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
@@ -16,6 +17,11 @@ IUserRepository& userRepository() {
 IPatientRepository& patientRepository() {
     static FilePatientRepository repository;
     return repository;
+}
+
+PatientRecordQueryService& patientRecordQueryService() {
+    static PatientRecordQueryService service(userRepository(), patientRepository());
+    return service;
 }
 
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
@@ -55,7 +61,19 @@ void Patient::displayMenu() {
                 std::cout << "Appointments\n";
                 std::cout << "Enter your full ID: ";
                 std::cin >> id;
-                get_patient_appointments(id);
+                {
+                    const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
+                    if (appointments.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+
+                    std::cout << std::endl;
+                    for (const auto& line : appointments) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 2: {
@@ -63,7 +81,19 @@ void Patient::displayMenu() {
                 std::cout << "Medications\n";
                 std::cout << "Enter your full ID: ";
                 std::cin >> id;
-                get_patient_medications(id);
+                {
+                    const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
+                    if (medications.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+
+                    std::cout << std::endl;
+                    for (const auto& line : medications) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 3: {
@@ -71,7 +101,19 @@ void Patient::displayMenu() {
                 std::cout << "Records\n";
                 std::cout << "Enter your full ID: ";
                 std::cin >> id;
-                get_patient_records(id);
+                {
+                    const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
+                    if (records.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+
+                    std::cout << std::endl;
+                    for (const auto& line : records) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 4: {
@@ -113,22 +155,6 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
         std::cout << "Name does not match the ID.\n";
         std::this_thread::sleep_for(std::chrono::seconds(3));
     }
-}
-
-// Prints all info from info.txt.
-void Patient::get_patient_info(const std::string &patient_full_id) {
-    const std::vector<std::string> info = userRepository().readInfo(patient_full_id);
-    if (info.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << "File Content:" << std::endl;
-    for (const auto& line : info) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 // Gets all info for info.txt.
@@ -240,54 +266,6 @@ void Patient::add_patient_record(const std::string &patient_full_id) {
 
     std::cout << "Record added:\n" << recordLine << '\n';
     std::this_thread::sleep_for(std::chrono::seconds(2));
-}
-
-// Prints all appointments from patient file.
-void Patient::get_patient_appointments(const std::string &patient_full_id) {
-    const std::vector<std::string> appointments = patientRepository().readAppointments(patient_full_id);
-    if (appointments.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << std::endl;
-    for (const auto& line : appointments) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-}
-
-// Prints all medications from patient file.
-void Patient::get_patient_medications(const std::string &patient_full_id) {
-    const std::vector<std::string> medications = patientRepository().readMedications(patient_full_id);
-    if (medications.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << std::endl;
-    for (const auto& line : medications) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-}
-
-// Prints all records from patient file.
-void Patient::get_patient_records(const std::string &patient_full_id) {
-    const std::vector<std::string> records = patientRepository().readRecords(patient_full_id);
-    if (records.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << std::endl;
-    for (const auto& line : records) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 void Patient::request_appointment(const std::string &patient_full_id) {

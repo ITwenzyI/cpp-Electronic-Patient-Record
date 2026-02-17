@@ -1,5 +1,6 @@
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Patient/Patient.hpp"
+#include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "common/util/Utils/Utils.hpp"
@@ -27,6 +28,11 @@ UserRecordService& userRecordService() {
 IPatientRepository& patientRepository() {
     static FilePatientRepository repository;
     return repository;
+}
+
+PatientRecordQueryService& patientRecordQueryService() {
+    static PatientRecordQueryService service(userRepository(), patientRepository());
+    return service;
 }
 
 UserProvisioningService& userProvisioningService() {
@@ -137,7 +143,18 @@ void Assistant::displayMenu() {
                 std::cout << "Patient Info\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_info(id);
+                {
+                    const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
+                    if (info.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << "File Content:" << std::endl;
+                    for (const auto& line : info) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 7: {
@@ -145,7 +162,18 @@ void Assistant::displayMenu() {
                 std::cout << "Patient Appointments\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_appointments(id);
+                {
+                    const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
+                    if (appointments.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << std::endl;
+                    for (const auto& line : appointments) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 8: {
@@ -153,7 +181,18 @@ void Assistant::displayMenu() {
                 std::cout << "Patient Medications\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_medications(id);
+                {
+                    const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
+                    if (medications.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << std::endl;
+                    for (const auto& line : medications) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 9: {
@@ -161,7 +200,18 @@ void Assistant::displayMenu() {
                 std::cout << "Patient Records\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_records(id);
+                {
+                    const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
+                    if (records.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << std::endl;
+                    for (const auto& line : records) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 10: {
