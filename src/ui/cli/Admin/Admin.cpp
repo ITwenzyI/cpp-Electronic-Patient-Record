@@ -204,7 +204,18 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             std::cout << "Please enter the full Assistant-ID: ";
             std::cin >> id;
-            Assistant::get_assistant_info(id);
+            {
+                const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
+                if (info.empty()) {
+                    std::cerr << "Failed to read file!" << std::endl;
+                    break;
+                }
+                std::cout << "File Content:" << std::endl;
+                for (const auto& line : info) {
+                    std::cout << line << std::endl;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+            }
             break;
         }
 
