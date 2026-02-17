@@ -71,9 +71,6 @@ public:
     virtual void setFirstName(const std::string& firstName);
     virtual void setLastName(const std::string& lastName);
 
-    static void update_field_in_file(const std::string& id, const std::string& field, const std::string& newInput);
-    static void add_extra_info(const std::string& id);
-
     // Abstract method
     virtual void displayMenu() = 0;
     virtual void check_id_name(std::string id, std::string firstName, std::string lastName) = 0;

@@ -10,6 +10,7 @@
 
 #include "application/ports/ISystemRepository.hpp"
 #include "application/ports/IUserRepository.hpp"
+#include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
@@ -36,6 +37,11 @@ IUserRepository& userRepository() {
 UserProvisioningService& userProvisioningService() {
     static FileUserProvisioningRepository repository;
     static UserProvisioningService service(repository);
+    return service;
+}
+
+UserRecordService& userRecordService() {
+    static UserRecordService service(userRepository());
     return service;
 }
 }
@@ -171,7 +177,13 @@ void Admin::admin_setup() {
             std::cin >> field;
             std::cout << "Please enter the new input: ";
             std::cin >> newInput;
-            User::update_field_in_file(id, field, newInput);
+            if (!userRecordService().updateFieldInFile(id, field, newInput)) {
+                std::cerr << "Could not update field in file.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+                break;
+            }
+            std::cout << field << " successfully updated.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
         }
 

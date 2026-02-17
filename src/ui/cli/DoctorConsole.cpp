@@ -1,16 +1,23 @@
 #include "domain/model/Doctor/Doctor.hpp"
 #include "domain/model/Patient/Patient.hpp"
+#include "application/usecase/UserRecordService.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <chrono>
 #include <iostream>
+#include <limits>
 #include <thread>
 
 namespace {
 IUserRepository& userRepository() {
     static FileUserRepository repository;
     return repository;
+}
+
+UserRecordService& userRecordService() {
+    static UserRecordService service(userRepository());
+    return service;
 }
 
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
@@ -111,15 +118,36 @@ void Doctor::displayMenu() {
                 std::cout << "Enter New Input: ";
                 std::cin >> newInput;
                 std::cout << std::endl;
-                update_field_in_file(id, field, newInput);
+                if (!userRecordService().updateFieldInFile(id, field, newInput)) {
+                    std::cerr << "Could not update field in file.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+                std::cout << field << " successfully updated.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             case 8: {
+                std::string extraInfo;
                 std::cout << std::endl;
                 std::cout << "Add Extra Info\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                add_extra_info(id);
+                std::cout << "ID: " << id << std::endl;
+                std::cout << "Enter the Extra Info: ";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::getline(std::cin, extraInfo);
+                std::cout << std::endl;
+
+                if (!userRecordService().addExtraInfo(id, extraInfo)) {
+                    std::cerr << "Could not open file for writing.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+
+                const std::string newLine = "[" + getDate() + "] " + extraInfo + "\n";
+                std::cout << "Extra Info added:\n" << newLine << '\n';
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             default:
