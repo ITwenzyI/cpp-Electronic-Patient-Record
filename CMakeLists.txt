@@ -4,7 +4,7 @@ project(patient_record)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(patient_record
-        src/ui/cli/main.cpp
+        src/main.cpp
         src/domain/model/Patient/Patient.cpp
         src/domain/model/Patient/Patient.hpp
         src/domain/model/User/User.cpp
@@ -17,6 +17,10 @@ add_executable(patient_record
         src/common/util/Utils/Utils.hpp
         src/infrastructure/persistence/IDs/IDs.cpp
         src/infrastructure/persistence/IDs/IDs.hpp
+        src/ui/cli/UserConsole.cpp
+        src/ui/cli/PatientConsole.cpp
+        src/ui/cli/DoctorConsole.cpp
+        src/ui/cli/AssistantConsole.cpp
         src/ui/cli/Admin/Admin.cpp
         src/ui/cli/Admin/Admin.hpp
 )
