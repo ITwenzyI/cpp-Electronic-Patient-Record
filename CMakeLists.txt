@@ -7,48 +7,12 @@ project(
     LANGUAGES CXX
 )
 
-set(PATIENT_RECORD_SOURCES
-    src/main.cpp
-    src/application/EprApplication.cpp
-    src/application/usecase/LoginDecisionUseCase.cpp
-    src/application/usecase/SystemBootstrapUseCase.cpp
-    src/application/usecase/UserSessionService.cpp
-    src/domain/model/Patient/Patient.cpp
-    src/domain/model/User/User.cpp
-    src/domain/model/Doctor/Doctor.cpp
-    src/domain/model/Assistant/Assistant.cpp
-    src/common/util/Utils/Utils.cpp
-    src/infrastructure/persistence/IDs/IDs.cpp
-    src/infrastructure/persistence/FileUserRepository.cpp
-    src/infrastructure/persistence/FilePatientRepository.cpp
-    src/infrastructure/persistence/FileSystemRepository.cpp
-    src/ui/cli/UserConsole.cpp
-    src/ui/cli/PatientConsole.cpp
-    src/ui/cli/DoctorConsole.cpp
-    src/ui/cli/AssistantConsole.cpp
-    src/ui/cli/MainMenuCli.cpp
-    src/ui/cli/Admin/Admin.cpp
+file(GLOB_RECURSE PATIENT_RECORD_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
 
-set(PATIENT_RECORD_HEADERS
-    src/application/EprApplication.hpp
-    src/application/usecase/LoginDecisionUseCase.hpp
-    src/application/usecase/SystemBootstrapUseCase.hpp
-    src/application/usecase/UserSessionService.hpp
-    src/application/ports/IUserRepository.hpp
-    src/application/ports/IPatientRepository.hpp
-    src/application/ports/ISystemRepository.hpp
-    src/domain/model/Patient/Patient.hpp
-    src/domain/model/User/User.hpp
-    src/domain/model/Doctor/Doctor.hpp
-    src/domain/model/Assistant/Assistant.hpp
-    src/common/util/Utils/Utils.hpp
-    src/infrastructure/persistence/IDs/IDs.hpp
-    src/infrastructure/persistence/FileUserRepository.hpp
-    src/infrastructure/persistence/FilePatientRepository.hpp
-    src/infrastructure/persistence/FileSystemRepository.hpp
-    src/ui/cli/MainMenuCli.hpp
-    src/ui/cli/Admin/Admin.hpp
+file(GLOB_RECURSE PATIENT_RECORD_HEADERS CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
 )
 
 add_executable(patient_record)
