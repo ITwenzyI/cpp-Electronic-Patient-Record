@@ -1,6 +1,7 @@
 #include "application/EprApplication.hpp"
 
 #include "application/ports/ISystemRepository.hpp"
+#include "application/usecase/LoginDecisionUseCase.hpp"
 #include "application/usecase/UserSessionService.hpp"
 #include "ui/cli/Admin/Admin.hpp"
 #include "infrastructure/persistence/FileSystemRepository.hpp"
@@ -21,6 +22,11 @@ ISystemRepository& systemRepository() {
 const UserSessionService& userSessionService() {
     static UserSessionService service;
     return service;
+}
+
+const LoginDecisionUseCase& loginDecisionUseCase() {
+    static LoginDecisionUseCase useCase;
+    return useCase;
 }
 }
 
@@ -56,33 +62,35 @@ int EprApplication::run() {
         std::cout << "Please enter your choice (or #admin): ";
         std::cin >> input;
 
-        if (input == "#admin") {
+        const LoginDecision decision = loginDecisionUseCase().decide(input);
+
+        if (decision.action == LoginAction::AdminSetup) {
             Admin::admin_setup();
-        } else {
-            try {
-                choice = std::stoi(input);
-            } catch (...) {
+            continue;
+        }
+
+        if (decision.action == LoginAction::InvalidInput) {
                 std::cout << "Invalid input.\n";
                 return 0;
-            }
-
-            if (choice == 0) {
-                std::cout << "Exiting...\n";
-                return 0;
-            }
-
-            std::string id;
-            std::cout << "Please enter your ID: ";
-            std::cin >> id;
-
-            std::string firstName, lastName;
-            std::cout << "Please enter your first name: ";
-            std::cin >> firstName;
-            std::cout << "Please enter your last name: ";
-            std::cin >> lastName;
-
-            userSessionService().runRoleSession(choice, id, firstName, lastName);
         }
+
+        choice = decision.roleChoice;
+        if (decision.action == LoginAction::ExitApplication) {
+            std::cout << "Exiting...\n";
+            return 0;
+        }
+
+        std::string id;
+        std::cout << "Please enter your ID: ";
+        std::cin >> id;
+
+        std::string firstName, lastName;
+        std::cout << "Please enter your first name: ";
+        std::cin >> firstName;
+        std::cout << "Please enter your last name: ";
+        std::cin >> lastName;
+
+        userSessionService().runRoleSession(choice, id, firstName, lastName);
     } while (choice != 0);
 
     return 0;
