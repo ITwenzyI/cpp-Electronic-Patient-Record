@@ -26,6 +26,7 @@ set(PATIENT_RECORD_SOURCES
     src/ui/cli/PatientConsole.cpp
     src/ui/cli/DoctorConsole.cpp
     src/ui/cli/AssistantConsole.cpp
+    src/ui/cli/MainMenuCli.cpp
     src/ui/cli/Admin/Admin.cpp
 )
 
@@ -46,6 +47,7 @@ set(PATIENT_RECORD_HEADERS
     src/infrastructure/persistence/FileUserRepository.hpp
     src/infrastructure/persistence/FilePatientRepository.hpp
     src/infrastructure/persistence/FileSystemRepository.hpp
+    src/ui/cli/MainMenuCli.hpp
     src/ui/cli/Admin/Admin.hpp
 )
 

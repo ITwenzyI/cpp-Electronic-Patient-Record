@@ -4,11 +4,10 @@
 #include "application/usecase/SystemBootstrapUseCase.hpp"
 #include "application/usecase/UserSessionService.hpp"
 #include "ui/cli/Admin/Admin.hpp"
+#include "ui/cli/MainMenuCli.hpp"
 
-#include <chrono>
 #include <iostream>
 #include <string>
-#include <thread>
 
 namespace {
 const UserSessionService& userSessionService() {
@@ -25,6 +24,11 @@ const SystemBootstrapUseCase& systemBootstrapUseCase() {
     static SystemBootstrapUseCase useCase;
     return useCase;
 }
+
+const MainMenuCli& mainMenuCli() {
+    static MainMenuCli cli;
+    return cli;
+}
 }
 
 int EprApplication::run() {
@@ -33,20 +37,7 @@ int EprApplication::run() {
     int choice;
 
     do {
-        std::cout << "Welcome to the Electronic Patient Record System.\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-        std::cout << "Please choice your role:\n";
-        std::this_thread::sleep_for(std::chrono::milliseconds(900));
-
-        std::string input;
-        std::cout << std::endl;
-        std::cout << "=== ELECTRONIC PATIENT RECORD SYSTEM ===\n";
-        std::cout << "1. Patient\n";
-        std::cout << "2. Doctor\n";
-        std::cout << "3. Assistant\n";
-        std::cout << "0. Exit\n";
-        std::cout << "Please enter your choice (or #admin): ";
-        std::cin >> input;
+        std::string input = mainMenuCli().promptRoleSelection();
 
         const LoginDecision decision = loginDecisionUseCase().decide(input);
 
@@ -66,15 +57,9 @@ int EprApplication::run() {
             return 0;
         }
 
-        std::string id;
-        std::cout << "Please enter your ID: ";
-        std::cin >> id;
-
         std::string firstName, lastName;
-        std::cout << "Please enter your first name: ";
-        std::cin >> firstName;
-        std::cout << "Please enter your last name: ";
-        std::cin >> lastName;
+        std::string id;
+        mainMenuCli().promptLoginIdentity(id, firstName, lastName);
 
         userSessionService().runRoleSession(choice, id, firstName, lastName);
     } while (choice != 0);
