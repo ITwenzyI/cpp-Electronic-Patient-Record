@@ -11,6 +11,7 @@
 #include "application/ports/ISystemRepository.hpp"
 #include "application/ports/IUserRepository.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
+#include "application/usecase/UserProfileQueryService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "common/util/Utils/Utils.hpp"
@@ -49,6 +50,11 @@ UserProvisioningService& userProvisioningService() {
 
 UserRecordService& userRecordService() {
     static UserRecordService service(userRepository());
+    return service;
+}
+
+UserProfileQueryService& userProfileQueryService() {
+    static UserProfileQueryService service(userRepository());
     return service;
 }
 
@@ -167,7 +173,18 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             std::cout << "Please enter the full Doctor-ID: ";
             std::cin >> id;
-            Doctor::get_doctor_info(id);
+            {
+                const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
+                if (info.empty()) {
+                    std::cerr << "Failed to read file!" << std::endl;
+                    break;
+                }
+                std::cout << "File Content:" << std::endl;
+                for (const auto& line : info) {
+                    std::cout << line << std::endl;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+            }
             break;
         }
 
