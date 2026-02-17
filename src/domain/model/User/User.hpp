@@ -3,19 +3,8 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#include "common/util/Utils/Utils.hpp"
-
 #include <string>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <utility>
-#include <format>
-#include <ctime>
-#include <thread>
 
 enum class UserRole {
     Patient,
@@ -69,6 +58,14 @@ public:
     virtual std::string getLastName() const;
     virtual std::string getRole() const;
     virtual std::string getID() const;
+    virtual std::string getDateOfBirth() const;
+    virtual std::string getGender() const;
+    virtual std::string getNationality() const;
+    virtual std::string getAddress() const;
+    virtual std::string getPhoneNumber() const;
+    virtual std::string getEmail() const;
+    virtual std::string getInsuranceID() const;
+    virtual std::string getInsuranceType() const;
 
     // Setters
     virtual void setFirstName(const std::string& firstName);

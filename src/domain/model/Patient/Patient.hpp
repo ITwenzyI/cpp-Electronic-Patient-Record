@@ -4,14 +4,6 @@
 #define PATIENT_HPP
 
 #include "domain/model/User/User.hpp"
-#include "common/util/Utils/Utils.hpp"
-#include "infrastructure/persistence/IDs/IDs.hpp"
-
-#include <string>
-#include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <chrono>
 
 class Patient : public User {
 public:
@@ -31,8 +23,6 @@ public:
 
 
 
-    // Patient Folder Actions
-    void createNewPatient() const;
     static void get_patient_info(const std::string &patient_full_id);
     void fill_patient_info();
     static void add_patient_appointment(const std::string &patient_full_id);

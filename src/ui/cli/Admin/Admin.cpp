@@ -10,11 +10,13 @@
 
 #include "application/ports/ISystemRepository.hpp"
 #include "application/ports/IUserRepository.hpp"
+#include "application/usecase/UserProvisioningService.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Patient/Patient.hpp"
 #include "domain/model/Doctor/Doctor.hpp"
 #include "infrastructure/persistence/FileSystemRepository.hpp"
+#include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <iostream>
@@ -29,6 +31,12 @@ ISystemRepository& systemRepository() {
 IUserRepository& userRepository() {
     static FileUserRepository repository;
     return repository;
+}
+
+UserProvisioningService& userProvisioningService() {
+    static FileUserProvisioningRepository repository;
+    static UserProvisioningService service(repository);
+    return service;
 }
 }
 
@@ -98,7 +106,7 @@ void Admin::admin_setup() {
             admin_getNames( firstName, lastName);
             Patient p("", firstName, lastName);
             p.fill_patient_info();
-            p.createNewPatient();
+            userProvisioningService().createPatient(p);
             std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -119,7 +127,7 @@ void Admin::admin_setup() {
             admin_getNames(firstName, lastName);
             Doctor d("", firstName, lastName);
             d.fill_doctor_info();
-            d.createNewDoctor();
+            userProvisioningService().createDoctor(d);
             std::cout << std::endl;
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -139,7 +147,7 @@ void Admin::admin_setup() {
             admin_getNames(firstName, lastName);
             Assistant a("", firstName, lastName);
             a.fill_assistant_info();
-            a.createNewAssistant();
+            userProvisioningService().createAssistant(a);
             std::cout << std::endl;
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));

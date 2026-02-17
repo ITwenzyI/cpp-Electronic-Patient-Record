@@ -1,4 +1,5 @@
 #include "domain/model/Patient/Patient.hpp"
+#include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 

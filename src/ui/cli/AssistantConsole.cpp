@@ -1,5 +1,9 @@
 #include "domain/model/Assistant/Assistant.hpp"
+#include "domain/model/Patient/Patient.hpp"
+#include "application/usecase/UserProvisioningService.hpp"
+#include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
+#include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/Admin/Admin.hpp"
 
@@ -16,6 +20,12 @@ IUserRepository& userRepository() {
 IPatientRepository& patientRepository() {
     static FilePatientRepository repository;
     return repository;
+}
+
+UserProvisioningService& userProvisioningService() {
+    static FileUserProvisioningRepository repository;
+    static UserProvisioningService service(repository);
+    return service;
 }
 
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
@@ -63,7 +73,7 @@ void Assistant::displayMenu() {
                 Admin::admin_getNames(firstName, lastName);
                 Patient p("", firstName, lastName);
                 p.fill_patient_info();
-                p.createNewPatient();
+                userProvisioningService().createPatient(p);
                 std::cout << std::endl;
                 std::cout << "Patient: [" << firstName << " " << lastName
                           << "] successfully created!" << "\n";

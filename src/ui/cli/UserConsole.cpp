@@ -1,4 +1,5 @@
 #include "domain/model/User/User.hpp"
+#include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <chrono>

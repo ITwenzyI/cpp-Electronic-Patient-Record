@@ -1,4 +1,6 @@
 #include "domain/model/Doctor/Doctor.hpp"
+#include "domain/model/Patient/Patient.hpp"
+#include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <chrono>
