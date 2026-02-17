@@ -1,5 +1,6 @@
 #include "domain/model/Patient/Patient.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
+#include "application/usecase/PatientWriteService.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
@@ -21,6 +22,11 @@ IPatientRepository& patientRepository() {
 
 PatientRecordQueryService& patientRecordQueryService() {
     static PatientRecordQueryService service(userRepository(), patientRepository());
+    return service;
+}
+
+PatientWriteService& patientWriteService() {
+    static PatientWriteService service(patientRepository());
     return service;
 }
 
@@ -117,11 +123,30 @@ void Patient::displayMenu() {
                 break;
             }
             case 4: {
+                std::string date, time, doctorName, reason;
                 std::cout << std::endl;
                 std::cout << "Book Appointment\n";
                 std::cout << "Enter your full ID: ";
                 std::cin >> id;
-                request_appointment(id);
+                std::cout << "=== Appointment Request ===\n";
+                std::cout << "Enter date (YYYY-MM-DD): ";
+                std::cin >> date;
+                std::cout << "Enter time (HH:MM): ";
+                std::cin >> time;
+                std::cin.ignore();
+                std::cout << "Enter doctor's name: ";
+                std::getline(std::cin, doctorName);
+                std::cout << "Enter reason (optional): ";
+                std::getline(std::cin, reason);
+
+                if (!patientWriteService().requestAppointment(id, date, time, doctorName, reason)) {
+                    std::cerr << "Error: could not open data/Appointments/requests.txt\n";
+                    break;
+                }
+
+                std::cout << std::endl;
+                std::cout << "Appointment request submitted. Waiting for confirmation.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(3));
                 break;
             }
             default:
@@ -178,124 +203,3 @@ void Patient::fill_patient_info() {
     std::getline(std::cin, insuranceType);
 }
 
-// Add new appointments to appointments.txt.
-void Patient::add_patient_appointment(const std::string &patient_full_id) {
-    std::string date, time, doctorName, reason;
-
-    std::cout << "Enter appointment date (YYYY-MM-DD): ";
-    std::getline(std::cin >> std::ws, date);
-    std::cout << std::endl;
-    std::cout << "Enter appointment time (HH:MM): ";
-    std::getline(std::cin, time);
-    std::cout << std::endl;
-    std::cout << "Enter doctor name: ";
-    std::getline(std::cin, doctorName);
-    std::cout << std::endl;
-    std::cout << "Enter reason for appointment: ";
-    std::getline(std::cin, reason);
-    std::cout << std::endl;
-
-    std::string appointmentLine = "[" + date + " " + time + "] - " + doctorName + " (" + reason + ")";
-    if (!patientRepository().appendAppointment(patient_full_id, appointmentLine)) {
-        std::cerr << "Could not open appointment file for writing.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        return;
-    }
-
-    std::cout << "Appointment added:\n" << appointmentLine << '\n';
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-}
-
-// Add new medications to medications.txt.
-void Patient::add_patient_medication(const std::string &patient_full_id) {
-    std::string nameAndDose, frequency, startDate, endDate;
-
-    std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
-    std::getline(std::cin >> std::ws, nameAndDose);
-    std::cout << std::endl;
-
-    std::cout << "Enter intake frequency (Example: 3x daily): ";
-    std::getline(std::cin, frequency);
-    std::cout << std::endl;
-
-    std::cout << "Enter start date (YYYY-MM-DD): ";
-    std::getline(std::cin, startDate);
-    std::cout << std::endl;
-
-    std::cout << "Enter end date (YYYY-MM-DD): ";
-    std::getline(std::cin, endDate);
-    std::cout << std::endl;
-
-    std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
-    if (!patientRepository().appendMedication(patient_full_id, medicationLine)) {
-        std::cerr << "Could not open medication file for writing.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        return;
-    }
-
-    std::cout << "Medication added:\n" << medicationLine << '\n';
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-}
-
-// Add new records to records.txt.
-void Patient::add_patient_record(const std::string &patient_full_id) {
-    std::string date, doctor, type, content;
-
-    std::cout << "Enter date of record (YYYY-MM-DD): ";
-    std::getline(std::cin >> std::ws, date);
-    std::cout << std::endl;
-
-    std::cout << "Enter doctor name: ";
-    std::getline(std::cin, doctor);
-    std::cout << std::endl;
-
-    std::cout << "Enter type of record: ";
-    std::getline(std::cin, type);
-    std::cout << std::endl;
-
-    std::cout << "Enter record details/notes: ";
-    std::getline(std::cin, content);
-    std::cout << std::endl;
-
-    std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
-    if (!patientRepository().appendRecord(patient_full_id, recordLine)) {
-        std::cerr << "Could not open records file for writing.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-        return;
-    }
-
-    std::cout << "Record added:\n" << recordLine << '\n';
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-}
-
-void Patient::request_appointment(const std::string &patient_full_id) {
-    std::string date, time, doctorName, reason;
-
-    std::cout << "=== Appointment Request ===\n";
-    std::cout << "Enter date (YYYY-MM-DD): ";
-    std::cin >> date;
-    std::cout << "Enter time (HH:MM): ";
-    std::cin >> time;
-    std::cin.ignore();
-
-    std::cout << "Enter doctor's name: ";
-    std::getline(std::cin, doctorName);
-
-    std::cout << "Enter reason (optional): ";
-    std::getline(std::cin, reason);
-
-    std::string requestLine = "[" + date + " " + time + "] - " + patient_full_id + " - Dr. " + doctorName;
-    if (!reason.empty()) {
-        requestLine += " - Reason: " + reason;
-    }
-    requestLine += " - Status: pending";
-
-    if (!patientRepository().appendAppointmentRequest(requestLine)) {
-        std::cerr << "Error: could not open data/Appointments/requests.txt\n";
-        return;
-    }
-
-    std::cout << std::endl;
-    std::cout << "Appointment request submitted. Waiting for confirmation.\n";
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-}

@@ -1,6 +1,7 @@
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Patient/Patient.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
+#include "application/usecase/PatientWriteService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "common/util/Utils/Utils.hpp"
@@ -38,6 +39,11 @@ PatientRecordQueryService& patientRecordQueryService() {
 UserProvisioningService& userProvisioningService() {
     static FileUserProvisioningRepository repository;
     static UserProvisioningService service(repository);
+    return service;
+}
+
+PatientWriteService& patientWriteService() {
+    static PatientWriteService service(patientRepository());
     return service;
 }
 
@@ -123,19 +129,63 @@ void Assistant::displayMenu() {
                 break;
             }
             case 4: {
+                std::string nameAndDose, frequency, startDate, endDate;
                 std::cout << std::endl;
                 std::cout << "Add Medication\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::add_patient_medication(id);
+                std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
+                std::getline(std::cin >> std::ws, nameAndDose);
+                std::cout << std::endl;
+                std::cout << "Enter intake frequency (Example: 3x daily): ";
+                std::getline(std::cin, frequency);
+                std::cout << std::endl;
+                std::cout << "Enter start date (YYYY-MM-DD): ";
+                std::getline(std::cin, startDate);
+                std::cout << std::endl;
+                std::cout << "Enter end date (YYYY-MM-DD): ";
+                std::getline(std::cin, endDate);
+                std::cout << std::endl;
+
+                if (!patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate)) {
+                    std::cerr << "Could not open medication file for writing.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+
+                const std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
+                std::cout << "Medication added:\n" << medicationLine << '\n';
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             case 5: {
+                std::string date, doctor, type, content;
                 std::cout << std::endl;
                 std::cout << "Add Records\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::add_patient_record(id);
+                std::cout << "Enter date of record (YYYY-MM-DD): ";
+                std::getline(std::cin >> std::ws, date);
+                std::cout << std::endl;
+                std::cout << "Enter doctor name: ";
+                std::getline(std::cin, doctor);
+                std::cout << std::endl;
+                std::cout << "Enter type of record: ";
+                std::getline(std::cin, type);
+                std::cout << std::endl;
+                std::cout << "Enter record details/notes: ";
+                std::getline(std::cin, content);
+                std::cout << std::endl;
+
+                if (!patientWriteService().addRecord(id, date, doctor, type, content)) {
+                    std::cerr << "Could not open records file for writing.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+
+                const std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
+                std::cout << "Record added:\n" << recordLine << '\n';
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             case 6: {

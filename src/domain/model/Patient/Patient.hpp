@@ -21,14 +21,7 @@ public:
     // Checks if ID and firstName and lastName of info.txt match.
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
-
-
     void fill_patient_info();
-    static void add_patient_appointment(const std::string &patient_full_id);
-    static void add_patient_medication(const std::string &patient_full_id);
-    static void add_patient_record(const std::string &patient_full_id);
-    static void request_appointment(const std::string &patient_full_id);
-
 
 };
 
