@@ -21,6 +21,10 @@ add_executable(patient_record
         src/common/util/Utils/Utils.hpp
         src/infrastructure/persistence/IDs/IDs.cpp
         src/infrastructure/persistence/IDs/IDs.hpp
+        src/infrastructure/persistence/FileUserRepository.cpp
+        src/infrastructure/persistence/FileUserRepository.hpp
+        src/infrastructure/persistence/FilePatientRepository.cpp
+        src/infrastructure/persistence/FilePatientRepository.hpp
         src/ui/cli/UserConsole.cpp
         src/ui/cli/PatientConsole.cpp
         src/ui/cli/DoctorConsole.cpp
