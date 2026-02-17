@@ -3,6 +3,18 @@
 UserProvisioningService::UserProvisioningService(IUserProvisioningRepository& repository)
     : repository_(repository) {}
 
+bool UserProvisioningService::createPatient(const UserProvisioningData& data) const {
+    return repository_.createPatient(data);
+}
+
+bool UserProvisioningService::createDoctor(const UserProvisioningData& data) const {
+    return repository_.createDoctor(data);
+}
+
+bool UserProvisioningService::createAssistant(const UserProvisioningData& data) const {
+    return repository_.createAssistant(data);
+}
+
 bool UserProvisioningService::createPatient(const Patient& patient) const {
     return repository_.createPatient(toProvisioningData(patient));
 }

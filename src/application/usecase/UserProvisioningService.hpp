@@ -10,6 +10,10 @@ class UserProvisioningService {
 public:
     explicit UserProvisioningService(IUserProvisioningRepository& repository);
 
+    bool createPatient(const UserProvisioningData& data) const;
+    bool createDoctor(const UserProvisioningData& data) const;
+    bool createAssistant(const UserProvisioningData& data) const;
+
     bool createPatient(const Patient& patient) const;
     bool createDoctor(const Doctor& doctor) const;
     bool createAssistant(const Assistant& assistant) const;

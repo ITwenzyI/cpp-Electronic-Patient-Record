@@ -21,8 +21,6 @@ public:
     // Checks if ID and firstName and lastName of info.txt match.
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
-    void fill_patient_info();
-
 };
 
 #endif //PATIENT_HPP

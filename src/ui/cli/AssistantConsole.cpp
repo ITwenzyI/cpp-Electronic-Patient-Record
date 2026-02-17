@@ -4,6 +4,7 @@
 #include "application/usecase/PatientWriteService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
+#include "ui/cli/UserProvisioningInputCli.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
@@ -90,9 +91,10 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Create New Patient\n";
                 Admin::admin_getNames(firstName, lastName);
-                Patient p("", firstName, lastName);
-                p.fill_patient_info();
-                userProvisioningService().createPatient(p);
+                UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
+                data.firstName = firstName;
+                data.lastName = lastName;
+                userProvisioningService().createPatient(data);
                 std::cout << std::endl;
                 std::cout << "Patient: [" << firstName << " " << lastName
                           << "] successfully created!" << "\n";
@@ -318,27 +320,6 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
         std::cout << "Name does not match the ID.\n";
         std::this_thread::sleep_for(std::chrono::seconds(3));
     }
-}
-
-// Gets all infos for info.txt.
-void Assistant::fill_assistant_info() {
-    std::cout << "\nPlease provide all the Infos from the Assistant!\n" << std::endl;
-    std::cout << "Date of Birth: ";
-    std::getline(std::cin >> std::ws, dateOfBirth);
-    std::cout << "Gender: ";
-    std::getline(std::cin, gender);
-    std::cout << "Nationality: ";
-    std::getline(std::cin, nationality);
-    std::cout << "Address: ";
-    std::getline(std::cin, address);
-    std::cout << "Phone Number: ";
-    std::getline(std::cin, phoneNumber);
-    std::cout << "Email Address: ";
-    std::getline(std::cin, email);
-    std::cout << "Insurance ID: ";
-    std::getline(std::cin, insuranceID);
-    std::cout << "InsuranceType: ";
-    std::getline(std::cin, insuranceType);
 }
 
 void Assistant::review_appointments() {

@@ -14,6 +14,7 @@
 #include "application/usecase/UserProfileQueryService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
+#include "ui/cli/UserProvisioningInputCli.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Patient/Patient.hpp"
@@ -128,9 +129,10 @@ void Admin::admin_setup() {
         case 1: {
             std::cout << std::endl;
             admin_getNames( firstName, lastName);
-            Patient p("", firstName, lastName);
-            p.fill_patient_info();
-            userProvisioningService().createPatient(p);
+            UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
+            data.firstName = firstName;
+            data.lastName = lastName;
+            userProvisioningService().createPatient(data);
             std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -160,9 +162,10 @@ void Admin::admin_setup() {
         case 3: {
             std::cout << std::endl;
             admin_getNames(firstName, lastName);
-            Doctor d("", firstName, lastName);
-            d.fill_doctor_info();
-            userProvisioningService().createDoctor(d);
+            UserProvisioningData data = UserProvisioningInputCli::promptDoctorInput();
+            data.firstName = firstName;
+            data.lastName = lastName;
+            userProvisioningService().createDoctor(data);
             std::cout << std::endl;
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -191,9 +194,10 @@ void Admin::admin_setup() {
         case 5: {
             std::cout << std::endl;
             admin_getNames(firstName, lastName);
-            Assistant a("", firstName, lastName);
-            a.fill_assistant_info();
-            userProvisioningService().createAssistant(a);
+            UserProvisioningData data = UserProvisioningInputCli::promptAssistantInput();
+            data.firstName = firstName;
+            data.lastName = lastName;
+            userProvisioningService().createAssistant(data);
             std::cout << std::endl;
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
