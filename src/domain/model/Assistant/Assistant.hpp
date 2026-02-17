@@ -2,11 +2,11 @@
 #ifndef ASSISTANT_HPP
 #define ASSISTANT_HPP
 
-#include "../User/User.hpp"
-#include "../Patient/Patient.hpp"
-#include "../Utils/Utils.hpp"
-#include "../IDs/IDs.hpp"
-#include "../Admin/Admin.hpp"
+#include "domain/model/User/User.hpp"
+#include "domain/model/Patient/Patient.hpp"
+#include "common/util/Utils/Utils.hpp"
+#include "infrastructure/persistence/IDs/IDs.hpp"
+#include "ui/cli/Admin/Admin.hpp"
 
 
 #include <iostream>

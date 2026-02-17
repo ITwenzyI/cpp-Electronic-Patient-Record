@@ -1,8 +1,8 @@
-#include "src/Admin/Admin.hpp"
-#include "src/Patient/Patient.hpp"
-#include "src/Doctor/Doctor.hpp"
-#include "src/Assistant/Assistant.hpp"
-#include "src/Utils/Utils.hpp"
+#include "ui/cli/Admin/Admin.hpp"
+#include "domain/model/Patient/Patient.hpp"
+#include "domain/model/Doctor/Doctor.hpp"
+#include "domain/model/Assistant/Assistant.hpp"
+#include "common/util/Utils/Utils.hpp"
 
 #include <iostream>
 #include <string>

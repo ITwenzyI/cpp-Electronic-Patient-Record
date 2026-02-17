@@ -3,7 +3,7 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#include "../Utils/Utils.hpp"
+#include "common/util/Utils/Utils.hpp"
 
 #include <string>
 #include <filesystem>

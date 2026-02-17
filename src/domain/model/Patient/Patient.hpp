@@ -3,9 +3,9 @@
 #ifndef PATIENT_HPP
 #define PATIENT_HPP
 
-#include "../User/User.hpp"
-#include "../Utils/Utils.hpp"
-#include "../IDs/IDs.hpp"
+#include "domain/model/User/User.hpp"
+#include "common/util/Utils/Utils.hpp"
+#include "infrastructure/persistence/IDs/IDs.hpp"
 
 #include <string>
 #include <iostream>
