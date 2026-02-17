@@ -8,6 +8,14 @@
 
 #include "Admin.hpp"
 
+#include "common/util/Utils/Utils.hpp"
+#include "domain/model/Assistant/Assistant.hpp"
+#include "domain/model/Patient/Patient.hpp"
+#include "domain/model/Doctor/Doctor.hpp"
+
+#include <filesystem>
+#include <fstream>
+#include <iostream>
 #include <thread>
 
 Admin::Admin() = default;
