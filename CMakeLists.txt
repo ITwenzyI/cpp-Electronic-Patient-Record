@@ -7,6 +7,8 @@ add_executable(patient_record
         src/main.cpp
         src/application/EprApplication.cpp
         src/application/EprApplication.hpp
+        src/application/ports/IUserRepository.hpp
+        src/application/ports/IPatientRepository.hpp
         src/domain/model/Patient/Patient.cpp
         src/domain/model/Patient/Patient.hpp
         src/domain/model/User/User.cpp
