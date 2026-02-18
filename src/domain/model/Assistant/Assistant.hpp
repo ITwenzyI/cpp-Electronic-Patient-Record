@@ -11,8 +11,7 @@ class Assistant : public User {
             const std::string& firstName,
             const std::string& lastName);
 
-
-    // If check_id_name is true, Menu will be displayed
+    // Role-specific menu entrypoint.
     void displayMenu() override;
 
 };
