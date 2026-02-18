@@ -77,8 +77,7 @@ void Doctor::displayMenu() {
                 std::string nameAndDose, frequency, startDate, endDate;
                 std::cout << std::endl;
                 std::cout << "Add Medication\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
                 std::getline(std::cin >> std::ws, nameAndDose);
                 std::cout << std::endl;
@@ -107,8 +106,7 @@ void Doctor::displayMenu() {
                 std::string date, doctor, type, content;
                 std::cout << std::endl;
                 std::cout << "Add Records\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 std::cout << "Enter date of record (YYYY-MM-DD): ";
                 std::getline(std::cin >> std::ws, date);
                 std::cout << std::endl;
@@ -136,8 +134,7 @@ void Doctor::displayMenu() {
             case 3: {
                 std::cout << std::endl;
                 std::cout << "Patient Info\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
                     if (info.empty()) {
@@ -153,8 +150,7 @@ void Doctor::displayMenu() {
             case 4: {
                 std::cout << std::endl;
                 std::cout << "Patient Appointments\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
                     if (appointments.empty()) {
@@ -170,8 +166,7 @@ void Doctor::displayMenu() {
             case 5: {
                 std::cout << std::endl;
                 std::cout << "Patient Medications\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
                     if (medications.empty()) {
@@ -187,8 +182,7 @@ void Doctor::displayMenu() {
             case 6: {
                 std::cout << std::endl;
                 std::cout << "Patient Records\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
                     if (records.empty()) {
@@ -205,14 +199,11 @@ void Doctor::displayMenu() {
                 std::string field, newInput;
                 std::cout << std::endl;
                 std::cout << "Update Field in File\n";
-                std::cout << "Enter full ID: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter full ID: ");
                 std::cout << std::endl;
-                std::cout << "Enter Field: ";
-                std::cin >> field;
+                field = ConsoleIO::promptToken("Enter Field: ");
                 std::cout << std::endl;
-                std::cout << "Enter New Input: ";
-                std::cin >> newInput;
+                newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
                 if (!userRecordService().updateFieldInFile(id, field, newInput)) {
                     std::cerr << "Could not update field in file.\n";
@@ -227,8 +218,7 @@ void Doctor::displayMenu() {
                 std::string extraInfo;
                 std::cout << std::endl;
                 std::cout << "Add Extra Info\n";
-                std::cout << "Enter the full ID of the Patient: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 std::cout << "ID: " << id << std::endl;
                 std::cout << "Enter the Extra Info: ";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
