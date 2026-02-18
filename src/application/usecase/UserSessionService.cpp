@@ -8,6 +8,9 @@
 #include "domain/model/Doctor/Doctor.hpp"
 #include "domain/model/Patient/Patient.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
+#include "ui/cli/AssistantMenuController.hpp"
+#include "ui/cli/DoctorMenuController.hpp"
+#include "ui/cli/PatientMenuController.hpp"
 
 #include <chrono>
 #include <iostream>
@@ -43,17 +46,17 @@ Result<void> UserSessionService::runRoleSession(
     switch (choice) {
         case 1: {
             Patient p(id, firstName, lastName);
-            p.displayMenu();
+            runPatientMenu(p);
             break;
         }
         case 2: {
             Doctor d(id, firstName, lastName);
-            d.displayMenu();
+            runDoctorMenu(d);
             break;
         }
         case 3: {
             Assistant a(id, firstName, lastName);
-            a.displayMenu();
+            runAssistantMenu(a);
             break;
         }
         default:

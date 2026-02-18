@@ -11,9 +11,6 @@ class Doctor : public User {
             const std::string& firstName,
             const std::string& lastName);
 
-    // Role-specific menu entrypoint.
-    void displayMenu() override;
-
 };
 
 #endif //DOCTOR_HPP

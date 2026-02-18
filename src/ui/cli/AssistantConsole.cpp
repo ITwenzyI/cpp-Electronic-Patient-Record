@@ -13,6 +13,7 @@
 #include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/Admin/Admin.hpp"
+#include "ui/cli/AssistantMenuController.hpp"
 
 #include <iostream>
 #include <limits>
@@ -112,15 +113,14 @@ void runAppointmentReviewCli() {
 
 }
 
-// Assistant menu.
-void Assistant::displayMenu() {
+void runAssistantMenu(Assistant& assistant) {
     int choice;
     std::string id;
 
     do {
         ConsoleIO::printHeader("=== Assistant Menu ===");
-        std::cout << getRole() << ": " << getFirstName() << " " << getLastName()
-                  << "\nID: " << getID() << std::endl;
+        std::cout << assistant.getRole() << ": " << assistant.getFirstName() << " " << assistant.getLastName()
+                  << "\nID: " << assistant.getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Create New Patient" << std::endl;
         std::cout << "2. Update Field in Info\n";
@@ -141,11 +141,13 @@ void Assistant::displayMenu() {
                 ConsoleIO::pauseSeconds(1);
                 return;
             case 1: {
+                std::string newFirstName;
+                std::string newLastName;
                 ConsoleIO::printHeader("Create New Patient");
-                Admin::admin_getNames(firstName, lastName);
+                Admin::admin_getNames(newFirstName, newLastName);
                 UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
-                data.firstName = firstName;
-                data.lastName = lastName;
+                data.firstName = newFirstName;
+                data.lastName = newLastName;
                 const Result<void> createPatientResult = userProvisioningService().createPatient(data);
                 if (!createPatientResult) {
                     ConsoleIO::printError(createPatientResult.error());
@@ -153,7 +155,7 @@ void Assistant::displayMenu() {
                     break;
                 }
                 std::cout << std::endl;
-                std::cout << "Patient: [" << firstName << " " << lastName
+                std::cout << "Patient: [" << newFirstName << " " << newLastName
                           << "] successfully created!" << "\n";
                 ConsoleIO::pauseSeconds(2);
                 break;

@@ -11,8 +11,6 @@ public:
     Patient(const std::string& patient_id,
             const std::string& firstName,
             const std::string& lastName);
-    // Role-specific menu entrypoint.
-    void displayMenu() override;
 
 };
 
