@@ -1,6 +1,6 @@
-#include "application/EprApplication.hpp"
+#include "ui/cli/EprCliApplication.hpp"
 
 int main() {
-    EprApplication app;
+    EprCliApplication app;
     return app.run();
 }
