@@ -6,11 +6,10 @@
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
+#include "ui/cli/ConsoleIO.hpp"
 
-#include <chrono>
 #include <iostream>
 #include <limits>
-#include <thread>
 
 namespace {
 IUserRepository& userRepository() {
@@ -67,13 +66,12 @@ void Doctor::displayMenu() {
         std::cout << "7. Update Field in Info\n";
         std::cout << "8. Add Extra Info" << std::endl;
         std::cout << "0. Logout" << std::endl;
-        std::cout << "Please enter your choice: ";
-        std::cin >> choice;
+        choice = ConsoleIO::promptInt("Please enter your choice: ");
 
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                ConsoleIO::pauseSeconds(3);
                 return;
             case 1: {
                 std::string nameAndDose, frequency, startDate, endDate;
@@ -96,13 +94,13 @@ void Doctor::displayMenu() {
 
                 if (!patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate)) {
                     std::cerr << "Could not open medication file for writing.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
                 const std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
                 std::cout << "Medication added:\n" << medicationLine << '\n';
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 2: {
@@ -126,13 +124,13 @@ void Doctor::displayMenu() {
 
                 if (!patientWriteService().addRecord(id, date, doctor, type, content)) {
                     std::cerr << "Could not open records file for writing.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
                 const std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
                 std::cout << "Record added:\n" << recordLine << '\n';
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 3: {
@@ -147,10 +145,8 @@ void Doctor::displayMenu() {
                         break;
                     }
                     std::cout << "File Content:" << std::endl;
-                    for (const auto& line : info) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(info);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -166,10 +162,8 @@ void Doctor::displayMenu() {
                         break;
                     }
                     std::cout << std::endl;
-                    for (const auto& line : appointments) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(appointments);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -185,10 +179,8 @@ void Doctor::displayMenu() {
                         break;
                     }
                     std::cout << std::endl;
-                    for (const auto& line : medications) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(medications);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -204,10 +196,8 @@ void Doctor::displayMenu() {
                         break;
                     }
                     std::cout << std::endl;
-                    for (const auto& line : records) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(records);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -226,11 +216,11 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 if (!userRecordService().updateFieldInFile(id, field, newInput)) {
                     std::cerr << "Could not update field in file.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
                 std::cout << field << " successfully updated.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 8: {
@@ -247,13 +237,13 @@ void Doctor::displayMenu() {
 
                 if (!userRecordService().addExtraInfo(id, extraInfo)) {
                     std::cerr << "Could not open file for writing.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
                 const std::string newLine = "[" + getDate() + "] " + extraInfo + "\n";
                 std::cout << "Extra Info added:\n" << newLine << '\n';
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             default:
@@ -269,7 +259,7 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
     if (!userRepository().exists(id)) {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         return;
     }
 
@@ -280,12 +270,12 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
         cleaned(fileLastName) == cleaned(lastName)) {
         std::cout << std::endl;
         std::cout << "Login successful.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         displayMenu();
     } else {
         std::cout << std::endl;
         std::cout << "Name does not match the ID.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        ConsoleIO::pauseSeconds(3);
     }
 }
 
