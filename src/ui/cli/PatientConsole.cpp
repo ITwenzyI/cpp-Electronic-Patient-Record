@@ -65,8 +65,8 @@ void Patient::displayMenu() {
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
-                    if (!appointmentsResult.ok()) {
-                        std::cerr << appointmentsResult.error().message << std::endl;
+                    if (!appointmentsResult) {
+                        std::cerr << appointmentsResult.errorMessage() << std::endl;
                         break;
                     }
 
@@ -81,8 +81,8 @@ void Patient::displayMenu() {
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
-                    if (!medicationsResult.ok()) {
-                        std::cerr << medicationsResult.error().message << std::endl;
+                    if (!medicationsResult) {
+                        std::cerr << medicationsResult.errorMessage() << std::endl;
                         break;
                     }
 
@@ -97,8 +97,8 @@ void Patient::displayMenu() {
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
-                    if (!recordsResult.ok()) {
-                        std::cerr << recordsResult.error().message << std::endl;
+                    if (!recordsResult) {
+                        std::cerr << recordsResult.errorMessage() << std::endl;
                         break;
                     }
 
@@ -122,8 +122,8 @@ void Patient::displayMenu() {
                 std::getline(std::cin, reason);
 
                 const Result<void> requestResult = patientWriteService().requestAppointment(id, date, time, doctorName, reason);
-                if (!requestResult.ok()) {
-                    std::cerr << requestResult.error().message << '\n';
+                if (!requestResult) {
+                    std::cerr << requestResult.errorMessage() << '\n';
                     break;
                 }
 
