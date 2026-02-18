@@ -14,6 +14,7 @@
 #include "application/usecase/UserProfileQueryService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
+#include "ui/cli/ConsoleIO.hpp"
 #include "ui/cli/UserProvisioningInputCli.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
@@ -79,7 +80,7 @@ bool Admin::checkInitialSetup() {
         );
 
         std::cout << "[!] System is not initialized yet.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
 
         if (!systemRepository().hasAssistantsDirectory() && !systemRepository().hasDoctorsDirectory()) {
             std::cout << "[!] No Assistant and Doctor structure found.\n";
@@ -91,9 +92,9 @@ bool Admin::checkInitialSetup() {
             std::cout << "[!] No Doctor structure found.\n";
         }
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        ConsoleIO::pauseSeconds(1);
         std::cout << "→ Entering admin setup mode...\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        ConsoleIO::pauseSeconds(3);
         admin_setup();
 
         return false;
@@ -111,8 +112,7 @@ void Admin::admin_setup() {
 
 
     do {
-        std::cout << std::endl;
-        std::cout << "=== Admin Logging | EPR SYSTEM ===\n";
+        ConsoleIO::printHeader("=== Admin Logging | EPR SYSTEM ===");
         std::cout << "1. Create Patient\n";
         std::cout << "2. Info Patient\n";
         std::cout << "3. Create Doctor\n";
@@ -122,8 +122,7 @@ void Admin::admin_setup() {
         std::cout << "7. Update Field in File\n";
         std::cout << "8. Backup User Info\n";
         std::cout << "0. Exit\n";
-        std::cout << "Please enter your choice: ";
-        std::cin >> choice;
+        choice = ConsoleIO::promptInt("Please enter your choice: ");
 
     switch (choice) {
         case 1: {
@@ -135,14 +134,13 @@ void Admin::admin_setup() {
             userProvisioningService().createPatient(data);
             std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            ConsoleIO::pauseSeconds(2);
             break;
         }
 
         case 2: {
             std::cout << std::endl;
-            std::cout << "Please enter the full Patient-ID: ";
-            std::cin >> id;
+            id = ConsoleIO::promptToken("Please enter the full Patient-ID: ");
             std::cout << std::endl;
             {
                 const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
@@ -151,10 +149,8 @@ void Admin::admin_setup() {
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
-                for (const auto& line : info) {
-                    std::cout << line << std::endl;
-                }
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                ConsoleIO::printLines(info);
+                ConsoleIO::pauseSeconds(3);
             }
             break;
         }
@@ -168,14 +164,13 @@ void Admin::admin_setup() {
             userProvisioningService().createDoctor(data);
             std::cout << std::endl;
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            ConsoleIO::pauseSeconds(2);
             break;
         }
 
         case 4: {
             std::cout << std::endl;
-            std::cout << "Please enter the full Doctor-ID: ";
-            std::cin >> id;
+            id = ConsoleIO::promptToken("Please enter the full Doctor-ID: ");
             {
                 const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
                 if (info.empty()) {
@@ -183,10 +178,8 @@ void Admin::admin_setup() {
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
-                for (const auto& line : info) {
-                    std::cout << line << std::endl;
-                }
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                ConsoleIO::printLines(info);
+                ConsoleIO::pauseSeconds(3);
             }
             break;
         }
@@ -200,14 +193,13 @@ void Admin::admin_setup() {
             userProvisioningService().createAssistant(data);
             std::cout << std::endl;
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            ConsoleIO::pauseSeconds(2);
             break;
         }
 
         case 6: {
             std::cout << std::endl;
-            std::cout << "Please enter the full Assistant-ID: ";
-            std::cin >> id;
+            id = ConsoleIO::promptToken("Please enter the full Assistant-ID: ");
             {
                 const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
                 if (info.empty()) {
@@ -215,10 +207,8 @@ void Admin::admin_setup() {
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
-                for (const auto& line : info) {
-                    std::cout << line << std::endl;
-                }
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                ConsoleIO::printLines(info);
+                ConsoleIO::pauseSeconds(3);
             }
             break;
         }
@@ -226,33 +216,29 @@ void Admin::admin_setup() {
         case 7: {
             std::string field, newInput;
             std::cout << std::endl;
-            std::cout << "Please enter the full ID: ";
-            std::cin >> id;
-            std::cout << "Please enter the field to change: ";
-            std::cin >> field;
-            std::cout << "Please enter the new input: ";
-            std::cin >> newInput;
+            id = ConsoleIO::promptToken("Please enter the full ID: ");
+            field = ConsoleIO::promptToken("Please enter the field to change: ");
+            newInput = ConsoleIO::promptToken("Please enter the new input: ");
             if (!userRecordService().updateFieldInFile(id, field, newInput)) {
                 std::cerr << "Could not update field in file.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             std::cout << field << " successfully updated.\n";
-            std::this_thread::sleep_for(std::chrono::seconds(2));
+            ConsoleIO::pauseSeconds(2);
             break;
         }
 
         case 8: {
             std::cout << std::endl;
-            std::cout << "Please enter the full ID to backup: ";
-            std::cin >> id;
+            id = ConsoleIO::promptToken("Please enter the full ID to backup: ");
             exportUserData(id);
             break;
         }
 
         case 0:
             std::cout << "Exiting...\n";
-            std::this_thread::sleep_for(std::chrono::seconds(3));
+            ConsoleIO::pauseSeconds(3);
             return;
 
         default: {
@@ -268,10 +254,8 @@ void Admin::admin_setup() {
 
 // Just a simple function to get the Names
 void Admin::admin_getNames(std::string &firstName, std::string &lastName) {
-    std::cout << "Enter first name: ";
-    std::cin >> firstName;
-    std::cout << "Enter last name: ";
-    std::cin >> lastName;
+    firstName = ConsoleIO::promptToken("Enter first name: ");
+    lastName = ConsoleIO::promptToken("Enter last name: ");
 }
 
 
@@ -279,7 +263,7 @@ void Admin::exportUserData(const std::string& id) {
 
     if (!userRepository().exists(id)) {
         std::cerr << "Invalid ID: " << id << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         return;
     }
 
@@ -297,7 +281,7 @@ void Admin::exportUserData(const std::string& id) {
 
     std::cout << "Successfully created backup_info.txt file for: " << folderName << "\n";
 
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    ConsoleIO::pauseSeconds(3);
 
 }
 
