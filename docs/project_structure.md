@@ -80,12 +80,12 @@ src/
 
 - Contains role entities (`User`, `Patient`, `Doctor`, `Assistant`)
 - Holds domain data (IDs, names, profile fields)
-- Exposes role menus via `displayMenu()` (legacy-compatible role entrypoints)
 - Does not perform persistence directly
 
 Notes:
 
 - `check_id_name` was removed from domain classes.
+- `displayMenu` role entrypoints were also removed from domain classes.
 - Authentication is now centralized in application (`AuthService`).
 
 ## 3.2 Application (`src/application`)
@@ -156,8 +156,11 @@ Intended direction:
 
 Practical note:
 
-- Some role menu methods (`displayMenu`) are still implemented in UI translation units for existing flow compatibility.
-- Authentication and identity check logic is no longer in role classes.
+- Role menu dispatch now uses explicit UI controllers:
+  - `runPatientMenu(Patient&)`
+  - `runDoctorMenu(Doctor&)`
+  - `runAssistantMenu(Assistant&)`
+- Authentication and identity check logic is centralized in `AuthService`.
 
 ## 5. Runtime Flow
 
@@ -166,7 +169,7 @@ Practical note:
 3. `MainMenuCli` reads role/admin selection and login identity.
 4. `LoginDecisionUseCase` decides admin/exit/session branch.
 5. `UserSessionService` calls `AuthService` to validate login data.
-6. On success, the selected role menu (`displayMenu`) is entered.
+6. On success, the selected role menu controller is entered.
 7. Role UI screens call application services, which use ports/adapters.
 
 ## 6. Error Handling Model
@@ -224,6 +227,5 @@ ctest --test-dir build --output-on-failure
 
 ## 10. Known Pragmatic Tradeoffs
 
-- Role menu entrypoints are still tied to role objects (`displayMenu`), while implementations live in UI files.
-- This keeps behavior stable and reduces migration risk, but can be further decoupled later into explicit UI controllers.
-
+- `UserSessionService` currently includes UI controller headers to dispatch role menus.
+- This keeps behavior stable during the refactor, but a stricter layering would move final menu dispatch fully into UI composition code.
