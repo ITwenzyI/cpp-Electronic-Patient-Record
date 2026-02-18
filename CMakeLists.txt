@@ -58,4 +58,21 @@ if(BUILD_TESTING)
     endif()
 
     add_test(NAME patient_write_service_smoke_tests COMMAND patient_write_service_smoke_tests)
+
+    add_executable(user_record_service_smoke_tests
+        tests/UserRecordServiceSmokeTest.cpp
+        src/application/usecase/UserRecordService.cpp
+        src/common/util/Utils/Utils.cpp
+    )
+
+    target_include_directories(user_record_service_smoke_tests PRIVATE src)
+    target_compile_features(user_record_service_smoke_tests PRIVATE cxx_std_20)
+
+    if(MSVC)
+        target_compile_options(user_record_service_smoke_tests PRIVATE /W4 /permissive-)
+    else()
+        target_compile_options(user_record_service_smoke_tests PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+
+    add_test(NAME user_record_service_smoke_tests COMMAND user_record_service_smoke_tests)
 endif()
