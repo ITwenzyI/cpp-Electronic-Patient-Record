@@ -7,6 +7,8 @@ project(
     LANGUAGES CXX
 )
 
+include(CTest)
+
 file(GLOB_RECURSE PATIENT_RECORD_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
@@ -38,4 +40,22 @@ if(MSVC)
     target_compile_options(patient_record PRIVATE /W4 /permissive-)
 else()
     target_compile_options(patient_record PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(patient_write_service_smoke_tests
+        tests/PatientWriteServiceSmokeTest.cpp
+        src/application/usecase/PatientWriteService.cpp
+    )
+
+    target_include_directories(patient_write_service_smoke_tests PRIVATE src)
+    target_compile_features(patient_write_service_smoke_tests PRIVATE cxx_std_20)
+
+    if(MSVC)
+        target_compile_options(patient_write_service_smoke_tests PRIVATE /W4 /permissive-)
+    else()
+        target_compile_options(patient_write_service_smoke_tests PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+
+    add_test(NAME patient_write_service_smoke_tests COMMAND patient_write_service_smoke_tests)
 endif()
