@@ -11,8 +11,7 @@ std::string MainMenuCli::promptRoleSelection() const {
     ConsoleIO::pauseMilliseconds(900);
 
     std::string input;
-    std::cout << std::endl;
-    std::cout << "=== ELECTRONIC PATIENT RECORD SYSTEM ===\n";
+    ConsoleIO::printHeader("=== ELECTRONIC PATIENT RECORD SYSTEM ===");
     std::cout << "1. Patient\n";
     std::cout << "2. Doctor\n";
     std::cout << "3. Assistant\n";
