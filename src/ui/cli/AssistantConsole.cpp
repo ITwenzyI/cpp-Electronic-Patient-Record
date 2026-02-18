@@ -91,7 +91,12 @@ void Assistant::displayMenu() {
                 UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
                 data.firstName = firstName;
                 data.lastName = lastName;
-                userProvisioningService().createPatient(data);
+                const Result<void> createPatientResult = userProvisioningService().createPatient(data);
+                if (!createPatientResult.ok()) {
+                    std::cerr << createPatientResult.error().message << '\n';
+                    ConsoleIO::pauseSeconds(2);
+                    break;
+                }
                 std::cout << std::endl;
                 std::cout << "Patient: [" << firstName << " " << lastName
                           << "] successfully created!" << "\n";

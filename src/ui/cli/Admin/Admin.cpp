@@ -131,7 +131,12 @@ void Admin::admin_setup() {
             UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
             data.firstName = firstName;
             data.lastName = lastName;
-            userProvisioningService().createPatient(data);
+            const Result<void> createPatientResult = userProvisioningService().createPatient(data);
+            if (!createPatientResult.ok()) {
+                std::cerr << createPatientResult.error().message << '\n';
+                ConsoleIO::pauseSeconds(2);
+                break;
+            }
             std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             ConsoleIO::pauseSeconds(2);
@@ -161,7 +166,12 @@ void Admin::admin_setup() {
             UserProvisioningData data = UserProvisioningInputCli::promptDoctorInput();
             data.firstName = firstName;
             data.lastName = lastName;
-            userProvisioningService().createDoctor(data);
+            const Result<void> createDoctorResult = userProvisioningService().createDoctor(data);
+            if (!createDoctorResult.ok()) {
+                std::cerr << createDoctorResult.error().message << '\n';
+                ConsoleIO::pauseSeconds(2);
+                break;
+            }
             std::cout << std::endl;
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             ConsoleIO::pauseSeconds(2);
@@ -190,7 +200,12 @@ void Admin::admin_setup() {
             UserProvisioningData data = UserProvisioningInputCli::promptAssistantInput();
             data.firstName = firstName;
             data.lastName = lastName;
-            userProvisioningService().createAssistant(data);
+            const Result<void> createAssistantResult = userProvisioningService().createAssistant(data);
+            if (!createAssistantResult.ok()) {
+                std::cerr << createAssistantResult.error().message << '\n';
+                ConsoleIO::pauseSeconds(2);
+                break;
+            }
             std::cout << std::endl;
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             ConsoleIO::pauseSeconds(2);
