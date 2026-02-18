@@ -37,6 +37,18 @@ void printLines(const std::vector<std::string>& lines) {
     }
 }
 
+void printError(const Error& error) {
+    std::cerr << error.message;
+    if (!error.source.empty()) {
+        std::cerr << " [source: " << error.source;
+        if (!error.detail.empty()) {
+            std::cerr << ", detail: " << error.detail;
+        }
+        std::cerr << "]";
+    }
+    std::cerr << '\n';
+}
+
 void pauseMilliseconds(int milliseconds) {
     std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }

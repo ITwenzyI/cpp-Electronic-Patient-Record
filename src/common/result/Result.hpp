@@ -7,6 +7,8 @@
 struct Error {
     std::string code;
     std::string message;
+    std::string source;
+    std::string detail;
 };
 
 template <typename T>
@@ -17,7 +19,11 @@ public:
     }
 
     static Result<T> failure(std::string code, std::string message) {
-        return Result<T>(false, T{}, {std::move(code), std::move(message)});
+        return Result<T>(false, T{}, {std::move(code), std::move(message), "", ""});
+    }
+
+    static Result<T> failure(std::string code, std::string message, std::string source, std::string detail = "") {
+        return Result<T>(false, T{}, {std::move(code), std::move(message), std::move(source), std::move(detail)});
     }
 
     bool ok() const {
@@ -56,6 +62,14 @@ public:
         return error_.message;
     }
 
+    const std::string& errorSource() const {
+        return error_.source;
+    }
+
+    const std::string& errorDetail() const {
+        return error_.detail;
+    }
+
 private:
     Result(bool ok, T value, Error error)
         : ok_(ok), value_(std::move(value)), error_(std::move(error)) {}
@@ -73,7 +87,11 @@ public:
     }
 
     static Result<void> failure(std::string code, std::string message) {
-        return Result<void>(false, {std::move(code), std::move(message)});
+        return Result<void>(false, {std::move(code), std::move(message), "", ""});
+    }
+
+    static Result<void> failure(std::string code, std::string message, std::string source, std::string detail = "") {
+        return Result<void>(false, {std::move(code), std::move(message), std::move(source), std::move(detail)});
     }
 
     bool ok() const {
@@ -98,6 +116,14 @@ public:
 
     const std::string& errorMessage() const {
         return error_.message;
+    }
+
+    const std::string& errorSource() const {
+        return error_.source;
+    }
+
+    const std::string& errorDetail() const {
+        return error_.detail;
     }
 
 private:
