@@ -160,3 +160,7 @@ Intended dependencies:
 - Expand use-case tests (additional negative/edge cases)
 - Introduce optional database adapter behind existing ports
 - Improve input validation for date/time and IDs
+
+## Author
+
+- Kilian
