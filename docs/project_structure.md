@@ -12,7 +12,7 @@ This project follows a layered architecture under `src/`:
 
 Entry point:
 
-- `src/main.cpp` creates and runs `EprApplication`
+- `src/main.cpp` creates and runs `EprCliApplication` (UI composition root)
 
 ## 2. Current Source Layout
 
@@ -21,8 +21,6 @@ src/
   main.cpp
 
   application/
-    EprApplication.cpp
-    EprApplication.hpp
     ports/
       IPatientRepository.hpp
       IUserRepository.hpp
@@ -57,9 +55,13 @@ src/
 
   ui/
     cli/
+      EprCliApplication.cpp/.hpp
+      AssistantMenuController.hpp
       ConsoleIO.cpp/.hpp
+      DoctorMenuController.hpp
       MainMenuCli.cpp/.hpp
       PatientConsole.cpp
+      PatientMenuController.hpp
       DoctorConsole.cpp
       AssistantConsole.cpp
       UserProvisioningInputCli.cpp/.hpp
@@ -96,11 +98,10 @@ Notes:
 
 Key use-cases:
 
-- `EprApplication`: top-level app loop and composition-style orchestration
 - `SystemBootstrapUseCase`: startup/bootstrap flow
 - `LoginDecisionUseCase`: parses role/admin/exit menu input
 - `AuthService`: validates `(id, firstName, lastName)` against user info
-- `UserSessionService`: authenticates + dispatches to role menu
+- `UserSessionService`: authenticates and validates role selection
 - `PatientRecordQueryService`: reads patient info/appointments/medications/records
 - `PatientWriteService`: writes records, medications, appointment requests
 - `UserRecordService`: updates info fields and appends extra info
@@ -169,7 +170,7 @@ Practical note:
 3. `MainMenuCli` reads role/admin selection and login identity.
 4. `LoginDecisionUseCase` decides admin/exit/session branch.
 5. `UserSessionService` calls `AuthService` to validate login data.
-6. On success, the selected role menu controller is entered.
+6. `EprCliApplication` dispatches to the selected role menu controller.
 7. Role UI screens call application services, which use ports/adapters.
 
 ## 6. Error Handling Model
@@ -227,5 +228,5 @@ ctest --test-dir build --output-on-failure
 
 ## 10. Known Pragmatic Tradeoffs
 
-- `UserSessionService` currently includes UI controller headers to dispatch role menus.
-- This keeps behavior stable during the refactor, but a stricter layering would move final menu dispatch fully into UI composition code.
+- The composition root now lives in `ui/cli/EprCliApplication`.
+- Application use-cases no longer include UI menu controller headers; session authentication and UI dispatch are separated.
