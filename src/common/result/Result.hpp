@@ -24,6 +24,14 @@ public:
         return ok_;
     }
 
+    explicit operator bool() const {
+        return ok();
+    }
+
+    bool hasError() const {
+        return !ok_;
+    }
+
     const T& value() const {
         return value_;
     }
@@ -32,8 +40,20 @@ public:
         return value_;
     }
 
+    T valueOr(T fallback) const {
+        return ok_ ? value_ : std::move(fallback);
+    }
+
     const Error& error() const {
         return error_;
+    }
+
+    const std::string& errorCode() const {
+        return error_.code;
+    }
+
+    const std::string& errorMessage() const {
+        return error_.message;
     }
 
 private:
@@ -60,8 +80,24 @@ public:
         return ok_;
     }
 
+    explicit operator bool() const {
+        return ok();
+    }
+
+    bool hasError() const {
+        return !ok_;
+    }
+
     const Error& error() const {
         return error_;
+    }
+
+    const std::string& errorCode() const {
+        return error_.code;
+    }
+
+    const std::string& errorMessage() const {
+        return error_.message;
     }
 
 private:
