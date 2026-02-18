@@ -66,7 +66,7 @@ void Patient::displayMenu() {
                 {
                     const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
                     if (!appointmentsResult) {
-                        std::cerr << appointmentsResult.errorMessage() << std::endl;
+                        ConsoleIO::printError(appointmentsResult.error());
                         break;
                     }
 
@@ -82,7 +82,7 @@ void Patient::displayMenu() {
                 {
                     const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
                     if (!medicationsResult) {
-                        std::cerr << medicationsResult.errorMessage() << std::endl;
+                        ConsoleIO::printError(medicationsResult.error());
                         break;
                     }
 
@@ -98,7 +98,7 @@ void Patient::displayMenu() {
                 {
                     const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
                     if (!recordsResult) {
-                        std::cerr << recordsResult.errorMessage() << std::endl;
+                        ConsoleIO::printError(recordsResult.error());
                         break;
                     }
 
@@ -123,7 +123,7 @@ void Patient::displayMenu() {
 
                 const Result<void> requestResult = patientWriteService().requestAppointment(id, date, time, doctorName, reason);
                 if (!requestResult) {
-                    std::cerr << requestResult.errorMessage() << '\n';
+                    ConsoleIO::printError(requestResult.error());
                     break;
                 }
 
