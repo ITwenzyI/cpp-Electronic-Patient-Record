@@ -58,8 +58,8 @@ Result<AppointmentDecisionOutcome> AppointmentReviewService::applyDecision(std::
     const std::string patientId = extractPatientId(entry);
     const std::string dateTime = extractDateTime(entry);
     const Result<std::string> doctorResult = extractDoctor(entry);
-    if (!doctorResult.ok()) {
-        return Result<AppointmentDecisionOutcome>::failure(doctorResult.error().code, doctorResult.error().message);
+    if (!doctorResult) {
+        return Result<AppointmentDecisionOutcome>::failure(doctorResult.errorCode(), doctorResult.errorMessage());
     }
 
     if (!repository_.ensurePatientDirectory(patientId) ||
