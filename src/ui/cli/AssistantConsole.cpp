@@ -53,6 +53,62 @@ AppointmentReviewService& appointmentReviewService() {
     return service;
 }
 
+void runAppointmentReviewCli() {
+    Result<std::vector<std::string>> requestsResult = appointmentReviewService().loadRequests();
+    if (!requestsResult.ok()) {
+        std::cerr << requestsResult.error().message << '\n';
+        return;
+    }
+    std::vector<std::string> lines = requestsResult.value();
+
+    bool changed = false;
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+        std::string& entry = lines[i];
+
+        if (AppointmentReviewService::isPending(entry)) {
+            std::cout << "\n=== Appointment Request " << i + 1 << " ===\n";
+            std::cout << entry << "\n";
+            std::cout << "Accept (A), Reject (R), Skip (S)? ";
+            char choice;
+            std::cin >> choice;
+
+            AppointmentDecision decision = AppointmentDecision::Skip;
+            if (choice == 'A' || choice == 'a') {
+                decision = AppointmentDecision::Accept;
+            } else if (choice == 'R' || choice == 'r') {
+                decision = AppointmentDecision::Reject;
+            }
+
+            const Result<AppointmentDecisionOutcome> decisionResult = appointmentReviewService().applyDecision(entry, decision);
+            if (!decisionResult.ok()) {
+                std::cerr << decisionResult.error().message << '\n';
+                return;
+            }
+
+            if (decisionResult.value().hasError) {
+                std::cerr << decisionResult.value().message << '\n';
+                continue;
+            }
+
+            changed = changed || decisionResult.value().changed;
+            std::cout << decisionResult.value().message << '\n';
+            ConsoleIO::pauseSeconds(2);
+        }
+    }
+
+    if (changed) {
+        const Result<void> saveResult = appointmentReviewService().saveRequests(lines);
+        if (!saveResult.ok()) {
+            std::cerr << saveResult.error().message << '\n';
+            return;
+        }
+        std::cout << "\nAppointment file updated.\n";
+    } else {
+        std::cout << "\nNo changes made.\n";
+    }
+}
+
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
     for (const auto& line : lines) {
         if (line.starts_with(keyPrefix)) {
@@ -131,7 +187,7 @@ void Assistant::displayMenu() {
             case 3: {
                 ConsoleIO::printHeader("Review Appointments");
                 std::cout << std::endl;
-                review_appointments();
+                runAppointmentReviewCli();
                 break;
             }
             case 4: {
@@ -307,58 +363,3 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     }
 }
 
-void Assistant::review_appointments() {
-    Result<std::vector<std::string>> requestsResult = appointmentReviewService().loadRequests();
-    if (!requestsResult.ok()) {
-        std::cerr << requestsResult.error().message << '\n';
-        return;
-    }
-    std::vector<std::string> lines = requestsResult.value();
-
-    bool changed = false;
-
-    for (size_t i = 0; i < lines.size(); ++i) {
-        std::string& entry = lines[i];
-
-        if (AppointmentReviewService::isPending(entry)) {
-            std::cout << "\n=== Appointment Request " << i + 1 << " ===\n";
-            std::cout << entry << "\n";
-            std::cout << "Accept (A), Reject (R), Skip (S)? ";
-            char choice;
-            std::cin >> choice;
-
-            AppointmentDecision decision = AppointmentDecision::Skip;
-            if (choice == 'A' || choice == 'a') {
-                decision = AppointmentDecision::Accept;
-            } else if (choice == 'R' || choice == 'r') {
-                decision = AppointmentDecision::Reject;
-            }
-
-            const Result<AppointmentDecisionOutcome> decisionResult = appointmentReviewService().applyDecision(entry, decision);
-            if (!decisionResult.ok()) {
-                std::cerr << decisionResult.error().message << '\n';
-                return;
-            }
-
-            if (decisionResult.value().hasError) {
-                std::cerr << decisionResult.value().message << '\n';
-                continue;
-            }
-
-            changed = changed || decisionResult.value().changed;
-            std::cout << decisionResult.value().message << '\n';
-            ConsoleIO::pauseSeconds(2);
-        }
-    }
-
-    if (changed) {
-        const Result<void> saveResult = appointmentReviewService().saveRequests(lines);
-        if (!saveResult.ok()) {
-            std::cerr << saveResult.error().message << '\n';
-            return;
-        }
-        std::cout << "\nAppointment file updated.\n";
-    } else {
-        std::cout << "\nNo changes made.\n";
-    }
-}
