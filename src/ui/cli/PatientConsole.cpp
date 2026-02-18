@@ -45,7 +45,7 @@ void Patient::displayMenu() {
     std::string id;
 
     do {
-        std::cout << "\n=== Patient Menu ===" << std::endl;
+        ConsoleIO::printHeader("=== Patient Menu ===");
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. View Appointments" << std::endl;
@@ -61,8 +61,7 @@ void Patient::displayMenu() {
                 ConsoleIO::pauseSeconds(3);
                 return;
             case 1: {
-                std::cout << std::endl;
-                std::cout << "Appointments\n";
+                ConsoleIO::printHeader("Appointments");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
@@ -78,8 +77,7 @@ void Patient::displayMenu() {
                 break;
             }
             case 2: {
-                std::cout << std::endl;
-                std::cout << "Medications\n";
+                ConsoleIO::printHeader("Medications");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
@@ -95,8 +93,7 @@ void Patient::displayMenu() {
                 break;
             }
             case 3: {
-                std::cout << std::endl;
-                std::cout << "Records\n";
+                ConsoleIO::printHeader("Records");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
@@ -113,8 +110,7 @@ void Patient::displayMenu() {
             }
             case 4: {
                 std::string date, time, doctorName, reason;
-                std::cout << std::endl;
-                std::cout << "Book Appointment\n";
+                ConsoleIO::printHeader("Book Appointment");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 std::cout << "=== Appointment Request ===\n";
                 date = ConsoleIO::promptToken("Enter date (YYYY-MM-DD): ");
