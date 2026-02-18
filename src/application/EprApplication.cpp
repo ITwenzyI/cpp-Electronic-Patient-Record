@@ -3,7 +3,9 @@
 #include "application/usecase/LoginDecisionUseCase.hpp"
 #include "application/usecase/SystemBootstrapUseCase.hpp"
 #include "application/usecase/UserSessionService.hpp"
+#include "common/result/ErrorCodes.hpp"
 #include "ui/cli/Admin/Admin.hpp"
+#include "ui/cli/ConsoleIO.hpp"
 #include "ui/cli/MainMenuCli.hpp"
 
 #include <iostream>
@@ -61,7 +63,15 @@ int EprApplication::run() {
         std::string id;
         mainMenuCli().promptLoginIdentity(id, firstName, lastName);
 
-        userSessionService().runRoleSession(choice, id, firstName, lastName);
+        const Result<void> sessionResult = userSessionService().runRoleSession(choice, id, firstName, lastName);
+        if (!sessionResult) {
+            ConsoleIO::printError(sessionResult.error());
+            if (sessionResult.errorCode() == ErrorCodes::kUserNotFound) {
+                ConsoleIO::pauseSeconds(2);
+            } else if (sessionResult.errorCode() == ErrorCodes::kAuthNameMismatch) {
+                ConsoleIO::pauseSeconds(3);
+            }
+        }
     } while (choice != 0);
 
     return 0;

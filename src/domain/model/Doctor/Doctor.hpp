@@ -11,12 +11,8 @@ class Doctor : public User {
             const std::string& firstName,
             const std::string& lastName);
 
-
-    // If check_id_name is true, Menu will be displayed
+    // Role-specific menu entrypoint.
     void displayMenu() override;
-
-    // Checks if ID and firstName and lastName of info.txt match.
-    void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
 };
 
