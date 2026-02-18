@@ -7,6 +7,8 @@ project(
     LANGUAGES CXX
 )
 
+include(CTest)
+
 file(GLOB_RECURSE PATIENT_RECORD_SOURCES CONFIGURE_DEPENDS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 )
@@ -38,4 +40,26 @@ if(MSVC)
     target_compile_options(patient_record PRIVATE /W4 /permissive-)
 else()
     target_compile_options(patient_record PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+if(BUILD_TESTING)
+    add_executable(usecase_smoke_tests
+        tests/TestMain.cpp
+        tests/PatientWriteServiceSmokeTest.cpp
+        tests/UserRecordServiceSmokeTest.cpp
+        src/application/usecase/PatientWriteService.cpp
+        src/application/usecase/UserRecordService.cpp
+        src/common/util/Utils/Utils.cpp
+    )
+
+    target_include_directories(usecase_smoke_tests PRIVATE src)
+    target_compile_features(usecase_smoke_tests PRIVATE cxx_std_20)
+
+    if(MSVC)
+        target_compile_options(usecase_smoke_tests PRIVATE /W4 /permissive-)
+    else()
+        target_compile_options(usecase_smoke_tests PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+
+    add_test(NAME usecase_smoke_tests COMMAND usecase_smoke_tests)
 endif()
