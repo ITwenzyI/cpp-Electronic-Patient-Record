@@ -161,6 +161,14 @@ Intended dependencies:
 - Introduce optional database adapter behind existing ports
 - Improve input validation for date/time and IDs
 
+## Disclaimer
+
+- It is not a medical product and does not provide medical advice.
+- Do not use this system for real patient care or clinical decision-making.
+- No real patient data should be stored, processed, or shared with this project.
+
 ## Author
 
-- Kilian
+`Kilian`
+
+As part of independent study in Medical Informatics. The software was fully developed in C++ using modern programming techniques.
