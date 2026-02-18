@@ -132,8 +132,8 @@ void Admin::admin_setup() {
             data.firstName = firstName;
             data.lastName = lastName;
             const Result<void> createPatientResult = userProvisioningService().createPatient(data);
-            if (!createPatientResult.ok()) {
-                std::cerr << createPatientResult.error().message << '\n';
+            if (!createPatientResult) {
+                std::cerr << createPatientResult.errorMessage() << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
             }
@@ -149,8 +149,8 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             {
                 const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
-                if (!infoResult.ok()) {
-                    std::cerr << infoResult.error().message << std::endl;
+                if (!infoResult) {
+                    std::cerr << infoResult.errorMessage() << std::endl;
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
@@ -167,8 +167,8 @@ void Admin::admin_setup() {
             data.firstName = firstName;
             data.lastName = lastName;
             const Result<void> createDoctorResult = userProvisioningService().createDoctor(data);
-            if (!createDoctorResult.ok()) {
-                std::cerr << createDoctorResult.error().message << '\n';
+            if (!createDoctorResult) {
+                std::cerr << createDoctorResult.errorMessage() << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
             }
@@ -183,8 +183,8 @@ void Admin::admin_setup() {
             id = ConsoleIO::promptToken("Please enter the full Doctor-ID: ");
             {
                 const Result<std::vector<std::string>> infoResult = userProfileQueryService().getUserInfo(id);
-                if (!infoResult.ok()) {
-                    std::cerr << infoResult.error().message << std::endl;
+                if (!infoResult) {
+                    std::cerr << infoResult.errorMessage() << std::endl;
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
@@ -201,8 +201,8 @@ void Admin::admin_setup() {
             data.firstName = firstName;
             data.lastName = lastName;
             const Result<void> createAssistantResult = userProvisioningService().createAssistant(data);
-            if (!createAssistantResult.ok()) {
-                std::cerr << createAssistantResult.error().message << '\n';
+            if (!createAssistantResult) {
+                std::cerr << createAssistantResult.errorMessage() << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
             }
@@ -217,8 +217,8 @@ void Admin::admin_setup() {
             id = ConsoleIO::promptToken("Please enter the full Assistant-ID: ");
             {
                 const Result<std::vector<std::string>> infoResult = userProfileQueryService().getUserInfo(id);
-                if (!infoResult.ok()) {
-                    std::cerr << infoResult.error().message << std::endl;
+                if (!infoResult) {
+                    std::cerr << infoResult.errorMessage() << std::endl;
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
@@ -235,8 +235,8 @@ void Admin::admin_setup() {
             field = ConsoleIO::promptToken("Please enter the field to change: ");
             newInput = ConsoleIO::promptToken("Please enter the new input: ");
             const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
-            if (!updateResult.ok()) {
-                std::cerr << updateResult.error().message << '\n';
+            if (!updateResult) {
+                std::cerr << updateResult.errorMessage() << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
             }
