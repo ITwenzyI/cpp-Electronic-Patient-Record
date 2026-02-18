@@ -14,6 +14,7 @@
 #include "application/usecase/UserProfileQueryService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
+#include "common/result/ErrorSources.hpp"
 #include "ui/cli/ConsoleIO.hpp"
 #include "ui/cli/UserProvisioningInputCli.hpp"
 #include "common/util/Utils/Utils.hpp"
@@ -278,20 +279,20 @@ void Admin::admin_getNames(std::string &firstName, std::string &lastName) {
 void Admin::exportUserData(const std::string& id) {
 
     if (!userRepository().exists(id)) {
-        std::cerr << "Invalid ID: " << id << std::endl;
+        ConsoleIO::printError({"USER_NOT_FOUND", "Invalid ID: " + id, ErrorSources::kUi, "Admin::exportUserData"});
         ConsoleIO::pauseSeconds(2);
         return;
     }
 
     const std::vector<std::string> content = userRepository().readInfo(id);
     if (content.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
+        ConsoleIO::printError({"READ_FAILED", "Failed to read file!", ErrorSources::kUi, "Admin::exportUserData"});
         return;
     }
 
     std::string folderName;
     if (!systemRepository().createUserBackupIfMissing(id, content, folderName)) {
-        std::cerr << "Failed to create backup file." << std::endl;
+        ConsoleIO::printError({"WRITE_FAILED", "Failed to create backup file.", ErrorSources::kUi, "Admin::exportUserData"});
         return;
     }
 
