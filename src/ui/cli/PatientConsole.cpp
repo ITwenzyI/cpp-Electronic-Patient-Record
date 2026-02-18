@@ -1,6 +1,7 @@
 #include "domain/model/Patient/Patient.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/PatientWriteService.hpp"
+#include "common/result/ErrorSources.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
@@ -144,7 +145,7 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
     const std::vector<std::string> info = userRepository().readInfo(id);
     if (!userRepository().exists(id)) {
         std::cout << std::endl;
-        std::cerr << "Failed to read file!" << std::endl;
+        ConsoleIO::printError({"USER_NOT_FOUND", "Failed to read file!", ErrorSources::kUi, "Patient::check_id_name"});
         ConsoleIO::pauseSeconds(2);
         return;
     }

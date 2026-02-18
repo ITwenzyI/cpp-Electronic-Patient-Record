@@ -5,6 +5,7 @@
 #include "application/usecase/AppointmentReviewService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
+#include "common/result/ErrorSources.hpp"
 #include "ui/cli/UserProvisioningInputCli.hpp"
 #include "ui/cli/ConsoleIO.hpp"
 #include "common/util/Utils/Utils.hpp"
@@ -87,7 +88,7 @@ void runAppointmentReviewCli() {
             }
 
             if (decisionResult.value().hasError) {
-                std::cerr << decisionResult.value().message << '\n';
+                ConsoleIO::printError({"WRITE_FAILED", decisionResult.value().message, ErrorSources::kUi, "runAppointmentReviewCli"});
                 continue;
             }
 
@@ -342,7 +343,7 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     const std::vector<std::string> info = userRepository().readInfo(id);
     if (!userRepository().exists(id)) {
         std::cout << std::endl;
-        std::cerr << "Failed to read file!" << std::endl;
+        ConsoleIO::printError({"USER_NOT_FOUND", "Failed to read file!", ErrorSources::kUi, "Assistant::check_id_name"});
         ConsoleIO::pauseSeconds(2);
         return;
     }
