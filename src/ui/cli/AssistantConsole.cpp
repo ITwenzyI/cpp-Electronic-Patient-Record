@@ -110,14 +110,6 @@ void runAppointmentReviewCli() {
     }
 }
 
-std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
-    for (const auto& line : lines) {
-        if (line.starts_with(keyPrefix)) {
-            return line.substr(keyPrefix.size());
-        }
-    }
-    return "";
-}
 }
 
 // Assistant menu.
@@ -336,31 +328,5 @@ void Assistant::displayMenu() {
                 break;
         }
     } while (choice != 0);
-}
-
-// Checks if login details are correct.
-void Assistant::check_id_name(std::string id, std::string firstName, std::string lastName) {
-    const std::vector<std::string> info = userRepository().readInfo(id);
-    if (!userRepository().exists(id)) {
-        std::cout << std::endl;
-        ConsoleIO::printError({"USER_NOT_FOUND", "Failed to read file!", ErrorSources::kUi, "Assistant::check_id_name"});
-        ConsoleIO::pauseSeconds(2);
-        return;
-    }
-
-    const std::string fileFirstName = extractField(info, "First Name:");
-    const std::string fileLastName = extractField(info, "Last Name:");
-
-    if (cleaned(fileFirstName) == cleaned(firstName) &&
-        cleaned(fileLastName) == cleaned(lastName)) {
-        std::cout << std::endl;
-        std::cout << "Login successful.\n";
-        ConsoleIO::pauseSeconds(2);
-        displayMenu();
-    } else {
-        std::cout << std::endl;
-        std::cout << "Name does not match the ID.\n";
-        ConsoleIO::pauseSeconds(3);
-    }
 }
 

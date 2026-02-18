@@ -1,8 +1,6 @@
 #include "domain/model/Patient/Patient.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/PatientWriteService.hpp"
-#include "common/result/ErrorSources.hpp"
-#include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/ConsoleIO.hpp"
@@ -28,15 +26,6 @@ PatientRecordQueryService& patientRecordQueryService() {
 PatientWriteService& patientWriteService() {
     static PatientWriteService service(patientRepository());
     return service;
-}
-
-std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
-    for (const auto& line : lines) {
-        if (line.starts_with(keyPrefix)) {
-            return line.substr(keyPrefix.size());
-        }
-    }
-    return "";
 }
 }
 
@@ -140,29 +129,4 @@ void Patient::displayMenu() {
     } while (choice != 0);
 }
 
-// Checks if login details are correct.
-void Patient::check_id_name(std::string id, std::string firstName, std::string lastName) {
-    const std::vector<std::string> info = userRepository().readInfo(id);
-    if (!userRepository().exists(id)) {
-        std::cout << std::endl;
-        ConsoleIO::printError({"USER_NOT_FOUND", "Failed to read file!", ErrorSources::kUi, "Patient::check_id_name"});
-        ConsoleIO::pauseSeconds(2);
-        return;
-    }
-
-    const std::string fileFirstName = extractField(info, "First Name:");
-    const std::string fileLastName = extractField(info, "Last Name:");
-
-    if (cleaned(fileFirstName) == cleaned(firstName) &&
-        cleaned(fileLastName) == cleaned(lastName)) {
-        std::cout << std::endl;
-        std::cout << "Login successful.\n";
-        ConsoleIO::pauseSeconds(2);
-        displayMenu();
-    } else {
-        std::cout << std::endl;
-        std::cout << "Name does not match the ID.\n";
-        ConsoleIO::pauseSeconds(3);
-    }
-}
 

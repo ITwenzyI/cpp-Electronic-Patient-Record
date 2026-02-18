@@ -15,9 +15,6 @@ class Doctor : public User {
     // If check_id_name is true, Menu will be displayed
     void displayMenu() override;
 
-    // Checks if ID and firstName and lastName of info.txt match.
-    void check_id_name(std::string id, std::string firstName, std::string lastName) override;
-
 };
 
 #endif //DOCTOR_HPP
