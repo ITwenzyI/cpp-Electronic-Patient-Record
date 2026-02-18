@@ -91,8 +91,8 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
 
                 const Result<void> medicationResult = patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate);
-                if (!medicationResult.ok()) {
-                    std::cerr << medicationResult.error().message << '\n';
+                if (!medicationResult) {
+                    std::cerr << medicationResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -120,8 +120,8 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
 
                 const Result<void> recordResult = patientWriteService().addRecord(id, date, doctor, type, content);
-                if (!recordResult.ok()) {
-                    std::cerr << recordResult.error().message << '\n';
+                if (!recordResult) {
+                    std::cerr << recordResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -136,8 +136,8 @@ void Doctor::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
-                    if (!infoResult.ok()) {
-                        std::cerr << infoResult.error().message << std::endl;
+                    if (!infoResult) {
+                        std::cerr << infoResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << "File Content:" << std::endl;
@@ -151,8 +151,8 @@ void Doctor::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
-                    if (!appointmentsResult.ok()) {
-                        std::cerr << appointmentsResult.error().message << std::endl;
+                    if (!appointmentsResult) {
+                        std::cerr << appointmentsResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << std::endl;
@@ -166,8 +166,8 @@ void Doctor::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
-                    if (!medicationsResult.ok()) {
-                        std::cerr << medicationsResult.error().message << std::endl;
+                    if (!medicationsResult) {
+                        std::cerr << medicationsResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << std::endl;
@@ -181,8 +181,8 @@ void Doctor::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
-                    if (!recordsResult.ok()) {
-                        std::cerr << recordsResult.error().message << std::endl;
+                    if (!recordsResult) {
+                        std::cerr << recordsResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << std::endl;
@@ -201,8 +201,8 @@ void Doctor::displayMenu() {
                 newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
                 const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
-                if (!updateResult.ok()) {
-                    std::cerr << updateResult.error().message << '\n';
+                if (!updateResult) {
+                    std::cerr << updateResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -221,8 +221,8 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
 
                 const Result<void> extraInfoResult = userRecordService().addExtraInfo(id, extraInfo);
-                if (!extraInfoResult.ok()) {
-                    std::cerr << extraInfoResult.error().message << '\n';
+                if (!extraInfoResult) {
+                    std::cerr << extraInfoResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
