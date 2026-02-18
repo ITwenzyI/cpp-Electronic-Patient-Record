@@ -1,178 +1,162 @@
-# 🩺 Electronic Patient Record (EPR) System – C++ Implementation
+# Electronic Patient Record (EPR) - C++ CLI
 
-## 🧠 Project Goal
+A layered C++ project that simulates a file-based Electronic Patient Record system with role-based workflows for Patients, Doctors, Assistants, and Admin setup.
 
-This C++ project simulates a simple yet structured **Electronic Patient Record (EPR) System**, designed for hands-on practice in object-oriented programming, file handling, and user role management. It supports patients, doctors, assistants, and an admin role, each with role-specific functionality. The project features realistic ID systems, folder-based data storage and a modular architecture, making it ideal for learning practical C++ in a healthcare related context.
+## Project Status
 
----
+- Active refactor state with clean layered structure
+- CLI-based interaction
+- File-based persistence (no database yet)
 
-## 💡 Purpose
-This project was created for learning purposes in the field of medical informatics and to improve practical C++ development and architecture skills.
-It aims to simulate a real-world clinical information workflow on a simple and accessible level.
+## Goals
 
----
+- Keep business and orchestration logic separated from persistence and UI
+- Improve maintainability and testability through explicit layers
+- Preserve existing behavior while incrementally modernizing architecture
 
-## 📍 Status
-🔧 Currently under development
+## Architecture
 
----
+The project is organized under `src/` using layered boundaries:
 
-## 🛠️ Concepts Used
+- `domain/`: entities and core model state
+- `application/`: use-cases and ports (interfaces)
+- `infrastructure/`: file-system adapters implementing ports
+- `ui/`: CLI menus, prompts, rendering, and composition root
+- `common/`: shared technical utilities (`Result`, error constants, helpers)
 
-- Classes & Inheritance
-- Access specifiers (`private`, `protected`, `public`)
-- File input/output (`fstream`)
-- Text-based user menu
-- Simple role system (Patient, Doctor, Assistant, Admin)
-- Header/Source file separation
+Detailed architecture documentation:
 
----
+- `docs/project_structure.md`
 
-## 🚀 Features (Work in Progress)
+## Key Components
 
-- Role-based access:
-  - **Patients** can view personal records and request appointments
-  - **Doctors** can review appointments and add medical records
-  - **Assistants** can manage and confirm appointment requests
-- Individual folder structure for each patient (`/data/Patients/`)
-- Text-based data files (`info.txt`, `appointments.txt`, `records.txt`)
-- Clear class separation with inheritance (User → Patient/Doctor/Assistant)
-- File-based storage using `std::filesystem`
+### Application Use-Cases
 
-## 🔹 Core Functionalities
-- System Initialization on first Startup with Admin-Setup
-- System requires at least one Assistant and one Doctor to operate
-- Admin Menu which can be opened in the Main Menu with #admin
-- Simple Login System which checks if the FirstName and LastName are correct for the ID (Checks in info.txt from the ID)
-- Simple Booting Up Scenario with Threads (For realism)
-- User is the base class for Patient, Assistant, Doctors (Stores all the infos and the generally functions)
-- Every Role has their own unique ID (Patient == P00000001, Assistant == A0001, Doctor == D0001)
-- IDs start with '1' and get updated for every new User. Stored in data/role_id.txt (patient_id.txt, ...)
-- Utils functions in separate file.
-- IDs functions in separate file and class for each role
-- Extensive code comments for learning
-- Threads to add realism
+- `AuthService`: validates login identity (`id`, `firstName`, `lastName`)
+- `UserSessionService`: session-level validation/orchestration checks
+- `PatientRecordQueryService`: read patient info, appointments, medications, records
+- `PatientWriteService`: add records/medications/appointment requests
+- `UserRecordService`: update user info fields / append extra info
+- `UserProvisioningService`: create Patient/Doctor/Assistant data
+- `AppointmentReviewService`: assistant workflow for request review/confirmation
+- `SystemBootstrapUseCase`: startup/bootstrap checks
+- `LoginDecisionUseCase`: interprets main menu input
 
----
+### UI Composition
 
-## 🔹 IDs functions
-| Role      | Prefix | Example ID  |
-|-----------|--------|-------------|
-| Patient   | `P`    | `P00000001` |
-| Doctor    | `D`    | `D0001`     |
-| Assistant | `A`    | `A0001`     |
+- Entry point: `src/main.cpp`
+- Composition root: `src/ui/cli/EprCliApplication.cpp`
+- Role menu controllers:
+  - `src/ui/cli/PatientMenuController.hpp`
+  - `src/ui/cli/DoctorMenuController.hpp`
+  - `src/ui/cli/AssistantMenuController.hpp`
 
-#### Class Patient_ID:
-- get_patient_id returns the ID which is stored in ``patient_id.txt``
-- update_patient_id Updates the ID in ``patient_id.txt`` with +1
-#### Class Assistant_ID:
-- get_assistant_id returns the ID which is stored in ``assistant_id.txt``
-- update_assistant_id Updates the ID in ``assistant_id.txt`` with +1
-#### Class Doctor_ID:
-- get_doctor_id returns the ID which is stored in ``doctor_id.txt``
-- update_doctor_id Updates the ID in ``doctor_id.txt`` with +1
+### Error Model
 
-## 🔹 Utils Functions
-- getDate in the Format ``YYYY-MM-DD``
-- getTime in the Format ``HH:MM:SS``
-- random_number, return a random **int Number** between min and max
-- cleaned, removes ``\r`` and all ``whitespace`` characters to clear input before storage or comparison
-- get_file_path_from_id, gets the correct Path from the ID (Example: D0001 == Doctor)
+- Unified result type: `src/common/result/Result.hpp`
+- Centralized error codes: `src/common/result/ErrorCodes.hpp`
+- Error source constants: `src/common/result/ErrorSources.hpp`
+- UI rendering helper: `ConsoleIO::printError(const Error&)`
 
-## 🔹 Admin Functions
-- Create New Patient | Creates a new Folder <Patient-ID> with ``info.txt``, ``medications.txt``, ``records.txt``, ``appointments.txt``
-- Create Doctors | Creates a new Folder <Doctor-ID> with ``info.txt``
-- Create Assistants | Creates a new Folder <Assistant-ID> with ``info.txt``
-- View Patient Info | Reads and displays `info.txt`
-- View Doctors Info | Reads and displays `info.txt`
-- View Assistants Info | Reads and displays `info.txt`
-- Update Info Field | Updates a field in `info.txt` by ID
+## Features
 
-## 🔹 Patient Functions
-- Request Appointments | Request in ``request.txt``. Needs Conformation to land in ``appointments.txt``
-- View Patient Appointments | Reads and displays `appointments.txt`
-- View Patient Medications | Reads and displays `medications.txt`
-- View Patient Records | Reads and displays `records.txt`
+### Admin
 
-## 🔹 Assistant Functions
-- Create New Patient | Creates a new Folder <Patient-ID> with ``info.txt``, ``medications.txt``, ``records.txt``, ``appointments.txt``
-- Update Info Field | Updates a field in `info.txt` by ID
-- Review Appointments |  Reads and displays `request.txt`. Assistant can confirm, reject or skip
-- Add Medications | Adds a line to `medications.txt`
-- Add Records | Adds a line to `records.txt`
-- View Patient Info | Reads and displays `info.txt`
-- View Patient Appointments | Reads and displays `appointments.txt`
-- View Patient Medications | Reads and displays `medications.txt`
-- View Patient Records | Reads and displays `records.txt`
-- Add Extra Info | Reads and Updates `info.txt` with an Extra Info
+- Initial setup and system bootstrapping support
+- Create Patient / Doctor / Assistant profiles
+- Read user profile data
+- Update user fields
+- Export user backup data
 
-## 🔹 Doctor Functions
-- Add Medications | Adds a line to `medications.txt`
-- Add Records | Adds a line to `records.txt`
-- View Patient Info | Reads and displays `info.txt`
-- View Patient Appointments | Reads and displays `appointments.txt`
-- View Patient Medications | Reads and displays `medications.txt`
-- View Patient Records | Reads and displays `records.txt`
-- Update Info Field | Updates a field in `info.txt` by ID
-- Add Extra Info | Reads and Updates `info.txt` with an Extra Info
+### Patient
 
----
+- View appointments
+- View medications
+- View records
+- Request new appointment
 
+### Doctor
 
-## 📦 Project Structure
-```
-│   ├── main.cpp              
-📁 /src/
-│   ├── Admin/
-│   │   └── Admin.cpp/hpp        
-│   ├── User/
-│   │   └── User.cpp/hpp        
-│   ├── Patient/
-│   │   └── Patient.cpp/hpp     
-│   ├── Doctor/
-│   │   └── Doctor.cpp/hpp      
-│   ├── Assistant/
-│       └── Assistant.cpp/hpp 
-│   ├── Utils/
-│       └── utils.cpp/hpp  
-📁 /data/
-│   ├── Patients/
-│     └── /<patient_id>/
-│           ├── info.txt       
-│           ├── records.txt       
-│           └── appointments.txt    
-│   ├── Assistants/
-│     └── /<assistant_id>/
-│           └── info.txt         
-│   ├── Doctors/
-│     └── /<doctor_id>/
-│           └── info.txt        
-│   ├── Appointments/
-│       └── requests.txt        
-│   ├── admin_logging.txt
-│   ├── assistant_id.txt
-│   ├── doctor_id.txt
-│   ├── patient_id.txt
-│
+- Add medications for patient
+- Add records for patient
+- View patient info/appointments/medications/records
+- Update info field
+- Add extra info
+
+### Assistant
+
+- Create new patient
+- Update info field
+- Review appointment requests (accept/reject/skip)
+- Add medications/records
+- View patient info/appointments/medications/records
+- Add extra info
+
+## Build Requirements
+
+- CMake `>= 3.29`
+- C++20-compatible compiler
+- Works with MSVC and MinGW/GCC toolchains (project currently used on Windows)
+
+## Build and Run
+
+From repository root:
+
+```powershell
+cmake -S . -B build
+cmake --build build
 ```
 
-## 🧩 To-Do
- - Save Users in Database
- - Password for Login
- - Debug-Mode
- - Log-System
- - Backup whole User
- - Demo-System
- - Tutorial
- - Wards System with bed occupancy
- - Medical visits Information
- - Graph for Medication
- - Complete Front-End 
+Run executable:
 
-## 📬 Contact
-If you have questions, suggestions, or want to contribute, feel free to open an issue or contact me via GitHub.
+```powershell
+.\build\patient_record.exe
+```
 
-## 👤 Author
-This project was created by **Kilian** as part of independent study in Medical Informatics.
-The software was fully developed in C++ using modern programming techniques.
+## Tests
 
+Smoke tests cover key application use-cases with fake repositories.
+
+Test target:
+
+- `usecase_smoke_tests`
+
+Run tests:
+
+```powershell
+ctest --test-dir build --output-on-failure
+```
+
+Test files:
+
+- `tests/TestMain.cpp`
+- `tests/PatientWriteServiceSmokeTest.cpp`
+- `tests/UserRecordServiceSmokeTest.cpp`
+- `tests/README.md`
+
+## Data Storage
+
+Persistence is file-based under `data/` (runtime-generated/updated):
+
+- role directories (`Patients`, `Doctors`, `Assistants`)
+- per-user info files
+- patient sub-files (`appointments.txt`, `medications.txt`, `records.txt`)
+- appointment requests (`data/Appointments/requests.txt`)
+- role ID counters (`*_id.txt`)
+
+## Dependency Direction
+
+Intended dependencies:
+
+1. `ui` -> `application`
+2. `application` -> `domain` + `application/ports`
+3. `infrastructure` -> `application/ports`
+4. `domain` independent of `ui` and `infrastructure`
+5. `common` shared by all layers for technical concerns
+
+## Roadmap (Pragmatic Next Steps)
+
+- Optional: extract role menu dispatch from `EprCliApplication` into dedicated UI routing module
+- Expand use-case tests (additional negative/edge cases)
+- Introduce optional database adapter behind existing ports
+- Improve input validation for date/time and IDs
