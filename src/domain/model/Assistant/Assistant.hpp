@@ -3,16 +3,6 @@
 #define ASSISTANT_HPP
 
 #include "domain/model/User/User.hpp"
-#include "domain/model/Patient/Patient.hpp"
-#include "common/util/Utils/Utils.hpp"
-#include "infrastructure/persistence/IDs/IDs.hpp"
-
-
-#include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <chrono>
 
 class Assistant : public User {
     public:
@@ -28,10 +18,6 @@ class Assistant : public User {
     // Checks if ID and firstName and lastName of info.txt match.
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
 
-    // Assistant Folder Actions
-    void createNewAssistant() const;
-    static void get_assistant_info(const std::string &assistant_full_id);
-    void fill_assistant_info();
     static void review_appointments();
 
 };

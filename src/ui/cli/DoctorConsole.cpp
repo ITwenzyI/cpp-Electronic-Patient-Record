@@ -1,14 +1,41 @@
 #include "domain/model/Doctor/Doctor.hpp"
+#include "domain/model/Patient/Patient.hpp"
+#include "application/usecase/PatientRecordQueryService.hpp"
+#include "application/usecase/PatientWriteService.hpp"
+#include "application/usecase/UserRecordService.hpp"
+#include "common/util/Utils/Utils.hpp"
+#include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <chrono>
 #include <iostream>
+#include <limits>
 #include <thread>
 
 namespace {
 IUserRepository& userRepository() {
     static FileUserRepository repository;
     return repository;
+}
+
+IPatientRepository& patientRepository() {
+    static FilePatientRepository repository;
+    return repository;
+}
+
+PatientRecordQueryService& patientRecordQueryService() {
+    static PatientRecordQueryService service(userRepository(), patientRepository());
+    return service;
+}
+
+UserRecordService& userRecordService() {
+    static UserRecordService service(userRepository());
+    return service;
+}
+
+PatientWriteService& patientWriteService() {
+    static PatientWriteService service(patientRepository());
+    return service;
 }
 
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
@@ -49,19 +76,63 @@ void Doctor::displayMenu() {
                 std::this_thread::sleep_for(std::chrono::seconds(3));
                 return;
             case 1: {
+                std::string nameAndDose, frequency, startDate, endDate;
                 std::cout << std::endl;
                 std::cout << "Add Medication\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::add_patient_medication(id);
+                std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
+                std::getline(std::cin >> std::ws, nameAndDose);
+                std::cout << std::endl;
+                std::cout << "Enter intake frequency (Example: 3x daily): ";
+                std::getline(std::cin, frequency);
+                std::cout << std::endl;
+                std::cout << "Enter start date (YYYY-MM-DD): ";
+                std::getline(std::cin, startDate);
+                std::cout << std::endl;
+                std::cout << "Enter end date (YYYY-MM-DD): ";
+                std::getline(std::cin, endDate);
+                std::cout << std::endl;
+
+                if (!patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate)) {
+                    std::cerr << "Could not open medication file for writing.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+
+                const std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
+                std::cout << "Medication added:\n" << medicationLine << '\n';
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             case 2: {
+                std::string date, doctor, type, content;
                 std::cout << std::endl;
                 std::cout << "Add Records\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::add_patient_record(id);
+                std::cout << "Enter date of record (YYYY-MM-DD): ";
+                std::getline(std::cin >> std::ws, date);
+                std::cout << std::endl;
+                std::cout << "Enter doctor name: ";
+                std::getline(std::cin, doctor);
+                std::cout << std::endl;
+                std::cout << "Enter type of record: ";
+                std::getline(std::cin, type);
+                std::cout << std::endl;
+                std::cout << "Enter record details/notes: ";
+                std::getline(std::cin, content);
+                std::cout << std::endl;
+
+                if (!patientWriteService().addRecord(id, date, doctor, type, content)) {
+                    std::cerr << "Could not open records file for writing.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+
+                const std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
+                std::cout << "Record added:\n" << recordLine << '\n';
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             case 3: {
@@ -69,7 +140,18 @@ void Doctor::displayMenu() {
                 std::cout << "Patient Info\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_info(id);
+                {
+                    const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
+                    if (info.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << "File Content:" << std::endl;
+                    for (const auto& line : info) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 4: {
@@ -77,7 +159,18 @@ void Doctor::displayMenu() {
                 std::cout << "Patient Appointments\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_appointments(id);
+                {
+                    const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
+                    if (appointments.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << std::endl;
+                    for (const auto& line : appointments) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 5: {
@@ -85,7 +178,18 @@ void Doctor::displayMenu() {
                 std::cout << "Patient Medications\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_medications(id);
+                {
+                    const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
+                    if (medications.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << std::endl;
+                    for (const auto& line : medications) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 6: {
@@ -93,7 +197,18 @@ void Doctor::displayMenu() {
                 std::cout << "Patient Records\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                Patient::get_patient_records(id);
+                {
+                    const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
+                    if (records.empty()) {
+                        std::cerr << "Failed to read file!" << std::endl;
+                        break;
+                    }
+                    std::cout << std::endl;
+                    for (const auto& line : records) {
+                        std::cout << line << std::endl;
+                    }
+                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                }
                 break;
             }
             case 7: {
@@ -109,15 +224,36 @@ void Doctor::displayMenu() {
                 std::cout << "Enter New Input: ";
                 std::cin >> newInput;
                 std::cout << std::endl;
-                update_field_in_file(id, field, newInput);
+                if (!userRecordService().updateFieldInFile(id, field, newInput)) {
+                    std::cerr << "Could not update field in file.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+                std::cout << field << " successfully updated.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             case 8: {
+                std::string extraInfo;
                 std::cout << std::endl;
                 std::cout << "Add Extra Info\n";
                 std::cout << "Enter the full ID of the Patient: ";
                 std::cin >> id;
-                add_extra_info(id);
+                std::cout << "ID: " << id << std::endl;
+                std::cout << "Enter the Extra Info: ";
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                std::getline(std::cin, extraInfo);
+                std::cout << std::endl;
+
+                if (!userRecordService().addExtraInfo(id, extraInfo)) {
+                    std::cerr << "Could not open file for writing.\n";
+                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    break;
+                }
+
+                const std::string newLine = "[" + getDate() + "] " + extraInfo + "\n";
+                std::cout << "Extra Info added:\n" << newLine << '\n';
+                std::this_thread::sleep_for(std::chrono::seconds(2));
                 break;
             }
             default:
@@ -153,39 +289,3 @@ void Doctor::check_id_name(std::string id, std::string firstName, std::string la
     }
 }
 
-// Prints all info from info.txt.
-void Doctor::get_doctor_info(const std::string& doctor_full_id) {
-    const std::vector<std::string> info = userRepository().readInfo(doctor_full_id);
-    if (info.empty()) {
-        std::cerr << "Failed to read file!" << std::endl;
-        return;
-    }
-
-    std::cout << "File Content:" << std::endl;
-    for (const auto& line : info) {
-        std::cout << line << std::endl;
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(3));
-}
-
-// Gets all info for info.txt.
-void Doctor::fill_doctor_info() {
-    std::cout << "\nPlease provide all Infos from the Doctor!\n" << std::endl;
-    std::cout << "Date of Birth: ";
-    std::getline(std::cin >> std::ws, dateOfBirth);
-    std::cout << "Gender: ";
-    std::getline(std::cin, gender);
-    std::cout << "Nationality: ";
-    std::getline(std::cin, nationality);
-    std::cout << "Address: ";
-    std::getline(std::cin, address);
-    std::cout << "Phone Number: ";
-    std::getline(std::cin, phoneNumber);
-    std::cout << "Email Address: ";
-    std::getline(std::cin, email);
-    std::cout << "Insurance ID: ";
-    std::getline(std::cin, insuranceID);
-    std::cout << "InsuranceType: ";
-    std::getline(std::cin, insuranceType);
-}

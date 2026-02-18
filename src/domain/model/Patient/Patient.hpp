@@ -4,14 +4,6 @@
 #define PATIENT_HPP
 
 #include "domain/model/User/User.hpp"
-#include "common/util/Utils/Utils.hpp"
-#include "infrastructure/persistence/IDs/IDs.hpp"
-
-#include <string>
-#include <iostream>
-#include <filesystem>
-#include <fstream>
-#include <chrono>
 
 class Patient : public User {
 public:
@@ -28,21 +20,6 @@ public:
 
     // Checks if ID and firstName and lastName of info.txt match.
     void check_id_name(std::string id, std::string firstName, std::string lastName) override;
-
-
-
-    // Patient Folder Actions
-    void createNewPatient() const;
-    static void get_patient_info(const std::string &patient_full_id);
-    void fill_patient_info();
-    static void add_patient_appointment(const std::string &patient_full_id);
-    static void add_patient_medication(const std::string &patient_full_id);
-    static void add_patient_record(const std::string &patient_full_id);
-    static void get_patient_appointments(const std::string &patient_full_id);
-    static void get_patient_medications(const std::string &patient_full_id);
-    static void get_patient_records(const std::string &patient_full_id);
-    static void request_appointment(const std::string &patient_full_id);
-
 
 };
 

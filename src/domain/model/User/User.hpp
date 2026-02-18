@@ -3,19 +3,8 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#include "common/util/Utils/Utils.hpp"
-
 #include <string>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <string>
-#include <vector>
 #include <utility>
-#include <format>
-#include <ctime>
-#include <thread>
 
 enum class UserRole {
     Patient,
@@ -69,13 +58,18 @@ public:
     virtual std::string getLastName() const;
     virtual std::string getRole() const;
     virtual std::string getID() const;
+    virtual std::string getDateOfBirth() const;
+    virtual std::string getGender() const;
+    virtual std::string getNationality() const;
+    virtual std::string getAddress() const;
+    virtual std::string getPhoneNumber() const;
+    virtual std::string getEmail() const;
+    virtual std::string getInsuranceID() const;
+    virtual std::string getInsuranceType() const;
 
     // Setters
     virtual void setFirstName(const std::string& firstName);
     virtual void setLastName(const std::string& lastName);
-
-    static void update_field_in_file(const std::string& id, const std::string& field, const std::string& newInput);
-    static void add_extra_info(const std::string& id);
 
     // Abstract method
     virtual void displayMenu() = 0;

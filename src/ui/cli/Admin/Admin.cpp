@@ -10,11 +10,18 @@
 
 #include "application/ports/ISystemRepository.hpp"
 #include "application/ports/IUserRepository.hpp"
+#include "application/usecase/PatientRecordQueryService.hpp"
+#include "application/usecase/UserProfileQueryService.hpp"
+#include "application/usecase/UserRecordService.hpp"
+#include "application/usecase/UserProvisioningService.hpp"
+#include "ui/cli/UserProvisioningInputCli.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Patient/Patient.hpp"
 #include "domain/model/Doctor/Doctor.hpp"
 #include "infrastructure/persistence/FileSystemRepository.hpp"
+#include "infrastructure/persistence/FilePatientRepository.hpp"
+#include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 
 #include <iostream>
@@ -29,6 +36,32 @@ ISystemRepository& systemRepository() {
 IUserRepository& userRepository() {
     static FileUserRepository repository;
     return repository;
+}
+
+IPatientRepository& patientRepository() {
+    static FilePatientRepository repository;
+    return repository;
+}
+
+UserProvisioningService& userProvisioningService() {
+    static FileUserProvisioningRepository repository;
+    static UserProvisioningService service(repository);
+    return service;
+}
+
+UserRecordService& userRecordService() {
+    static UserRecordService service(userRepository());
+    return service;
+}
+
+UserProfileQueryService& userProfileQueryService() {
+    static UserProfileQueryService service(userRepository());
+    return service;
+}
+
+PatientRecordQueryService& patientRecordQueryService() {
+    static PatientRecordQueryService service(userRepository(), patientRepository());
+    return service;
 }
 }
 
@@ -96,9 +129,10 @@ void Admin::admin_setup() {
         case 1: {
             std::cout << std::endl;
             admin_getNames( firstName, lastName);
-            Patient p("", firstName, lastName);
-            p.fill_patient_info();
-            p.createNewPatient();
+            UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
+            data.firstName = firstName;
+            data.lastName = lastName;
+            userProvisioningService().createPatient(data);
             std::cout << std::endl;
             std::cout << "Patient: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -110,16 +144,28 @@ void Admin::admin_setup() {
             std::cout << "Please enter the full Patient-ID: ";
             std::cin >> id;
             std::cout << std::endl;
-            Patient::get_patient_info(id);
+            {
+                const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
+                if (info.empty()) {
+                    std::cerr << "Failed to read file!" << std::endl;
+                    break;
+                }
+                std::cout << "File Content:" << std::endl;
+                for (const auto& line : info) {
+                    std::cout << line << std::endl;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+            }
             break;
         }
 
         case 3: {
             std::cout << std::endl;
             admin_getNames(firstName, lastName);
-            Doctor d("", firstName, lastName);
-            d.fill_doctor_info();
-            d.createNewDoctor();
+            UserProvisioningData data = UserProvisioningInputCli::promptDoctorInput();
+            data.firstName = firstName;
+            data.lastName = lastName;
+            userProvisioningService().createDoctor(data);
             std::cout << std::endl;
             std::cout << "Doctor: [" << firstName << " " << lastName << "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -130,16 +176,28 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             std::cout << "Please enter the full Doctor-ID: ";
             std::cin >> id;
-            Doctor::get_doctor_info(id);
+            {
+                const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
+                if (info.empty()) {
+                    std::cerr << "Failed to read file!" << std::endl;
+                    break;
+                }
+                std::cout << "File Content:" << std::endl;
+                for (const auto& line : info) {
+                    std::cout << line << std::endl;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+            }
             break;
         }
 
         case 5: {
             std::cout << std::endl;
             admin_getNames(firstName, lastName);
-            Assistant a("", firstName, lastName);
-            a.fill_assistant_info();
-            a.createNewAssistant();
+            UserProvisioningData data = UserProvisioningInputCli::promptAssistantInput();
+            data.firstName = firstName;
+            data.lastName = lastName;
+            userProvisioningService().createAssistant(data);
             std::cout << std::endl;
             std::cout << "Assistant: [" << firstName << " " << lastName <<  "] successfully created!" << "\n";
             std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -150,7 +208,18 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             std::cout << "Please enter the full Assistant-ID: ";
             std::cin >> id;
-            Assistant::get_assistant_info(id);
+            {
+                const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
+                if (info.empty()) {
+                    std::cerr << "Failed to read file!" << std::endl;
+                    break;
+                }
+                std::cout << "File Content:" << std::endl;
+                for (const auto& line : info) {
+                    std::cout << line << std::endl;
+                }
+                std::this_thread::sleep_for(std::chrono::seconds(3));
+            }
             break;
         }
 
@@ -163,7 +232,13 @@ void Admin::admin_setup() {
             std::cin >> field;
             std::cout << "Please enter the new input: ";
             std::cin >> newInput;
-            User::update_field_in_file(id, field, newInput);
+            if (!userRecordService().updateFieldInFile(id, field, newInput)) {
+                std::cerr << "Could not update field in file.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(2));
+                break;
+            }
+            std::cout << field << " successfully updated.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(2));
             break;
         }
 

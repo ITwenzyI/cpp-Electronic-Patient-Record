@@ -61,6 +61,38 @@ std::string User::getID() const {
     return user_id;
 }
 
+std::string User::getDateOfBirth() const {
+    return dateOfBirth;
+}
+
+std::string User::getGender() const {
+    return gender;
+}
+
+std::string User::getNationality() const {
+    return nationality;
+}
+
+std::string User::getAddress() const {
+    return address;
+}
+
+std::string User::getPhoneNumber() const {
+    return phoneNumber;
+}
+
+std::string User::getEmail() const {
+    return email;
+}
+
+std::string User::getInsuranceID() const {
+    return insuranceID;
+}
+
+std::string User::getInsuranceType() const {
+    return insuranceType;
+}
+
 
 // Setters
 
