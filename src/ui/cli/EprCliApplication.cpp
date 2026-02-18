@@ -1,15 +1,23 @@
-#include "application/EprApplication.hpp"
+#include "ui/cli/EprCliApplication.hpp"
 
 #include "application/usecase/LoginDecisionUseCase.hpp"
 #include "application/usecase/SystemBootstrapUseCase.hpp"
 #include "application/usecase/UserSessionService.hpp"
 #include "common/result/ErrorCodes.hpp"
+#include "domain/model/Assistant/Assistant.hpp"
+#include "domain/model/Doctor/Doctor.hpp"
+#include "domain/model/Patient/Patient.hpp"
 #include "ui/cli/Admin/Admin.hpp"
+#include "ui/cli/AssistantMenuController.hpp"
 #include "ui/cli/ConsoleIO.hpp"
+#include "ui/cli/DoctorMenuController.hpp"
 #include "ui/cli/MainMenuCli.hpp"
+#include "ui/cli/PatientMenuController.hpp"
 
+#include <chrono>
 #include <iostream>
 #include <string>
+#include <thread>
 
 namespace {
 const UserSessionService& userSessionService() {
@@ -33,7 +41,7 @@ const MainMenuCli& mainMenuCli() {
 }
 }
 
-int EprApplication::run() {
+int EprCliApplication::run() {
     systemBootstrapUseCase().run();
 
     int choice;
@@ -49,8 +57,8 @@ int EprApplication::run() {
         }
 
         if (decision.action == LoginAction::InvalidInput) {
-                std::cout << "Invalid input.\n";
-                return 0;
+            std::cout << "Invalid input.\n";
+            return 0;
         }
 
         choice = decision.roleChoice;
@@ -71,6 +79,22 @@ int EprApplication::run() {
             } else if (sessionResult.errorCode() == ErrorCodes::kAuthNameMismatch) {
                 ConsoleIO::pauseSeconds(3);
             }
+            continue;
+        }
+
+        std::cout << std::endl;
+        std::cout << "Login successful.\n";
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+
+        if (choice == 1) {
+            Patient patient(id, firstName, lastName);
+            runPatientMenu(patient);
+        } else if (choice == 2) {
+            Doctor doctor(id, firstName, lastName);
+            runDoctorMenu(doctor);
+        } else if (choice == 3) {
+            Assistant assistant(id, firstName, lastName);
+            runAssistantMenu(assistant);
         }
     } while (choice != 0);
 
