@@ -219,8 +219,9 @@ void Admin::admin_setup() {
             id = ConsoleIO::promptToken("Please enter the full ID: ");
             field = ConsoleIO::promptToken("Please enter the field to change: ");
             newInput = ConsoleIO::promptToken("Please enter the new input: ");
-            if (!userRecordService().updateFieldInFile(id, field, newInput)) {
-                std::cerr << "Could not update field in file.\n";
+            const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
+            if (!updateResult.ok()) {
+                std::cerr << updateResult.error().message << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
             }

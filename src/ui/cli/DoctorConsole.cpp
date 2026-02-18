@@ -198,8 +198,9 @@ void Doctor::displayMenu() {
                 std::cout << std::endl;
                 newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
-                if (!userRecordService().updateFieldInFile(id, field, newInput)) {
-                    std::cerr << "Could not update field in file.\n";
+                const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
+                if (!updateResult.ok()) {
+                    std::cerr << updateResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -217,8 +218,9 @@ void Doctor::displayMenu() {
                 std::getline(std::cin, extraInfo);
                 std::cout << std::endl;
 
-                if (!userRecordService().addExtraInfo(id, extraInfo)) {
-                    std::cerr << "Could not open file for writing.\n";
+                const Result<void> extraInfoResult = userRecordService().addExtraInfo(id, extraInfo);
+                if (!extraInfoResult.ok()) {
+                    std::cerr << extraInfoResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }

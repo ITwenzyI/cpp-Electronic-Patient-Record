@@ -7,13 +7,13 @@
 UserRecordService::UserRecordService(IUserRepository& repository)
     : repository_(repository) {}
 
-bool UserRecordService::updateFieldInFile(
+Result<void> UserRecordService::updateFieldInFile(
     const std::string& id,
     const std::string& field,
     const std::string& newInput
 ) const {
     if (!repository_.exists(id)) {
-        return false;
+        return Result<void>::failure("USER_NOT_FOUND", "Invalid ID.");
     }
 
     std::vector<std::string> lines = repository_.readInfo(id);
@@ -27,17 +27,25 @@ bool UserRecordService::updateFieldInFile(
     }
 
     if (!updated) {
-        return false;
+        return Result<void>::failure("FIELD_NOT_FOUND", "Field does not exist in user info.");
     }
 
-    return repository_.writeInfo(id, lines);
+    if (!repository_.writeInfo(id, lines)) {
+        return Result<void>::failure("WRITE_FAILED", "Could not update field in file.");
+    }
+
+    return Result<void>::success();
 }
 
-bool UserRecordService::addExtraInfo(const std::string& id, const std::string& extraInfo) const {
+Result<void> UserRecordService::addExtraInfo(const std::string& id, const std::string& extraInfo) const {
     if (!repository_.exists(id)) {
-        return false;
+        return Result<void>::failure("USER_NOT_FOUND", "Invalid ID.");
     }
 
     const std::string line = "[" + getDate() + "] " + extraInfo + "\n";
-    return repository_.appendInfoLine(id, line);
+    if (!repository_.appendInfoLine(id, line)) {
+        return Result<void>::failure("WRITE_FAILED", "Could not open file for writing.");
+    }
+
+    return Result<void>::success();
 }
