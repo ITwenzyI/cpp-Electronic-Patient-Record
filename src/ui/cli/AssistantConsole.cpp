@@ -5,16 +5,15 @@
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "ui/cli/UserProvisioningInputCli.hpp"
+#include "ui/cli/ConsoleIO.hpp"
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/Admin/Admin.hpp"
 
-#include <chrono>
 #include <iostream>
 #include <limits>
-#include <thread>
 
 namespace {
 IUserRepository& userRepository() {
@@ -79,13 +78,12 @@ void Assistant::displayMenu() {
         std::cout << "9. View Patient Records" << std::endl;
         std::cout << "10. Add Extra Info" << std::endl;
         std::cout << "0. Logout" << std::endl;
-        std::cout << "Please enter your choice: ";
-        std::cin >> choice;
+        choice = ConsoleIO::promptInt("Please enter your choice: ");
 
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
+                ConsoleIO::pauseSeconds(1);
                 return;
             case 1: {
                 std::cout << std::endl;
@@ -98,7 +96,7 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
                 std::cout << "Patient: [" << firstName << " " << lastName
                           << "] successfully created!" << "\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 2: {
@@ -116,11 +114,11 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
                 if (!userRecordService().updateFieldInFile(id, field, newInput)) {
                     std::cerr << "Could not update field in file.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
                 std::cout << field << " successfully updated.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 3: {
@@ -151,13 +149,13 @@ void Assistant::displayMenu() {
 
                 if (!patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate)) {
                     std::cerr << "Could not open medication file for writing.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
                 const std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
                 std::cout << "Medication added:\n" << medicationLine << '\n';
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 5: {
@@ -181,13 +179,13 @@ void Assistant::displayMenu() {
 
                 if (!patientWriteService().addRecord(id, date, doctor, type, content)) {
                     std::cerr << "Could not open records file for writing.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
                 const std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
                 std::cout << "Record added:\n" << recordLine << '\n';
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             case 6: {
@@ -202,10 +200,8 @@ void Assistant::displayMenu() {
                         break;
                     }
                     std::cout << "File Content:" << std::endl;
-                    for (const auto& line : info) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(info);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -221,10 +217,8 @@ void Assistant::displayMenu() {
                         break;
                     }
                     std::cout << std::endl;
-                    for (const auto& line : appointments) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(appointments);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -240,10 +234,8 @@ void Assistant::displayMenu() {
                         break;
                     }
                     std::cout << std::endl;
-                    for (const auto& line : medications) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(medications);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -259,10 +251,8 @@ void Assistant::displayMenu() {
                         break;
                     }
                     std::cout << std::endl;
-                    for (const auto& line : records) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(records);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -280,13 +270,13 @@ void Assistant::displayMenu() {
 
                 if (!userRecordService().addExtraInfo(id, extraInfo)) {
                     std::cerr << "Could not open file for writing.\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(2));
+                    ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
                 const std::string newLine = "[" + getDate() + "] " + extraInfo + "\n";
                 std::cout << "Extra Info added:\n" << newLine << '\n';
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
                 break;
             }
             default:
@@ -302,7 +292,7 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     if (!userRepository().exists(id)) {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         return;
     }
 
@@ -313,12 +303,12 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
         cleaned(fileLastName) == cleaned(lastName)) {
         std::cout << std::endl;
         std::cout << "Login successful.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         displayMenu();
     } else {
         std::cout << std::endl;
         std::cout << "Name does not match the ID.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        ConsoleIO::pauseSeconds(3);
     }
 }
 
@@ -368,15 +358,15 @@ void Assistant::review_appointments() {
                 changed = true;
 
                 std::cout << "Appointment confirmed and added to patient file.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
             } else if (choice == 'R' || choice == 'r') {
                 entry.replace(entry.find("pending"), 7, "rejected");
                 changed = true;
                 std::cout << "Appointment rejected.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
             } else {
                 std::cout << "Skipped.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(2));
+                ConsoleIO::pauseSeconds(2);
             }
         }
     }
