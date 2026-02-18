@@ -63,8 +63,7 @@ void Patient::displayMenu() {
             case 1: {
                 std::cout << std::endl;
                 std::cout << "Appointments\n";
-                std::cout << "Enter your full ID: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
                     if (appointments.empty()) {
@@ -81,8 +80,7 @@ void Patient::displayMenu() {
             case 2: {
                 std::cout << std::endl;
                 std::cout << "Medications\n";
-                std::cout << "Enter your full ID: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
                     if (medications.empty()) {
@@ -99,8 +97,7 @@ void Patient::displayMenu() {
             case 3: {
                 std::cout << std::endl;
                 std::cout << "Records\n";
-                std::cout << "Enter your full ID: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
                     const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
                     if (records.empty()) {
@@ -118,13 +115,10 @@ void Patient::displayMenu() {
                 std::string date, time, doctorName, reason;
                 std::cout << std::endl;
                 std::cout << "Book Appointment\n";
-                std::cout << "Enter your full ID: ";
-                std::cin >> id;
+                id = ConsoleIO::promptToken("Enter your full ID: ");
                 std::cout << "=== Appointment Request ===\n";
-                std::cout << "Enter date (YYYY-MM-DD): ";
-                std::cin >> date;
-                std::cout << "Enter time (HH:MM): ";
-                std::cin >> time;
+                date = ConsoleIO::promptToken("Enter date (YYYY-MM-DD): ");
+                time = ConsoleIO::promptToken("Enter time (HH:MM): ");
                 std::cin.ignore();
                 std::cout << "Enter doctor's name: ";
                 std::getline(std::cin, doctorName);
