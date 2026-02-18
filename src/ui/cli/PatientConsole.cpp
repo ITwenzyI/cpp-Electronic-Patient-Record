@@ -121,8 +121,9 @@ void Patient::displayMenu() {
                 std::cout << "Enter reason (optional): ";
                 std::getline(std::cin, reason);
 
-                if (!patientWriteService().requestAppointment(id, date, time, doctorName, reason)) {
-                    std::cerr << "Error: could not open data/Appointments/requests.txt\n";
+                const Result<void> requestResult = patientWriteService().requestAppointment(id, date, time, doctorName, reason);
+                if (!requestResult.ok()) {
+                    std::cerr << requestResult.error().message << '\n';
                     break;
                 }
 

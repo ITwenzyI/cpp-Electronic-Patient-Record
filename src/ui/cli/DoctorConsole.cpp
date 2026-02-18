@@ -90,8 +90,9 @@ void Doctor::displayMenu() {
                 std::getline(std::cin, endDate);
                 std::cout << std::endl;
 
-                if (!patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate)) {
-                    std::cerr << "Could not open medication file for writing.\n";
+                const Result<void> medicationResult = patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate);
+                if (!medicationResult.ok()) {
+                    std::cerr << medicationResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -118,8 +119,9 @@ void Doctor::displayMenu() {
                 std::getline(std::cin, content);
                 std::cout << std::endl;
 
-                if (!patientWriteService().addRecord(id, date, doctor, type, content)) {
-                    std::cerr << "Could not open records file for writing.\n";
+                const Result<void> recordResult = patientWriteService().addRecord(id, date, doctor, type, content);
+                if (!recordResult.ok()) {
+                    std::cerr << recordResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
