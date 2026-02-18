@@ -2,6 +2,7 @@
 #define PATIENT_WRITE_SERVICE_HPP
 
 #include "application/ports/IPatientRepository.hpp"
+#include "common/result/Result.hpp"
 
 #include <string>
 
@@ -9,7 +10,7 @@ class PatientWriteService {
 public:
     explicit PatientWriteService(IPatientRepository& repository);
 
-    bool addAppointment(
+    Result<void> addAppointment(
         const std::string& patientId,
         const std::string& date,
         const std::string& time,
@@ -17,7 +18,7 @@ public:
         const std::string& reason
     ) const;
 
-    bool addMedication(
+    Result<void> addMedication(
         const std::string& patientId,
         const std::string& nameAndDose,
         const std::string& frequency,
@@ -25,7 +26,7 @@ public:
         const std::string& endDate
     ) const;
 
-    bool addRecord(
+    Result<void> addRecord(
         const std::string& patientId,
         const std::string& date,
         const std::string& doctor,
@@ -33,7 +34,7 @@ public:
         const std::string& content
     ) const;
 
-    bool requestAppointment(
+    Result<void> requestAppointment(
         const std::string& patientId,
         const std::string& date,
         const std::string& time,

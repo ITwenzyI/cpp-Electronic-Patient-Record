@@ -2,6 +2,7 @@
 #define USER_PROFILE_QUERY_SERVICE_HPP
 
 #include "application/ports/IUserRepository.hpp"
+#include "common/result/Result.hpp"
 
 #include <string>
 #include <vector>
@@ -10,7 +11,7 @@ class UserProfileQueryService {
 public:
     explicit UserProfileQueryService(IUserRepository& repository);
 
-    std::vector<std::string> getUserInfo(const std::string& id) const;
+    Result<std::vector<std::string>> getUserInfo(const std::string& id) const;
 
 private:
     IUserRepository& repository_;

@@ -3,28 +3,37 @@
 UserProvisioningService::UserProvisioningService(IUserProvisioningRepository& repository)
     : repository_(repository) {}
 
-bool UserProvisioningService::createPatient(const UserProvisioningData& data) const {
-    return repository_.createPatient(data);
+Result<void> UserProvisioningService::createPatient(const UserProvisioningData& data) const {
+    if (!repository_.createPatient(data)) {
+        return Result<void>::failure("CREATE_PATIENT_FAILED", "Failed to create patient.");
+    }
+    return Result<void>::success();
 }
 
-bool UserProvisioningService::createDoctor(const UserProvisioningData& data) const {
-    return repository_.createDoctor(data);
+Result<void> UserProvisioningService::createDoctor(const UserProvisioningData& data) const {
+    if (!repository_.createDoctor(data)) {
+        return Result<void>::failure("CREATE_DOCTOR_FAILED", "Failed to create doctor.");
+    }
+    return Result<void>::success();
 }
 
-bool UserProvisioningService::createAssistant(const UserProvisioningData& data) const {
-    return repository_.createAssistant(data);
+Result<void> UserProvisioningService::createAssistant(const UserProvisioningData& data) const {
+    if (!repository_.createAssistant(data)) {
+        return Result<void>::failure("CREATE_ASSISTANT_FAILED", "Failed to create assistant.");
+    }
+    return Result<void>::success();
 }
 
-bool UserProvisioningService::createPatient(const Patient& patient) const {
-    return repository_.createPatient(toProvisioningData(patient));
+Result<void> UserProvisioningService::createPatient(const Patient& patient) const {
+    return createPatient(toProvisioningData(patient));
 }
 
-bool UserProvisioningService::createDoctor(const Doctor& doctor) const {
-    return repository_.createDoctor(toProvisioningData(doctor));
+Result<void> UserProvisioningService::createDoctor(const Doctor& doctor) const {
+    return createDoctor(toProvisioningData(doctor));
 }
 
-bool UserProvisioningService::createAssistant(const Assistant& assistant) const {
-    return repository_.createAssistant(toProvisioningData(assistant));
+Result<void> UserProvisioningService::createAssistant(const Assistant& assistant) const {
+    return createAssistant(toProvisioningData(assistant));
 }
 
 UserProvisioningData UserProvisioningService::toProvisioningData(const User& user) {

@@ -3,7 +3,7 @@
 PatientWriteService::PatientWriteService(IPatientRepository& repository)
     : repository_(repository) {}
 
-bool PatientWriteService::addAppointment(
+Result<void> PatientWriteService::addAppointment(
     const std::string& patientId,
     const std::string& date,
     const std::string& time,
@@ -11,10 +11,13 @@ bool PatientWriteService::addAppointment(
     const std::string& reason
 ) const {
     const std::string line = "[" + date + " " + time + "] - " + doctorName + " (" + reason + ")";
-    return repository_.appendAppointment(patientId, line);
+    if (!repository_.appendAppointment(patientId, line)) {
+        return Result<void>::failure("WRITE_FAILED", "Could not open appointment file for writing.");
+    }
+    return Result<void>::success();
 }
 
-bool PatientWriteService::addMedication(
+Result<void> PatientWriteService::addMedication(
     const std::string& patientId,
     const std::string& nameAndDose,
     const std::string& frequency,
@@ -22,10 +25,13 @@ bool PatientWriteService::addMedication(
     const std::string& endDate
 ) const {
     const std::string line = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
-    return repository_.appendMedication(patientId, line);
+    if (!repository_.appendMedication(patientId, line)) {
+        return Result<void>::failure("WRITE_FAILED", "Could not open medication file for writing.");
+    }
+    return Result<void>::success();
 }
 
-bool PatientWriteService::addRecord(
+Result<void> PatientWriteService::addRecord(
     const std::string& patientId,
     const std::string& date,
     const std::string& doctor,
@@ -33,10 +39,13 @@ bool PatientWriteService::addRecord(
     const std::string& content
 ) const {
     const std::string line = "[" + date + "] " + doctor + ": " + type + ": " + content;
-    return repository_.appendRecord(patientId, line);
+    if (!repository_.appendRecord(patientId, line)) {
+        return Result<void>::failure("WRITE_FAILED", "Could not open records file for writing.");
+    }
+    return Result<void>::success();
 }
 
-bool PatientWriteService::requestAppointment(
+Result<void> PatientWriteService::requestAppointment(
     const std::string& patientId,
     const std::string& date,
     const std::string& time,
@@ -48,5 +57,8 @@ bool PatientWriteService::requestAppointment(
         line += " - Reason: " + reason;
     }
     line += " - Status: pending";
-    return repository_.appendAppointmentRequest(line);
+    if (!repository_.appendAppointmentRequest(line)) {
+        return Result<void>::failure("WRITE_FAILED", "Error: could not open data/Appointments/requests.txt");
+    }
+    return Result<void>::success();
 }

@@ -91,7 +91,12 @@ void Assistant::displayMenu() {
                 UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
                 data.firstName = firstName;
                 data.lastName = lastName;
-                userProvisioningService().createPatient(data);
+                const Result<void> createPatientResult = userProvisioningService().createPatient(data);
+                if (!createPatientResult.ok()) {
+                    std::cerr << createPatientResult.error().message << '\n';
+                    ConsoleIO::pauseSeconds(2);
+                    break;
+                }
                 std::cout << std::endl;
                 std::cout << "Patient: [" << firstName << " " << lastName
                           << "] successfully created!" << "\n";
@@ -107,8 +112,9 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
                 newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
-                if (!userRecordService().updateFieldInFile(id, field, newInput)) {
-                    std::cerr << "Could not update field in file.\n";
+                const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
+                if (!updateResult.ok()) {
+                    std::cerr << updateResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -139,8 +145,9 @@ void Assistant::displayMenu() {
                 std::getline(std::cin, endDate);
                 std::cout << std::endl;
 
-                if (!patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate)) {
-                    std::cerr << "Could not open medication file for writing.\n";
+                const Result<void> medicationResult = patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate);
+                if (!medicationResult.ok()) {
+                    std::cerr << medicationResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -167,8 +174,9 @@ void Assistant::displayMenu() {
                 std::getline(std::cin, content);
                 std::cout << std::endl;
 
-                if (!patientWriteService().addRecord(id, date, doctor, type, content)) {
-                    std::cerr << "Could not open records file for writing.\n";
+                const Result<void> recordResult = patientWriteService().addRecord(id, date, doctor, type, content);
+                if (!recordResult.ok()) {
+                    std::cerr << recordResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -182,13 +190,13 @@ void Assistant::displayMenu() {
                 ConsoleIO::printHeader("Patient Info");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
-                    if (info.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
+                    if (!infoResult.ok()) {
+                        std::cerr << infoResult.error().message << std::endl;
                         break;
                     }
                     std::cout << "File Content:" << std::endl;
-                    ConsoleIO::printLines(info);
+                    ConsoleIO::printLines(infoResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;
@@ -197,13 +205,13 @@ void Assistant::displayMenu() {
                 ConsoleIO::printHeader("Patient Appointments");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
-                    if (appointments.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
+                    if (!appointmentsResult.ok()) {
+                        std::cerr << appointmentsResult.error().message << std::endl;
                         break;
                     }
                     std::cout << std::endl;
-                    ConsoleIO::printLines(appointments);
+                    ConsoleIO::printLines(appointmentsResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;
@@ -212,13 +220,13 @@ void Assistant::displayMenu() {
                 ConsoleIO::printHeader("Patient Medications");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
-                    if (medications.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
+                    if (!medicationsResult.ok()) {
+                        std::cerr << medicationsResult.error().message << std::endl;
                         break;
                     }
                     std::cout << std::endl;
-                    ConsoleIO::printLines(medications);
+                    ConsoleIO::printLines(medicationsResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;
@@ -227,13 +235,13 @@ void Assistant::displayMenu() {
                 ConsoleIO::printHeader("Patient Records");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
-                    if (records.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
+                    if (!recordsResult.ok()) {
+                        std::cerr << recordsResult.error().message << std::endl;
                         break;
                     }
                     std::cout << std::endl;
-                    ConsoleIO::printLines(records);
+                    ConsoleIO::printLines(recordsResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;
@@ -248,8 +256,9 @@ void Assistant::displayMenu() {
                 std::getline(std::cin, extraInfo);
                 std::cout << std::endl;
 
-                if (!userRecordService().addExtraInfo(id, extraInfo)) {
-                    std::cerr << "Could not open file for writing.\n";
+                const Result<void> extraInfoResult = userRecordService().addExtraInfo(id, extraInfo);
+                if (!extraInfoResult.ok()) {
+                    std::cerr << extraInfoResult.error().message << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
