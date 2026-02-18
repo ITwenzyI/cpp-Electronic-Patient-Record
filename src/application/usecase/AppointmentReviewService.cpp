@@ -1,6 +1,7 @@
 #include "application/usecase/AppointmentReviewService.hpp"
 
 #include "common/result/ErrorCodes.hpp"
+#include "common/result/ErrorSources.hpp"
 
 namespace {
 std::string extractPatientId(const std::string& entry) {
@@ -23,12 +24,16 @@ std::string extractDateTime(const std::string& entry) {
 Result<std::string> extractDoctor(const std::string& entry) {
     const size_t drStart = entry.find("Dr. ");
     if (drStart == std::string::npos) {
-        return Result<std::string>::failure(ErrorCodes::kDoctorNameNotFound, "Doctor name not found.");
+        return Result<std::string>::failure(
+            ErrorCodes::kDoctorNameNotFound, "Doctor name not found.", ErrorSources::kApplication, "AppointmentReviewService::extractDoctor"
+        );
     }
 
     const size_t nameEnd = entry.find(" -", drStart);
     if (nameEnd == std::string::npos || nameEnd <= drStart + 4) {
-        return Result<std::string>::failure(ErrorCodes::kDoctorNameNotFound, "Doctor name not found.");
+        return Result<std::string>::failure(
+            ErrorCodes::kDoctorNameNotFound, "Doctor name not found.", ErrorSources::kApplication, "AppointmentReviewService::extractDoctor"
+        );
     }
 
     return Result<std::string>::success(entry.substr(drStart + 4, nameEnd - (drStart + 4)));
@@ -40,7 +45,10 @@ AppointmentReviewService::AppointmentReviewService(IPatientRepository& repositor
 
 Result<std::vector<std::string>> AppointmentReviewService::loadRequests() const {
     if (!repository_.appointmentRequestsExists()) {
-        return Result<std::vector<std::string>>::failure(ErrorCodes::kRequestsFileMissing, "Error: Could not open data/Appointments/requests.txt");
+        return Result<std::vector<std::string>>::failure(
+            ErrorCodes::kRequestsFileMissing, "Error: Could not open data/Appointments/requests.txt",
+            ErrorSources::kApplication, "AppointmentReviewService::loadRequests"
+        );
     }
     return Result<std::vector<std::string>>::success(repository_.readAppointmentRequests());
 }
@@ -59,7 +67,9 @@ Result<AppointmentDecisionOutcome> AppointmentReviewService::applyDecision(std::
     const std::string dateTime = extractDateTime(entry);
     const Result<std::string> doctorResult = extractDoctor(entry);
     if (!doctorResult) {
-        return Result<AppointmentDecisionOutcome>::failure(doctorResult.errorCode(), doctorResult.errorMessage());
+        return Result<AppointmentDecisionOutcome>::failure(
+            doctorResult.errorCode(), doctorResult.errorMessage(), doctorResult.errorSource(), doctorResult.errorDetail()
+        );
     }
 
     if (!repository_.ensurePatientDirectory(patientId) ||
@@ -77,7 +87,10 @@ Result<AppointmentDecisionOutcome> AppointmentReviewService::applyDecision(std::
 
 Result<void> AppointmentReviewService::saveRequests(const std::vector<std::string>& lines) const {
     if (!repository_.writeAppointmentRequests(lines)) {
-        return Result<void>::failure(ErrorCodes::kWriteRequestsFailed, "\nFailed to update appointment file.");
+        return Result<void>::failure(
+            ErrorCodes::kWriteRequestsFailed, "\nFailed to update appointment file.",
+            ErrorSources::kApplication, "AppointmentReviewService::saveRequests"
+        );
     }
     return Result<void>::success();
 }
