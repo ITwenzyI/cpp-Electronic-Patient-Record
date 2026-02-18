@@ -1,5 +1,7 @@
 #include "application/usecase/PatientWriteService.hpp"
 
+#include "common/result/ErrorCodes.hpp"
+
 PatientWriteService::PatientWriteService(IPatientRepository& repository)
     : repository_(repository) {}
 
@@ -12,7 +14,7 @@ Result<void> PatientWriteService::addAppointment(
 ) const {
     const std::string line = "[" + date + " " + time + "] - " + doctorName + " (" + reason + ")";
     if (!repository_.appendAppointment(patientId, line)) {
-        return Result<void>::failure("WRITE_FAILED", "Could not open appointment file for writing.");
+        return Result<void>::failure(ErrorCodes::kWriteFailed, "Could not open appointment file for writing.");
     }
     return Result<void>::success();
 }
@@ -26,7 +28,7 @@ Result<void> PatientWriteService::addMedication(
 ) const {
     const std::string line = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
     if (!repository_.appendMedication(patientId, line)) {
-        return Result<void>::failure("WRITE_FAILED", "Could not open medication file for writing.");
+        return Result<void>::failure(ErrorCodes::kWriteFailed, "Could not open medication file for writing.");
     }
     return Result<void>::success();
 }
@@ -40,7 +42,7 @@ Result<void> PatientWriteService::addRecord(
 ) const {
     const std::string line = "[" + date + "] " + doctor + ": " + type + ": " + content;
     if (!repository_.appendRecord(patientId, line)) {
-        return Result<void>::failure("WRITE_FAILED", "Could not open records file for writing.");
+        return Result<void>::failure(ErrorCodes::kWriteFailed, "Could not open records file for writing.");
     }
     return Result<void>::success();
 }
@@ -58,7 +60,7 @@ Result<void> PatientWriteService::requestAppointment(
     }
     line += " - Status: pending";
     if (!repository_.appendAppointmentRequest(line)) {
-        return Result<void>::failure("WRITE_FAILED", "Error: could not open data/Appointments/requests.txt");
+        return Result<void>::failure(ErrorCodes::kWriteFailed, "Error: could not open data/Appointments/requests.txt");
     }
     return Result<void>::success();
 }
