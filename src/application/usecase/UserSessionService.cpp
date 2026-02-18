@@ -1,35 +1,66 @@
 #include "application/usecase/UserSessionService.hpp"
 
+#include "application/ports/IUserRepository.hpp"
+#include "application/usecase/AuthService.hpp"
+#include "common/result/ErrorCodes.hpp"
+#include "common/result/ErrorSources.hpp"
 #include "domain/model/Assistant/Assistant.hpp"
 #include "domain/model/Doctor/Doctor.hpp"
 #include "domain/model/Patient/Patient.hpp"
+#include "infrastructure/persistence/FileUserRepository.hpp"
 
+#include <chrono>
 #include <iostream>
+#include <thread>
 
-void UserSessionService::runRoleSession(
+namespace {
+IUserRepository& userRepository() {
+    static FileUserRepository repository;
+    return repository;
+}
+
+const AuthService& authService() {
+    static AuthService service(userRepository());
+    return service;
+}
+}
+
+Result<void> UserSessionService::runRoleSession(
     const int choice,
     const std::string& id,
     const std::string& firstName,
     const std::string& lastName
 ) const {
+    const Result<void> authResult = authService().authenticate(id, firstName, lastName);
+    if (!authResult) {
+        return authResult;
+    }
+
+    std::cout << std::endl;
+    std::cout << "Login successful.\n";
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+
     switch (choice) {
         case 1: {
             Patient p(id, firstName, lastName);
-            p.check_id_name(id, firstName, lastName);
+            p.displayMenu();
             break;
         }
         case 2: {
             Doctor d(id, firstName, lastName);
-            d.check_id_name(id, firstName, lastName);
+            d.displayMenu();
             break;
         }
         case 3: {
             Assistant a(id, firstName, lastName);
-            a.check_id_name(id, firstName, lastName);
+            a.displayMenu();
             break;
         }
         default:
-            std::cout << "Invalid selection.\n";
-            break;
+            return Result<void>::failure(
+                ErrorCodes::kInvalidSelection, "Invalid selection.", ErrorSources::kApplication, "UserSessionService::runRoleSession"
+            );
     }
+
+    return Result<void>::success();
 }
