@@ -4,10 +4,9 @@
 #include "common/util/Utils/Utils.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
+#include "ui/cli/ConsoleIO.hpp"
 
-#include <chrono>
 #include <iostream>
-#include <thread>
 
 namespace {
 IUserRepository& userRepository() {
@@ -54,13 +53,12 @@ void Patient::displayMenu() {
         std::cout << "3. View Records" << std::endl;
         std::cout << "4. Book Appointment" << std::endl;
         std::cout << "0. Logout" << std::endl;
-        std::cout << "Please enter your choice: ";
-        std::cin >> choice;
+        choice = ConsoleIO::promptInt("Please enter your choice: ");
 
         switch (choice) {
             case 0:
                 std::cout << "Logging out..." << std::endl;
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                ConsoleIO::pauseSeconds(3);
                 return;
             case 1: {
                 std::cout << std::endl;
@@ -75,10 +73,8 @@ void Patient::displayMenu() {
                     }
 
                     std::cout << std::endl;
-                    for (const auto& line : appointments) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(appointments);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -95,10 +91,8 @@ void Patient::displayMenu() {
                     }
 
                     std::cout << std::endl;
-                    for (const auto& line : medications) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(medications);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -115,10 +109,8 @@ void Patient::displayMenu() {
                     }
 
                     std::cout << std::endl;
-                    for (const auto& line : records) {
-                        std::cout << line << std::endl;
-                    }
-                    std::this_thread::sleep_for(std::chrono::seconds(3));
+                    ConsoleIO::printLines(records);
+                    ConsoleIO::pauseSeconds(3);
                 }
                 break;
             }
@@ -146,7 +138,7 @@ void Patient::displayMenu() {
 
                 std::cout << std::endl;
                 std::cout << "Appointment request submitted. Waiting for confirmation.\n";
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+                ConsoleIO::pauseSeconds(3);
                 break;
             }
             default:
@@ -162,7 +154,7 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
     if (!userRepository().exists(id)) {
         std::cout << std::endl;
         std::cerr << "Failed to read file!" << std::endl;
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         return;
     }
 
@@ -173,12 +165,12 @@ void Patient::check_id_name(std::string id, std::string firstName, std::string l
         cleaned(fileLastName) == cleaned(lastName)) {
         std::cout << std::endl;
         std::cout << "Login successful.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(2));
+        ConsoleIO::pauseSeconds(2);
         displayMenu();
     } else {
         std::cout << std::endl;
         std::cout << "Name does not match the ID.\n";
-        std::this_thread::sleep_for(std::chrono::seconds(3));
+        ConsoleIO::pauseSeconds(3);
     }
 }
 
