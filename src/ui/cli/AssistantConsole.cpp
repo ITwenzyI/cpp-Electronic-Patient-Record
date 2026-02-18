@@ -2,6 +2,7 @@
 #include "domain/model/Patient/Patient.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/PatientWriteService.hpp"
+#include "application/usecase/AppointmentReviewService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
 #include "ui/cli/UserProvisioningInputCli.hpp"
@@ -45,6 +46,67 @@ UserProvisioningService& userProvisioningService() {
 PatientWriteService& patientWriteService() {
     static PatientWriteService service(patientRepository());
     return service;
+}
+
+AppointmentReviewService& appointmentReviewService() {
+    static AppointmentReviewService service(patientRepository());
+    return service;
+}
+
+void runAppointmentReviewCli() {
+    Result<std::vector<std::string>> requestsResult = appointmentReviewService().loadRequests();
+    if (!requestsResult.ok()) {
+        std::cerr << requestsResult.error().message << '\n';
+        return;
+    }
+    std::vector<std::string> lines = requestsResult.value();
+
+    bool changed = false;
+
+    for (size_t i = 0; i < lines.size(); ++i) {
+        std::string& entry = lines[i];
+
+        if (AppointmentReviewService::isPending(entry)) {
+            std::cout << "\n=== Appointment Request " << i + 1 << " ===\n";
+            std::cout << entry << "\n";
+            std::cout << "Accept (A), Reject (R), Skip (S)? ";
+            char choice;
+            std::cin >> choice;
+
+            AppointmentDecision decision = AppointmentDecision::Skip;
+            if (choice == 'A' || choice == 'a') {
+                decision = AppointmentDecision::Accept;
+            } else if (choice == 'R' || choice == 'r') {
+                decision = AppointmentDecision::Reject;
+            }
+
+            const Result<AppointmentDecisionOutcome> decisionResult = appointmentReviewService().applyDecision(entry, decision);
+            if (!decisionResult.ok()) {
+                std::cerr << decisionResult.error().message << '\n';
+                return;
+            }
+
+            if (decisionResult.value().hasError) {
+                std::cerr << decisionResult.value().message << '\n';
+                continue;
+            }
+
+            changed = changed || decisionResult.value().changed;
+            std::cout << decisionResult.value().message << '\n';
+            ConsoleIO::pauseSeconds(2);
+        }
+    }
+
+    if (changed) {
+        const Result<void> saveResult = appointmentReviewService().saveRequests(lines);
+        if (!saveResult.ok()) {
+            std::cerr << saveResult.error().message << '\n';
+            return;
+        }
+        std::cout << "\nAppointment file updated.\n";
+    } else {
+        std::cout << "\nNo changes made.\n";
+    }
 }
 
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
@@ -125,7 +187,7 @@ void Assistant::displayMenu() {
             case 3: {
                 ConsoleIO::printHeader("Review Appointments");
                 std::cout << std::endl;
-                review_appointments();
+                runAppointmentReviewCli();
                 break;
             }
             case 4: {
@@ -301,72 +363,3 @@ void Assistant::check_id_name(std::string id, std::string firstName, std::string
     }
 }
 
-void Assistant::review_appointments() {
-    std::vector<std::string> lines = patientRepository().readAppointmentRequests();
-    if (!patientRepository().appointmentRequestsExists()) {
-        std::cerr << "Error: Could not open data/Appointments/requests.txt\n";
-        return;
-    }
-
-    bool changed = false;
-
-    for (size_t i = 0; i < lines.size(); ++i) {
-        std::string& entry = lines[i];
-
-        if (entry.find("Status: pending") != std::string::npos) {
-            std::cout << "\n=== Appointment Request " << i + 1 << " ===\n";
-            std::cout << entry << "\n";
-            std::cout << "Accept (A), Reject (R), Skip (S)? ";
-            char choice;
-            std::cin >> choice;
-
-            if (choice == 'A' || choice == 'a') {
-                size_t idStart = entry.find("P");
-                std::string patientID = entry.substr(idStart, 9);
-
-                size_t bracketStart = entry.find('[');
-                size_t bracketEnd = entry.find(']');
-                std::string dateTime = entry.substr(bracketStart, bracketEnd - bracketStart + 1);
-
-                size_t drStart = entry.find("Dr. ");
-                if (drStart == std::string::npos) {
-                    std::cerr << "Doctor name not found.\n";
-                    return;
-                }
-
-                size_t nameEnd = entry.find(" -", drStart);
-                std::string doctor = entry.substr(drStart + 4, nameEnd - (drStart + 4));
-
-                if (!patientRepository().ensurePatientDirectory(patientID) ||
-                    !patientRepository().appendAppointment(patientID, dateTime + " - Dr. " + doctor + " (confirmed)")) {
-                    std::cerr << "Error writing to data/Patients/" << patientID << "/appointments.txt\n";
-                    continue;
-                }
-
-                entry.replace(entry.find("pending"), 7, "confirmed");
-                changed = true;
-
-                std::cout << "Appointment confirmed and added to patient file.\n";
-                ConsoleIO::pauseSeconds(2);
-            } else if (choice == 'R' || choice == 'r') {
-                entry.replace(entry.find("pending"), 7, "rejected");
-                changed = true;
-                std::cout << "Appointment rejected.\n";
-                ConsoleIO::pauseSeconds(2);
-            } else {
-                std::cout << "Skipped.\n";
-                ConsoleIO::pauseSeconds(2);
-            }
-        }
-    }
-
-    if (changed) {
-        if (!patientRepository().writeAppointmentRequests(lines)) {
-            std::cerr << "\nFailed to update appointment file.\n";
-            return;
-        }
-        std::cout << "\nAppointment file updated.\n";
-    } else {
-        std::cout << "\nNo changes made.\n";
-    }
-}
