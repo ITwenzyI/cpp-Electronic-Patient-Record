@@ -37,6 +37,10 @@ void printLines(const std::vector<std::string>& lines) {
     }
 }
 
+void pauseMilliseconds(int milliseconds) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+}
+
 void pauseSeconds(int seconds) {
     std::this_thread::sleep_for(std::chrono::seconds(seconds));
 }

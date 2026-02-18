@@ -10,6 +10,7 @@ std::string promptToken(const std::string& prompt);
 std::string promptLine(const std::string& prompt);
 void printHeader(const std::string& title);
 void printLines(const std::vector<std::string>& lines);
+void pauseMilliseconds(int milliseconds);
 void pauseSeconds(int seconds);
 }
 
