@@ -63,7 +63,7 @@ void Assistant::displayMenu() {
     std::string id;
 
     do {
-        std::cout << "\n=== Assistant Menu ===" << std::endl;
+        ConsoleIO::printHeader("=== Assistant Menu ===");
         std::cout << getRole() << ": " << getFirstName() << " " << getLastName()
                   << "\nID: " << getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
@@ -86,8 +86,7 @@ void Assistant::displayMenu() {
                 ConsoleIO::pauseSeconds(1);
                 return;
             case 1: {
-                std::cout << std::endl;
-                std::cout << "Create New Patient\n";
+                ConsoleIO::printHeader("Create New Patient");
                 Admin::admin_getNames(firstName, lastName);
                 UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
                 data.firstName = firstName;
@@ -101,8 +100,7 @@ void Assistant::displayMenu() {
             }
             case 2: {
                 std::string field, newInput;
-                std::cout << std::endl;
-                std::cout << "Update Field in File\n";
+                ConsoleIO::printHeader("Update Field in File");
                 id = ConsoleIO::promptToken("Enter full ID: ");
                 std::cout << std::endl;
                 field = ConsoleIO::promptToken("Enter Field: ");
@@ -119,16 +117,14 @@ void Assistant::displayMenu() {
                 break;
             }
             case 3: {
-                std::cout << std::endl;
-                std::cout << "Review Appointments\n";
+                ConsoleIO::printHeader("Review Appointments");
                 std::cout << std::endl;
                 review_appointments();
                 break;
             }
             case 4: {
                 std::string nameAndDose, frequency, startDate, endDate;
-                std::cout << std::endl;
-                std::cout << "Add Medication\n";
+                ConsoleIO::printHeader("Add Medication");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 std::cout << "Enter medication name and dosage (Example: Ibuprofen 400 mg): ";
                 std::getline(std::cin >> std::ws, nameAndDose);
@@ -156,8 +152,7 @@ void Assistant::displayMenu() {
             }
             case 5: {
                 std::string date, doctor, type, content;
-                std::cout << std::endl;
-                std::cout << "Add Records\n";
+                ConsoleIO::printHeader("Add Records");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 std::cout << "Enter date of record (YYYY-MM-DD): ";
                 std::getline(std::cin >> std::ws, date);
@@ -184,8 +179,7 @@ void Assistant::displayMenu() {
                 break;
             }
             case 6: {
-                std::cout << std::endl;
-                std::cout << "Patient Info\n";
+                ConsoleIO::printHeader("Patient Info");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
@@ -200,8 +194,7 @@ void Assistant::displayMenu() {
                 break;
             }
             case 7: {
-                std::cout << std::endl;
-                std::cout << "Patient Appointments\n";
+                ConsoleIO::printHeader("Patient Appointments");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
@@ -216,8 +209,7 @@ void Assistant::displayMenu() {
                 break;
             }
             case 8: {
-                std::cout << std::endl;
-                std::cout << "Patient Medications\n";
+                ConsoleIO::printHeader("Patient Medications");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
@@ -232,8 +224,7 @@ void Assistant::displayMenu() {
                 break;
             }
             case 9: {
-                std::cout << std::endl;
-                std::cout << "Patient Records\n";
+                ConsoleIO::printHeader("Patient Records");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
@@ -249,8 +240,7 @@ void Assistant::displayMenu() {
             }
             case 10: {
                 std::string extraInfo;
-                std::cout << std::endl;
-                std::cout << "Add Extra Info\n";
+                ConsoleIO::printHeader("Add Extra Info");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 std::cout << "ID: " << id << std::endl;
                 std::cout << "Enter the Extra Info: ";
