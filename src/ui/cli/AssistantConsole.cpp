@@ -55,8 +55,8 @@ AppointmentReviewService& appointmentReviewService() {
 
 void runAppointmentReviewCli() {
     Result<std::vector<std::string>> requestsResult = appointmentReviewService().loadRequests();
-    if (!requestsResult.ok()) {
-        std::cerr << requestsResult.error().message << '\n';
+    if (!requestsResult) {
+        std::cerr << requestsResult.errorMessage() << '\n';
         return;
     }
     std::vector<std::string> lines = requestsResult.value();
@@ -81,8 +81,8 @@ void runAppointmentReviewCli() {
             }
 
             const Result<AppointmentDecisionOutcome> decisionResult = appointmentReviewService().applyDecision(entry, decision);
-            if (!decisionResult.ok()) {
-                std::cerr << decisionResult.error().message << '\n';
+            if (!decisionResult) {
+                std::cerr << decisionResult.errorMessage() << '\n';
                 return;
             }
 
@@ -99,8 +99,8 @@ void runAppointmentReviewCli() {
 
     if (changed) {
         const Result<void> saveResult = appointmentReviewService().saveRequests(lines);
-        if (!saveResult.ok()) {
-            std::cerr << saveResult.error().message << '\n';
+        if (!saveResult) {
+            std::cerr << saveResult.errorMessage() << '\n';
             return;
         }
         std::cout << "\nAppointment file updated.\n";
@@ -154,8 +154,8 @@ void Assistant::displayMenu() {
                 data.firstName = firstName;
                 data.lastName = lastName;
                 const Result<void> createPatientResult = userProvisioningService().createPatient(data);
-                if (!createPatientResult.ok()) {
-                    std::cerr << createPatientResult.error().message << '\n';
+                if (!createPatientResult) {
+                    std::cerr << createPatientResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -175,8 +175,8 @@ void Assistant::displayMenu() {
                 newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
                 const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
-                if (!updateResult.ok()) {
-                    std::cerr << updateResult.error().message << '\n';
+                if (!updateResult) {
+                    std::cerr << updateResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -208,8 +208,8 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
 
                 const Result<void> medicationResult = patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate);
-                if (!medicationResult.ok()) {
-                    std::cerr << medicationResult.error().message << '\n';
+                if (!medicationResult) {
+                    std::cerr << medicationResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -237,8 +237,8 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
 
                 const Result<void> recordResult = patientWriteService().addRecord(id, date, doctor, type, content);
-                if (!recordResult.ok()) {
-                    std::cerr << recordResult.error().message << '\n';
+                if (!recordResult) {
+                    std::cerr << recordResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
@@ -253,8 +253,8 @@ void Assistant::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
-                    if (!infoResult.ok()) {
-                        std::cerr << infoResult.error().message << std::endl;
+                    if (!infoResult) {
+                        std::cerr << infoResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << "File Content:" << std::endl;
@@ -268,8 +268,8 @@ void Assistant::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
-                    if (!appointmentsResult.ok()) {
-                        std::cerr << appointmentsResult.error().message << std::endl;
+                    if (!appointmentsResult) {
+                        std::cerr << appointmentsResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << std::endl;
@@ -283,8 +283,8 @@ void Assistant::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
-                    if (!medicationsResult.ok()) {
-                        std::cerr << medicationsResult.error().message << std::endl;
+                    if (!medicationsResult) {
+                        std::cerr << medicationsResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << std::endl;
@@ -298,8 +298,8 @@ void Assistant::displayMenu() {
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
                     const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
-                    if (!recordsResult.ok()) {
-                        std::cerr << recordsResult.error().message << std::endl;
+                    if (!recordsResult) {
+                        std::cerr << recordsResult.errorMessage() << std::endl;
                         break;
                     }
                     std::cout << std::endl;
@@ -319,8 +319,8 @@ void Assistant::displayMenu() {
                 std::cout << std::endl;
 
                 const Result<void> extraInfoResult = userRecordService().addExtraInfo(id, extraInfo);
-                if (!extraInfoResult.ok()) {
-                    std::cerr << extraInfoResult.error().message << '\n';
+                if (!extraInfoResult) {
+                    std::cerr << extraInfoResult.errorMessage() << '\n';
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
