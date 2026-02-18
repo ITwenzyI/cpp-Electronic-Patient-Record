@@ -43,36 +43,23 @@ else()
 endif()
 
 if(BUILD_TESTING)
-    add_executable(patient_write_service_smoke_tests
+    add_executable(usecase_smoke_tests
+        tests/TestMain.cpp
         tests/PatientWriteServiceSmokeTest.cpp
-        src/application/usecase/PatientWriteService.cpp
-    )
-
-    target_include_directories(patient_write_service_smoke_tests PRIVATE src)
-    target_compile_features(patient_write_service_smoke_tests PRIVATE cxx_std_20)
-
-    if(MSVC)
-        target_compile_options(patient_write_service_smoke_tests PRIVATE /W4 /permissive-)
-    else()
-        target_compile_options(patient_write_service_smoke_tests PRIVATE -Wall -Wextra -Wpedantic)
-    endif()
-
-    add_test(NAME patient_write_service_smoke_tests COMMAND patient_write_service_smoke_tests)
-
-    add_executable(user_record_service_smoke_tests
         tests/UserRecordServiceSmokeTest.cpp
+        src/application/usecase/PatientWriteService.cpp
         src/application/usecase/UserRecordService.cpp
         src/common/util/Utils/Utils.cpp
     )
 
-    target_include_directories(user_record_service_smoke_tests PRIVATE src)
-    target_compile_features(user_record_service_smoke_tests PRIVATE cxx_std_20)
+    target_include_directories(usecase_smoke_tests PRIVATE src)
+    target_compile_features(usecase_smoke_tests PRIVATE cxx_std_20)
 
     if(MSVC)
-        target_compile_options(user_record_service_smoke_tests PRIVATE /W4 /permissive-)
+        target_compile_options(usecase_smoke_tests PRIVATE /W4 /permissive-)
     else()
-        target_compile_options(user_record_service_smoke_tests PRIVATE -Wall -Wextra -Wpedantic)
+        target_compile_options(usecase_smoke_tests PRIVATE -Wall -Wextra -Wpedantic)
     endif()
 
-    add_test(NAME user_record_service_smoke_tests COMMAND user_record_service_smoke_tests)
+    add_test(NAME usecase_smoke_tests COMMAND usecase_smoke_tests)
 endif()

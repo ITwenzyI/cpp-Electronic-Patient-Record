@@ -83,22 +83,22 @@ bool testWriteFailureReturnsWriteFailedCode() {
 }
 }
 
-int main() {
+bool runPatientWriteServiceSmokeTests() {
     if (!testAddMedicationFormatsAndWritesLine()) {
         std::cerr << "testAddMedicationFormatsAndWritesLine failed\n";
-        return 1;
+        return false;
     }
 
     if (!testRequestAppointmentIncludesReason()) {
         std::cerr << "testRequestAppointmentIncludesReason failed\n";
-        return 1;
+        return false;
     }
 
     if (!testWriteFailureReturnsWriteFailedCode()) {
         std::cerr << "testWriteFailureReturnsWriteFailedCode failed\n";
-        return 1;
+        return false;
     }
 
     std::cout << "PatientWriteService smoke tests passed\n";
-    return 0;
+    return true;
 }

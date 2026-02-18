@@ -72,22 +72,22 @@ bool testAddExtraInfoReturnsWriteFailedWhenAppendFails() {
 }
 }
 
-int main() {
+bool runUserRecordServiceSmokeTests() {
     if (!testUpdateFieldInFileUpdatesMatchingField()) {
         std::cerr << "testUpdateFieldInFileUpdatesMatchingField failed\n";
-        return 1;
+        return false;
     }
 
     if (!testUpdateFieldInFileReturnsUserNotFoundWhenMissing()) {
         std::cerr << "testUpdateFieldInFileReturnsUserNotFoundWhenMissing failed\n";
-        return 1;
+        return false;
     }
 
     if (!testAddExtraInfoReturnsWriteFailedWhenAppendFails()) {
         std::cerr << "testAddExtraInfoReturnsWriteFailedWhenAppendFails failed\n";
-        return 1;
+        return false;
     }
 
     std::cout << "UserRecordService smoke tests passed\n";
-    return 0;
+    return true;
 }
