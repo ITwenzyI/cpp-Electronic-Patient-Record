@@ -64,14 +64,14 @@ void Patient::displayMenu() {
                 ConsoleIO::printHeader("Appointments");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
-                    const std::vector<std::string> appointments = patientRecordQueryService().getAppointments(id);
-                    if (appointments.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
+                    if (!appointmentsResult.ok()) {
+                        std::cerr << appointmentsResult.error().message << std::endl;
                         break;
                     }
 
                     std::cout << std::endl;
-                    ConsoleIO::printLines(appointments);
+                    ConsoleIO::printLines(appointmentsResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;
@@ -80,14 +80,14 @@ void Patient::displayMenu() {
                 ConsoleIO::printHeader("Medications");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
-                    const std::vector<std::string> medications = patientRecordQueryService().getMedications(id);
-                    if (medications.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
+                    if (!medicationsResult.ok()) {
+                        std::cerr << medicationsResult.error().message << std::endl;
                         break;
                     }
 
                     std::cout << std::endl;
-                    ConsoleIO::printLines(medications);
+                    ConsoleIO::printLines(medicationsResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;
@@ -96,14 +96,14 @@ void Patient::displayMenu() {
                 ConsoleIO::printHeader("Records");
                 id = ConsoleIO::promptToken("Enter your full ID: ");
                 {
-                    const std::vector<std::string> records = patientRecordQueryService().getRecords(id);
-                    if (records.empty()) {
-                        std::cerr << "Failed to read file!" << std::endl;
+                    const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
+                    if (!recordsResult.ok()) {
+                        std::cerr << recordsResult.error().message << std::endl;
                         break;
                     }
 
                     std::cout << std::endl;
-                    ConsoleIO::printLines(records);
+                    ConsoleIO::printLines(recordsResult.value());
                     ConsoleIO::pauseSeconds(3);
                 }
                 break;

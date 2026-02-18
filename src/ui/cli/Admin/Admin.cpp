@@ -143,13 +143,13 @@ void Admin::admin_setup() {
             id = ConsoleIO::promptToken("Please enter the full Patient-ID: ");
             std::cout << std::endl;
             {
-                const std::vector<std::string> info = patientRecordQueryService().getPatientInfo(id);
-                if (info.empty()) {
-                    std::cerr << "Failed to read file!" << std::endl;
+                const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
+                if (!infoResult.ok()) {
+                    std::cerr << infoResult.error().message << std::endl;
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
-                ConsoleIO::printLines(info);
+                ConsoleIO::printLines(infoResult.value());
                 ConsoleIO::pauseSeconds(3);
             }
             break;
@@ -172,13 +172,13 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             id = ConsoleIO::promptToken("Please enter the full Doctor-ID: ");
             {
-                const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
-                if (info.empty()) {
-                    std::cerr << "Failed to read file!" << std::endl;
+                const Result<std::vector<std::string>> infoResult = userProfileQueryService().getUserInfo(id);
+                if (!infoResult.ok()) {
+                    std::cerr << infoResult.error().message << std::endl;
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
-                ConsoleIO::printLines(info);
+                ConsoleIO::printLines(infoResult.value());
                 ConsoleIO::pauseSeconds(3);
             }
             break;
@@ -201,13 +201,13 @@ void Admin::admin_setup() {
             std::cout << std::endl;
             id = ConsoleIO::promptToken("Please enter the full Assistant-ID: ");
             {
-                const std::vector<std::string> info = userProfileQueryService().getUserInfo(id);
-                if (info.empty()) {
-                    std::cerr << "Failed to read file!" << std::endl;
+                const Result<std::vector<std::string>> infoResult = userProfileQueryService().getUserInfo(id);
+                if (!infoResult.ok()) {
+                    std::cerr << infoResult.error().message << std::endl;
                     break;
                 }
                 std::cout << "File Content:" << std::endl;
-                ConsoleIO::printLines(info);
+                ConsoleIO::printLines(infoResult.value());
                 ConsoleIO::pauseSeconds(3);
             }
             break;
