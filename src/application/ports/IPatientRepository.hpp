@@ -5,7 +5,7 @@
 #include <vector>
 
 class IPatientRepository {
-public:
+  public:
     virtual ~IPatientRepository() = default;
 
     virtual std::vector<std::string> readAppointments(const std::string& patientId) const = 0;

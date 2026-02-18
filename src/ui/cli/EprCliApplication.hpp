@@ -2,7 +2,7 @@
 #define EPR_CLI_APPLICATION_HPP
 
 class EprCliApplication {
-public:
+  public:
     int run();
 };
 

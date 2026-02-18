@@ -17,7 +17,7 @@ struct UserProvisioningData {
 };
 
 class IUserProvisioningRepository {
-public:
+  public:
     virtual ~IUserProvisioningRepository() = default;
 
     virtual bool createPatient(const UserProvisioningData& data) = 0;

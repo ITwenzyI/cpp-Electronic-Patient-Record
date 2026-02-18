@@ -8,11 +8,7 @@
 #include <string>
 #include <vector>
 
-enum class AppointmentDecision {
-    Accept,
-    Reject,
-    Skip
-};
+enum class AppointmentDecision { Accept, Reject, Skip };
 
 struct AppointmentDecisionOutcome {
     bool changed;
@@ -21,15 +17,16 @@ struct AppointmentDecisionOutcome {
 };
 
 class AppointmentReviewService {
-public:
+  public:
     explicit AppointmentReviewService(IPatientRepository& repository);
 
     Result<std::vector<std::string>> loadRequests() const;
-    Result<AppointmentDecisionOutcome> applyDecision(std::string& entry, AppointmentDecision decision) const;
+    Result<AppointmentDecisionOutcome> applyDecision(
+        std::string& entry, AppointmentDecision decision) const;
     Result<void> saveRequests(const std::vector<std::string>& lines) const;
     static bool isPending(const std::string& entry);
 
-private:
+  private:
     IPatientRepository& repository_;
 };
 

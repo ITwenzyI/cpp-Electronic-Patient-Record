@@ -47,9 +47,9 @@ Detailed architecture documentation:
 - Entry point: `src/main.cpp`
 - Composition root: `src/ui/cli/EprCliApplication.cpp`
 - Role menu controllers:
-  - `src/ui/cli/PatientMenuController.hpp`
-  - `src/ui/cli/DoctorMenuController.hpp`
-  - `src/ui/cli/AssistantMenuController.hpp`
+    - `src/ui/cli/PatientMenuController.hpp`
+    - `src/ui/cli/DoctorMenuController.hpp`
+    - `src/ui/cli/AssistantMenuController.hpp`
 
 ### Error Model
 

@@ -6,8 +6,9 @@
 #include <string>
 
 class UserSessionService {
-public:
-    Result<void> runRoleSession(int choice, const std::string& id, const std::string& firstName, const std::string& lastName) const;
+  public:
+    Result<void> runRoleSession(int choice, const std::string& id, const std::string& firstName,
+        const std::string& lastName) const;
 };
 
 #endif //USER_SESSION_SERVICE_HPP

@@ -3,12 +3,7 @@
 
 #include <string>
 
-enum class LoginAction {
-    AdminSetup,
-    ExitApplication,
-    StartRoleSession,
-    InvalidInput
-};
+enum class LoginAction { AdminSetup, ExitApplication, StartRoleSession, InvalidInput };
 
 struct LoginDecision {
     LoginAction action;
@@ -16,7 +11,7 @@ struct LoginDecision {
 };
 
 class LoginDecisionUseCase {
-public:
+  public:
     LoginDecision decide(const std::string& input) const;
 };
 

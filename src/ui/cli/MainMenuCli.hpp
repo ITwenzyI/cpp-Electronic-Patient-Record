@@ -4,7 +4,7 @@
 #include <string>
 
 class MainMenuCli {
-public:
+  public:
     std::string promptRoleSelection() const;
     void promptLoginIdentity(std::string& id, std::string& firstName, std::string& lastName) const;
 };

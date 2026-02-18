@@ -4,7 +4,7 @@
 #include "application/ports/IPatientRepository.hpp"
 
 class FilePatientRepository final : public IPatientRepository {
-public:
+  public:
     std::vector<std::string> readAppointments(const std::string& patientId) const override;
     std::vector<std::string> readMedications(const std::string& patientId) const override;
     std::vector<std::string> readRecords(const std::string& patientId) const override;

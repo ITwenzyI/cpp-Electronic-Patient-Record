@@ -7,19 +7,19 @@
 #include <vector>
 
 class Patient_ID {
-public:
+  public:
     static int get_patient_id();
     static void update_patient_id(int old_id);
 };
 
 class Assistant_ID {
-    public:
+  public:
     static int get_assistant_id();
     static void update_assistant_id(int old_id);
 };
 
 class Doctor_ID {
-    public:
+  public:
     static int get_doctor_id();
     static void update_doctor_id(int old_id);
 };

@@ -11,9 +11,8 @@ struct Error {
     std::string detail;
 };
 
-template <typename T>
-class Result {
-public:
+template <typename T> class Result {
+  public:
     static Result<T> success(T value) {
         return Result<T>(true, std::move(value), {});
     }
@@ -22,8 +21,10 @@ public:
         return Result<T>(false, T{}, {std::move(code), std::move(message), "", ""});
     }
 
-    static Result<T> failure(std::string code, std::string message, std::string source, std::string detail = "") {
-        return Result<T>(false, T{}, {std::move(code), std::move(message), std::move(source), std::move(detail)});
+    static Result<T> failure(
+        std::string code, std::string message, std::string source, std::string detail = "") {
+        return Result<T>(false, T{},
+            {std::move(code), std::move(message), std::move(source), std::move(detail)});
     }
 
     bool ok() const {
@@ -70,18 +71,18 @@ public:
         return error_.detail;
     }
 
-private:
+  private:
     Result(bool ok, T value, Error error)
-        : ok_(ok), value_(std::move(value)), error_(std::move(error)) {}
+        : ok_(ok), value_(std::move(value)), error_(std::move(error)) {
+    }
 
     bool ok_;
     T value_;
     Error error_;
 };
 
-template <>
-class Result<void> {
-public:
+template <> class Result<void> {
+  public:
     static Result<void> success() {
         return Result<void>(true, {});
     }
@@ -90,8 +91,10 @@ public:
         return Result<void>(false, {std::move(code), std::move(message), "", ""});
     }
 
-    static Result<void> failure(std::string code, std::string message, std::string source, std::string detail = "") {
-        return Result<void>(false, {std::move(code), std::move(message), std::move(source), std::move(detail)});
+    static Result<void> failure(
+        std::string code, std::string message, std::string source, std::string detail = "") {
+        return Result<void>(
+            false, {std::move(code), std::move(message), std::move(source), std::move(detail)});
     }
 
     bool ok() const {
@@ -126,9 +129,9 @@ public:
         return error_.detail;
     }
 
-private:
-    Result(bool ok, Error error)
-        : ok_(ok), error_(std::move(error)) {}
+  private:
+    Result(bool ok, Error error) : ok_(ok), error_(std::move(error)) {
+    }
 
     bool ok_;
     Error error_;

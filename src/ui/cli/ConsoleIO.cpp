@@ -57,4 +57,4 @@ void pauseMilliseconds(int milliseconds) {
 void pauseSeconds(int seconds) {
     std::this_thread::sleep_for(std::chrono::seconds(seconds));
 }
-}
+} // namespace ConsoleIO

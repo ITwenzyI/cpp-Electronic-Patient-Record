@@ -2,7 +2,7 @@
 #define SYSTEM_BOOTSTRAP_USE_CASE_HPP
 
 class SystemBootstrapUseCase {
-public:
+  public:
     void run() const;
 };
 

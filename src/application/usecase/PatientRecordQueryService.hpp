@@ -9,15 +9,16 @@
 #include <vector>
 
 class PatientRecordQueryService {
-public:
-    PatientRecordQueryService(IUserRepository& userRepository, IPatientRepository& patientRepository);
+  public:
+    PatientRecordQueryService(
+        IUserRepository& userRepository, IPatientRepository& patientRepository);
 
     Result<std::vector<std::string>> getPatientInfo(const std::string& patientId) const;
     Result<std::vector<std::string>> getAppointments(const std::string& patientId) const;
     Result<std::vector<std::string>> getMedications(const std::string& patientId) const;
     Result<std::vector<std::string>> getRecords(const std::string& patientId) const;
 
-private:
+  private:
     IUserRepository& userRepository_;
     IPatientRepository& patientRepository_;
 };

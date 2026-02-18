@@ -4,7 +4,7 @@
 #include "application/ports/IUserProvisioningRepository.hpp"
 
 class FileUserProvisioningRepository final : public IUserProvisioningRepository {
-public:
+  public:
     bool createPatient(const UserProvisioningData& data) override;
     bool createDoctor(const UserProvisioningData& data) override;
     bool createAssistant(const UserProvisioningData& data) override;

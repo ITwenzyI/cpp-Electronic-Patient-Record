@@ -7,7 +7,7 @@
 
 namespace {
 class FakeUserRepository final : public IUserRepository {
-public:
+  public:
     bool existsResult = true;
     bool writeInfoResult = true;
     bool appendInfoLineResult = true;
@@ -37,18 +37,13 @@ public:
 
 bool testUpdateFieldInFileUpdatesMatchingField() {
     FakeUserRepository repository;
-    repository.infoLines = {
-        "First Name: John",
-        "Last Name: Doe",
-        "Insurance ID: OLD"
-    };
+    repository.infoLines = {"First Name: John", "Last Name: Doe", "Insurance ID: OLD"};
     UserRecordService service(repository);
 
     const Result<void> result = service.updateFieldInFile("P12345678", "Insurance ID", "NEW");
 
-    return result &&
-           repository.writtenLines.size() == 3 &&
-           repository.writtenLines[2] == "Insurance ID: NEW";
+    return result && repository.writtenLines.size() == 3 &&
+        repository.writtenLines[2] == "Insurance ID: NEW";
 }
 
 bool testUpdateFieldInFileReturnsUserNotFoundWhenMissing() {
@@ -70,7 +65,7 @@ bool testAddExtraInfoReturnsWriteFailedWhenAppendFails() {
 
     return !result && result.errorCode() == ErrorCodes::kWriteFailed;
 }
-}
+} // namespace
 
 bool runUserRecordServiceSmokeTests() {
     if (!testUpdateFieldInFileUpdatesMatchingField()) {

@@ -6,21 +6,17 @@
 #include <string>
 #include <utility>
 
-enum class UserRole {
-    Patient,
-    Doctor,
-    Assistant
-};
+enum class UserRole { Patient, Doctor, Assistant };
 
 class User {
-protected:
+  protected:
     std::string user_id; // Unique ID in the system
     UserRole role;
 
     // --- Personal Infos ---
     std::string firstName;
     std::string lastName;
-    std::string dateOfBirth;     // Format: "YYYY-MM-DD"
+    std::string dateOfBirth; // Format: "YYYY-MM-DD"
     std::string gender;
     std::string nationality;
 
@@ -33,22 +29,12 @@ protected:
     std::string insuranceID;
     std::string insuranceType;
 
-public:
+  public:
     // Constructor
-    User(std::string user_id,
-         UserRole role,
-         std::string firstName,
-         std::string lastName,
-         std::string dateOfBirth,
-         std::string gender,
-         std::string nationality,
-         std::string address,
-         std::string phoneNumber,
-         std::string email,
-         std::string insuranceID,
-         std::string insuranceType);
-
-
+    User(std::string user_id, UserRole role, std::string firstName, std::string lastName,
+        std::string dateOfBirth, std::string gender, std::string nationality, std::string address,
+        std::string phoneNumber, std::string email, std::string insuranceID,
+        std::string insuranceType);
 
     // Virtual destructor
     virtual ~User();
@@ -70,7 +56,6 @@ public:
     // Setters
     virtual void setFirstName(const std::string& firstName);
     virtual void setLastName(const std::string& lastName);
-
 };
 
 #endif // USER_HPP

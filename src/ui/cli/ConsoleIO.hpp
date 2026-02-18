@@ -15,6 +15,6 @@ void printLines(const std::vector<std::string>& lines);
 void printError(const Error& error);
 void pauseMilliseconds(int milliseconds);
 void pauseSeconds(int seconds);
-}
+} // namespace ConsoleIO
 
 #endif // CONSOLE_IO_HPP

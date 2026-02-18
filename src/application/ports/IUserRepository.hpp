@@ -5,7 +5,7 @@
 #include <vector>
 
 class IUserRepository {
-public:
+  public:
     virtual ~IUserRepository() = default;
 
     virtual bool exists(const std::string& id) const = 0;

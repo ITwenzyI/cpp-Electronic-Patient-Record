@@ -1,15 +1,13 @@
 #include "IDs.hpp"
 
-
-#include <string>
 #include <ctime>
-#include <iomanip>
-#include <random>
-#include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <random>
 #include <sstream>
-
+#include <string>
 
 /// ------------------------- Patient ---------------------------------------------------
 
@@ -35,9 +33,7 @@ void Patient_ID::update_patient_id(const int old_id) {
     }
 }
 
-
 /// ------------------------- Assistant ---------------------------------------------------
-
 
 int Assistant_ID::get_assistant_id() {
     std::ifstream file_in("data/assistant_id.txt");
@@ -61,12 +57,7 @@ void Assistant_ID::update_assistant_id(const int old_id) {
     }
 }
 
-
-
-
 /// ------------------------- Doctor ---------------------------------------------------
-
-
 
 int Doctor_ID::get_doctor_id() {
     std::ifstream file_in("data/doctor_id.txt");
@@ -89,5 +80,3 @@ void Doctor_ID::update_doctor_id(const int old_id) {
         std::cerr << "Failed to open and update ID from Doctor!\n";
     }
 }
-
-

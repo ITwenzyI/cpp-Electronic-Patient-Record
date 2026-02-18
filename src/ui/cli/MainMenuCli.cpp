@@ -21,7 +21,8 @@ std::string MainMenuCli::promptRoleSelection() const {
     return input;
 }
 
-void MainMenuCli::promptLoginIdentity(std::string& id, std::string& firstName, std::string& lastName) const {
+void MainMenuCli::promptLoginIdentity(
+    std::string& id, std::string& firstName, std::string& lastName) const {
     id = ConsoleIO::promptToken("Please enter your ID: ");
     firstName = ConsoleIO::promptToken("Please enter your first name: ");
     lastName = ConsoleIO::promptToken("Please enter your last name: ");

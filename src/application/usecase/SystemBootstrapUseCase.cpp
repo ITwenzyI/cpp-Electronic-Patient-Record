@@ -15,7 +15,7 @@ ISystemRepository& systemRepository() {
     static FileSystemRepository repository;
     return repository;
 }
-}
+} // namespace
 
 void SystemBootstrapUseCase::run() const {
     SetConsoleOutputCP(CP_UTF8);
@@ -29,5 +29,6 @@ void SystemBootstrapUseCase::run() const {
 
     systemRepository().ensureBootstrapData();
 
-    while (!Admin::checkInitialSetup()) {}
+    while (!Admin::checkInitialSetup()) {
+    }
 }

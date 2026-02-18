@@ -7,42 +7,23 @@
 #include <string>
 
 class PatientWriteService {
-public:
+  public:
     explicit PatientWriteService(IPatientRepository& repository);
 
-    Result<void> addAppointment(
-        const std::string& patientId,
-        const std::string& date,
-        const std::string& time,
-        const std::string& doctorName,
-        const std::string& reason
-    ) const;
+    Result<void> addAppointment(const std::string& patientId, const std::string& date,
+        const std::string& time, const std::string& doctorName, const std::string& reason) const;
 
-    Result<void> addMedication(
-        const std::string& patientId,
-        const std::string& nameAndDose,
-        const std::string& frequency,
-        const std::string& startDate,
-        const std::string& endDate
-    ) const;
+    Result<void> addMedication(const std::string& patientId, const std::string& nameAndDose,
+        const std::string& frequency, const std::string& startDate,
+        const std::string& endDate) const;
 
-    Result<void> addRecord(
-        const std::string& patientId,
-        const std::string& date,
-        const std::string& doctor,
-        const std::string& type,
-        const std::string& content
-    ) const;
+    Result<void> addRecord(const std::string& patientId, const std::string& date,
+        const std::string& doctor, const std::string& type, const std::string& content) const;
 
-    Result<void> requestAppointment(
-        const std::string& patientId,
-        const std::string& date,
-        const std::string& time,
-        const std::string& doctorName,
-        const std::string& reason
-    ) const;
+    Result<void> requestAppointment(const std::string& patientId, const std::string& date,
+        const std::string& time, const std::string& doctorName, const std::string& reason) const;
 
-private:
+  private:
     IPatientRepository& repository_;
 };
 

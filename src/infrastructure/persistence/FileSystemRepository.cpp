@@ -1,8 +1,8 @@
 #include "infrastructure/persistence/FileSystemRepository.hpp"
 
 #include <filesystem>
-#include <fstream>
 #include <format>
+#include <fstream>
 
 void FileSystemRepository::ensureBootstrapData() {
     std::filesystem::create_directories("data");
@@ -37,10 +37,7 @@ void FileSystemRepository::writeAdminSetupLog(const std::string& line) {
 }
 
 bool FileSystemRepository::createUserBackupIfMissing(
-    const std::string& id,
-    const std::vector<std::string>& infoLines,
-    std::string& outFolderName
-) {
+    const std::string& id, const std::vector<std::string>& infoLines, std::string& outFolderName) {
     std::filesystem::create_directories("data/Exports");
     outFolderName = std::format("data/Exports/{}", id);
     std::filesystem::create_directories(outFolderName);

@@ -1,38 +1,16 @@
 #include "User.hpp"
 
-User::User(std::string user_id,
-           UserRole role,
-           std::string firstName,
-           std::string lastName,
-           std::string dateOfBirth,
-           std::string gender,
-           std::string nationality,
-           std::string address,
-           std::string phoneNumber,
-           std::string email,
-           std::string insuranceID,
-           std::string insuranceType)
-    : user_id(std::move(user_id)),
-      role(std::move(role)),
-      firstName(std::move(firstName)),
-      lastName(std::move(lastName)),
-      dateOfBirth(std::move(dateOfBirth)),
-      gender(std::move(gender)),
-      nationality(std::move(nationality)),
-      address(std::move(address)),
-      phoneNumber(std::move(phoneNumber)),
-      email(std::move(email)),
-      insuranceID(std::move(insuranceID)),
-      insuranceType(std::move(insuranceType)) {}
-
-
-
+User::User(std::string user_id, UserRole role, std::string firstName, std::string lastName,
+    std::string dateOfBirth, std::string gender, std::string nationality, std::string address,
+    std::string phoneNumber, std::string email, std::string insuranceID, std::string insuranceType)
+    : user_id(std::move(user_id)), role(std::move(role)), firstName(std::move(firstName)),
+      lastName(std::move(lastName)), dateOfBirth(std::move(dateOfBirth)), gender(std::move(gender)),
+      nationality(std::move(nationality)), address(std::move(address)),
+      phoneNumber(std::move(phoneNumber)), email(std::move(email)),
+      insuranceID(std::move(insuranceID)), insuranceType(std::move(insuranceType)) {
+}
 
 User::~User() = default;
-
-
-
-
 
 // Getters
 
@@ -93,7 +71,6 @@ std::string User::getInsuranceType() const {
     return insuranceType;
 }
 
-
 // Setters
 
 void User::setFirstName(const std::string& firstName) {
@@ -103,10 +80,3 @@ void User::setFirstName(const std::string& firstName) {
 void User::setLastName(const std::string& lastName) {
     this->lastName = lastName;
 }
-
-
-
-
-
-
-

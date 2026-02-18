@@ -28,7 +28,7 @@ void writeCommonInfo(std::ofstream& out, const UserProvisioningData& data) {
 
     out << "\n" << "--- Extra Infos ---" << "\n";
 }
-}
+} // namespace
 
 bool FileUserProvisioningRepository::createPatient(const UserProvisioningData& data) {
     const int patientId = Patient_ID::get_patient_id();

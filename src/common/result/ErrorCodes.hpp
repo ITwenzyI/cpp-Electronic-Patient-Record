@@ -17,6 +17,6 @@ constexpr const char* kRequestsFileMissing = "REQUESTS_FILE_MISSING";
 constexpr const char* kWriteRequestsFailed = "WRITE_REQUESTS_FAILED";
 constexpr const char* kAuthNameMismatch = "AUTH_NAME_MISMATCH";
 constexpr const char* kInvalidSelection = "INVALID_SELECTION";
-}
+} // namespace ErrorCodes
 
 #endif // ERROR_CODES_HPP

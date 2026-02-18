@@ -1,9 +1,9 @@
-#include "domain/model/Doctor/Doctor.hpp"
-#include "domain/model/Patient/Patient.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/PatientWriteService.hpp"
 #include "application/usecase/UserRecordService.hpp"
 #include "common/util/Utils/Utils.hpp"
+#include "domain/model/Doctor/Doctor.hpp"
+#include "domain/model/Patient/Patient.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/ConsoleIO.hpp"
@@ -37,7 +37,7 @@ PatientWriteService& patientWriteService() {
     static PatientWriteService service(patientRepository());
     return service;
 }
-}
+} // namespace
 
 void runDoctorMenu(Doctor& doctor) {
     int choice;
@@ -45,8 +45,8 @@ void runDoctorMenu(Doctor& doctor) {
 
     do {
         ConsoleIO::printHeader("=== Doctor Menu ===");
-        std::cout << doctor.getRole() << ": " << doctor.getFirstName() << " " << doctor.getLastName()
-                  << "\nID: " << doctor.getID() << std::endl;
+        std::cout << doctor.getRole() << ": " << doctor.getFirstName() << " "
+                  << doctor.getLastName() << "\nID: " << doctor.getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Add Medications for Patient" << std::endl;
         std::cout << "2. Add Records for Patient" << std::endl;
@@ -81,14 +81,16 @@ void runDoctorMenu(Doctor& doctor) {
                 std::getline(std::cin, endDate);
                 std::cout << std::endl;
 
-                const Result<void> medicationResult = patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate);
+                const Result<void> medicationResult = patientWriteService().addMedication(
+                    id, nameAndDose, frequency, startDate, endDate);
                 if (!medicationResult) {
                     ConsoleIO::printError(medicationResult.error());
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
-                const std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
+                const std::string medicationLine =
+                    nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
                 std::cout << "Medication added:\n" << medicationLine << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
@@ -110,14 +112,16 @@ void runDoctorMenu(Doctor& doctor) {
                 std::getline(std::cin, content);
                 std::cout << std::endl;
 
-                const Result<void> recordResult = patientWriteService().addRecord(id, date, doctor, type, content);
+                const Result<void> recordResult =
+                    patientWriteService().addRecord(id, date, doctor, type, content);
                 if (!recordResult) {
                     ConsoleIO::printError(recordResult.error());
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
-                const std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
+                const std::string recordLine =
+                    "[" + date + "] " + doctor + ": " + type + ": " + content;
                 std::cout << "Record added:\n" << recordLine << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
@@ -126,7 +130,8 @@ void runDoctorMenu(Doctor& doctor) {
                 ConsoleIO::printHeader("Patient Info");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
+                    const Result<std::vector<std::string>> infoResult =
+                        patientRecordQueryService().getPatientInfo(id);
                     if (!infoResult) {
                         ConsoleIO::printError(infoResult.error());
                         break;
@@ -141,7 +146,8 @@ void runDoctorMenu(Doctor& doctor) {
                 ConsoleIO::printHeader("Patient Appointments");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
+                    const Result<std::vector<std::string>> appointmentsResult =
+                        patientRecordQueryService().getAppointments(id);
                     if (!appointmentsResult) {
                         ConsoleIO::printError(appointmentsResult.error());
                         break;
@@ -156,7 +162,8 @@ void runDoctorMenu(Doctor& doctor) {
                 ConsoleIO::printHeader("Patient Medications");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
+                    const Result<std::vector<std::string>> medicationsResult =
+                        patientRecordQueryService().getMedications(id);
                     if (!medicationsResult) {
                         ConsoleIO::printError(medicationsResult.error());
                         break;
@@ -171,7 +178,8 @@ void runDoctorMenu(Doctor& doctor) {
                 ConsoleIO::printHeader("Patient Records");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
+                    const Result<std::vector<std::string>> recordsResult =
+                        patientRecordQueryService().getRecords(id);
                     if (!recordsResult) {
                         ConsoleIO::printError(recordsResult.error());
                         break;
@@ -191,7 +199,8 @@ void runDoctorMenu(Doctor& doctor) {
                 std::cout << std::endl;
                 newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
-                const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
+                const Result<void> updateResult =
+                    userRecordService().updateFieldInFile(id, field, newInput);
                 if (!updateResult) {
                     ConsoleIO::printError(updateResult.error());
                     ConsoleIO::pauseSeconds(2);
@@ -211,7 +220,8 @@ void runDoctorMenu(Doctor& doctor) {
                 std::getline(std::cin, extraInfo);
                 std::cout << std::endl;
 
-                const Result<void> extraInfoResult = userRecordService().addExtraInfo(id, extraInfo);
+                const Result<void> extraInfoResult =
+                    userRecordService().addExtraInfo(id, extraInfo);
                 if (!extraInfoResult) {
                     ConsoleIO::printError(extraInfoResult.error());
                     ConsoleIO::pauseSeconds(2);
@@ -229,5 +239,3 @@ void runDoctorMenu(Doctor& doctor) {
         }
     } while (choice != 0);
 }
-
-

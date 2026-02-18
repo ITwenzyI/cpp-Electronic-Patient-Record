@@ -7,13 +7,14 @@
 #include <string>
 
 class UserRecordService {
-public:
+  public:
     explicit UserRecordService(IUserRepository& repository);
 
-    Result<void> updateFieldInFile(const std::string& id, const std::string& field, const std::string& newInput) const;
+    Result<void> updateFieldInFile(
+        const std::string& id, const std::string& field, const std::string& newInput) const;
     Result<void> addExtraInfo(const std::string& id, const std::string& extraInfo) const;
 
-private:
+  private:
     IUserRepository& repository_;
 };
 

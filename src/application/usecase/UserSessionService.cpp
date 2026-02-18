@@ -16,19 +16,14 @@ const AuthService& authService() {
     static AuthService service(userRepository());
     return service;
 }
-}
+} // namespace
 
-Result<void> UserSessionService::runRoleSession(
-    const int choice,
-    const std::string& id,
-    const std::string& firstName,
-    const std::string& lastName
-) const {
+Result<void> UserSessionService::runRoleSession(const int choice, const std::string& id,
+    const std::string& firstName, const std::string& lastName) const {
     // Session service validates role and credentials only; no UI dispatch here.
     if (choice < 1 || choice > 3) {
-        return Result<void>::failure(
-            ErrorCodes::kInvalidSelection, "Invalid selection.", ErrorSources::kApplication, "UserSessionService::runRoleSession"
-        );
+        return Result<void>::failure(ErrorCodes::kInvalidSelection, "Invalid selection.",
+            ErrorSources::kApplication, "UserSessionService::runRoleSession");
     }
 
     const Result<void> authResult = authService().authenticate(id, firstName, lastName);

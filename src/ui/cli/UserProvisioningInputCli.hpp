@@ -6,12 +6,12 @@
 #include <string>
 
 class UserProvisioningInputCli {
-public:
+  public:
     static UserProvisioningData promptPatientInput();
     static UserProvisioningData promptDoctorInput();
     static UserProvisioningData promptAssistantInput();
 
-private:
+  private:
     static UserProvisioningData promptCommonInput(const std::string& roleLabel);
 };
 

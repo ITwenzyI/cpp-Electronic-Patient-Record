@@ -8,12 +8,12 @@
 #include <vector>
 
 class UserProfileQueryService {
-public:
+  public:
     explicit UserProfileQueryService(IUserRepository& repository);
 
     Result<std::vector<std::string>> getUserInfo(const std::string& id) const;
 
-private:
+  private:
     IUserRepository& repository_;
 };
 

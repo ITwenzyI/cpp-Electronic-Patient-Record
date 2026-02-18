@@ -7,12 +7,13 @@
 #include <string>
 
 class AuthService {
-public:
+  public:
     explicit AuthService(IUserRepository& repository);
 
-    Result<void> authenticate(const std::string& id, const std::string& firstName, const std::string& lastName) const;
+    Result<void> authenticate(
+        const std::string& id, const std::string& firstName, const std::string& lastName) const;
 
-private:
+  private:
     IUserRepository& repository_;
 };
 

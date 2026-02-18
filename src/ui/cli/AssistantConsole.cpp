@@ -1,19 +1,19 @@
-#include "domain/model/Assistant/Assistant.hpp"
-#include "domain/model/Patient/Patient.hpp"
+#include "application/usecase/AppointmentReviewService.hpp"
 #include "application/usecase/PatientRecordQueryService.hpp"
 #include "application/usecase/PatientWriteService.hpp"
-#include "application/usecase/AppointmentReviewService.hpp"
-#include "application/usecase/UserRecordService.hpp"
 #include "application/usecase/UserProvisioningService.hpp"
+#include "application/usecase/UserRecordService.hpp"
 #include "common/result/ErrorSources.hpp"
-#include "ui/cli/UserProvisioningInputCli.hpp"
-#include "ui/cli/ConsoleIO.hpp"
 #include "common/util/Utils/Utils.hpp"
+#include "domain/model/Assistant/Assistant.hpp"
+#include "domain/model/Patient/Patient.hpp"
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserProvisioningRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/Admin/Admin.hpp"
 #include "ui/cli/AssistantMenuController.hpp"
+#include "ui/cli/ConsoleIO.hpp"
+#include "ui/cli/UserProvisioningInputCli.hpp"
 
 #include <iostream>
 #include <limits>
@@ -82,14 +82,16 @@ void runAppointmentReviewCli() {
                 decision = AppointmentDecision::Reject;
             }
 
-            const Result<AppointmentDecisionOutcome> decisionResult = appointmentReviewService().applyDecision(entry, decision);
+            const Result<AppointmentDecisionOutcome> decisionResult =
+                appointmentReviewService().applyDecision(entry, decision);
             if (!decisionResult) {
                 ConsoleIO::printError(decisionResult.error());
                 return;
             }
 
             if (decisionResult.value().hasError) {
-                ConsoleIO::printError({"WRITE_FAILED", decisionResult.value().message, ErrorSources::kUi, "runAppointmentReviewCli"});
+                ConsoleIO::printError({"WRITE_FAILED", decisionResult.value().message,
+                    ErrorSources::kUi, "runAppointmentReviewCli"});
                 continue;
             }
 
@@ -111,7 +113,7 @@ void runAppointmentReviewCli() {
     }
 }
 
-}
+} // namespace
 
 void runAssistantMenu(Assistant& assistant) {
     int choice;
@@ -119,8 +121,8 @@ void runAssistantMenu(Assistant& assistant) {
 
     do {
         ConsoleIO::printHeader("=== Assistant Menu ===");
-        std::cout << assistant.getRole() << ": " << assistant.getFirstName() << " " << assistant.getLastName()
-                  << "\nID: " << assistant.getID() << std::endl;
+        std::cout << assistant.getRole() << ": " << assistant.getFirstName() << " "
+                  << assistant.getLastName() << "\nID: " << assistant.getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. Create New Patient" << std::endl;
         std::cout << "2. Update Field in Info\n";
@@ -148,7 +150,8 @@ void runAssistantMenu(Assistant& assistant) {
                 UserProvisioningData data = UserProvisioningInputCli::promptPatientInput();
                 data.firstName = newFirstName;
                 data.lastName = newLastName;
-                const Result<void> createPatientResult = userProvisioningService().createPatient(data);
+                const Result<void> createPatientResult =
+                    userProvisioningService().createPatient(data);
                 if (!createPatientResult) {
                     ConsoleIO::printError(createPatientResult.error());
                     ConsoleIO::pauseSeconds(2);
@@ -169,7 +172,8 @@ void runAssistantMenu(Assistant& assistant) {
                 std::cout << std::endl;
                 newInput = ConsoleIO::promptToken("Enter New Input: ");
                 std::cout << std::endl;
-                const Result<void> updateResult = userRecordService().updateFieldInFile(id, field, newInput);
+                const Result<void> updateResult =
+                    userRecordService().updateFieldInFile(id, field, newInput);
                 if (!updateResult) {
                     ConsoleIO::printError(updateResult.error());
                     ConsoleIO::pauseSeconds(2);
@@ -202,14 +206,16 @@ void runAssistantMenu(Assistant& assistant) {
                 std::getline(std::cin, endDate);
                 std::cout << std::endl;
 
-                const Result<void> medicationResult = patientWriteService().addMedication(id, nameAndDose, frequency, startDate, endDate);
+                const Result<void> medicationResult = patientWriteService().addMedication(
+                    id, nameAndDose, frequency, startDate, endDate);
                 if (!medicationResult) {
                     ConsoleIO::printError(medicationResult.error());
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
-                const std::string medicationLine = nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
+                const std::string medicationLine =
+                    nameAndDose + " - " + frequency + " - from " + startDate + " to " + endDate;
                 std::cout << "Medication added:\n" << medicationLine << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
@@ -231,14 +237,16 @@ void runAssistantMenu(Assistant& assistant) {
                 std::getline(std::cin, content);
                 std::cout << std::endl;
 
-                const Result<void> recordResult = patientWriteService().addRecord(id, date, doctor, type, content);
+                const Result<void> recordResult =
+                    patientWriteService().addRecord(id, date, doctor, type, content);
                 if (!recordResult) {
                     ConsoleIO::printError(recordResult.error());
                     ConsoleIO::pauseSeconds(2);
                     break;
                 }
 
-                const std::string recordLine = "[" + date + "] " + doctor + ": " + type + ": " + content;
+                const std::string recordLine =
+                    "[" + date + "] " + doctor + ": " + type + ": " + content;
                 std::cout << "Record added:\n" << recordLine << '\n';
                 ConsoleIO::pauseSeconds(2);
                 break;
@@ -247,7 +255,8 @@ void runAssistantMenu(Assistant& assistant) {
                 ConsoleIO::printHeader("Patient Info");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> infoResult = patientRecordQueryService().getPatientInfo(id);
+                    const Result<std::vector<std::string>> infoResult =
+                        patientRecordQueryService().getPatientInfo(id);
                     if (!infoResult) {
                         ConsoleIO::printError(infoResult.error());
                         break;
@@ -262,7 +271,8 @@ void runAssistantMenu(Assistant& assistant) {
                 ConsoleIO::printHeader("Patient Appointments");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> appointmentsResult = patientRecordQueryService().getAppointments(id);
+                    const Result<std::vector<std::string>> appointmentsResult =
+                        patientRecordQueryService().getAppointments(id);
                     if (!appointmentsResult) {
                         ConsoleIO::printError(appointmentsResult.error());
                         break;
@@ -277,7 +287,8 @@ void runAssistantMenu(Assistant& assistant) {
                 ConsoleIO::printHeader("Patient Medications");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> medicationsResult = patientRecordQueryService().getMedications(id);
+                    const Result<std::vector<std::string>> medicationsResult =
+                        patientRecordQueryService().getMedications(id);
                     if (!medicationsResult) {
                         ConsoleIO::printError(medicationsResult.error());
                         break;
@@ -292,7 +303,8 @@ void runAssistantMenu(Assistant& assistant) {
                 ConsoleIO::printHeader("Patient Records");
                 id = ConsoleIO::promptToken("Enter the full ID of the Patient: ");
                 {
-                    const Result<std::vector<std::string>> recordsResult = patientRecordQueryService().getRecords(id);
+                    const Result<std::vector<std::string>> recordsResult =
+                        patientRecordQueryService().getRecords(id);
                     if (!recordsResult) {
                         ConsoleIO::printError(recordsResult.error());
                         break;
@@ -313,7 +325,8 @@ void runAssistantMenu(Assistant& assistant) {
                 std::getline(std::cin, extraInfo);
                 std::cout << std::endl;
 
-                const Result<void> extraInfoResult = userRecordService().addExtraInfo(id, extraInfo);
+                const Result<void> extraInfoResult =
+                    userRecordService().addExtraInfo(id, extraInfo);
                 if (!extraInfoResult) {
                     ConsoleIO::printError(extraInfoResult.error());
                     ConsoleIO::pauseSeconds(2);
@@ -331,4 +344,3 @@ void runAssistantMenu(Assistant& assistant) {
         }
     } while (choice != 0);
 }
-

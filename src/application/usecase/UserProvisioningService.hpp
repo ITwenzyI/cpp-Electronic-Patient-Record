@@ -8,7 +8,7 @@
 #include "domain/model/Patient/Patient.hpp"
 
 class UserProvisioningService {
-public:
+  public:
     explicit UserProvisioningService(IUserProvisioningRepository& repository);
 
     Result<void> createPatient(const UserProvisioningData& data) const;
@@ -19,7 +19,7 @@ public:
     Result<void> createDoctor(const Doctor& doctor) const;
     Result<void> createAssistant(const Assistant& assistant) const;
 
-private:
+  private:
     IUserProvisioningRepository& repository_;
     static UserProvisioningData toProvisioningData(const User& user);
 };

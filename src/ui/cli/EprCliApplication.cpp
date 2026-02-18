@@ -39,7 +39,7 @@ const MainMenuCli& mainMenuCli() {
     static MainMenuCli cli;
     return cli;
 }
-}
+} // namespace
 
 int EprCliApplication::run() {
     // Ensure required system data/folders exist before any UI flow starts.
@@ -73,7 +73,8 @@ int EprCliApplication::run() {
         std::string id;
         mainMenuCli().promptLoginIdentity(id, firstName, lastName);
 
-        const Result<void> sessionResult = userSessionService().runRoleSession(choice, id, firstName, lastName);
+        const Result<void> sessionResult =
+            userSessionService().runRoleSession(choice, id, firstName, lastName);
         if (!sessionResult) {
             ConsoleIO::printError(sessionResult.error());
             // Keep the original UX pacing for common login failures.

@@ -16,20 +16,16 @@ std::string extractField(const std::vector<std::string>& lines, const std::strin
     }
     return "";
 }
+} // namespace
+
+AuthService::AuthService(IUserRepository& repository) : repository_(repository) {
 }
 
-AuthService::AuthService(IUserRepository& repository)
-    : repository_(repository) {}
-
 Result<void> AuthService::authenticate(
-    const std::string& id,
-    const std::string& firstName,
-    const std::string& lastName
-) const {
+    const std::string& id, const std::string& firstName, const std::string& lastName) const {
     if (!repository_.exists(id)) {
-        return Result<void>::failure(
-            ErrorCodes::kUserNotFound, "Failed to read file!", ErrorSources::kApplication, "AuthService::authenticate"
-        );
+        return Result<void>::failure(ErrorCodes::kUserNotFound, "Failed to read file!",
+            ErrorSources::kApplication, "AuthService::authenticate");
     }
 
     // Compare normalized strings to keep compatibility with existing text-file data.
@@ -42,7 +38,6 @@ Result<void> AuthService::authenticate(
         return Result<void>::success();
     }
 
-    return Result<void>::failure(
-        ErrorCodes::kAuthNameMismatch, "Name does not match the ID.", ErrorSources::kApplication, "AuthService::authenticate"
-    );
+    return Result<void>::failure(ErrorCodes::kAuthNameMismatch, "Name does not match the ID.",
+        ErrorSources::kApplication, "AuthService::authenticate");
 }
