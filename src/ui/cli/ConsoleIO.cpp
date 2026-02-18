@@ -38,6 +38,7 @@ void printLines(const std::vector<std::string>& lines) {
 }
 
 void printError(const Error& error) {
+    // Print message first, then optional debug context when available.
     std::cerr << error.message;
     if (!error.source.empty()) {
         std::cerr << " [source: " << error.source;
