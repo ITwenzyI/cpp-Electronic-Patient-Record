@@ -42,6 +42,7 @@ const MainMenuCli& mainMenuCli() {
 }
 
 int EprCliApplication::run() {
+    // Ensure required system data/folders exist before any UI flow starts.
     systemBootstrapUseCase().run();
 
     int choice;
@@ -49,6 +50,7 @@ int EprCliApplication::run() {
     do {
         std::string input = mainMenuCli().promptRoleSelection();
 
+        // Convert raw menu input into an explicit action decision.
         const LoginDecision decision = loginDecisionUseCase().decide(input);
 
         if (decision.action == LoginAction::AdminSetup) {
@@ -74,6 +76,7 @@ int EprCliApplication::run() {
         const Result<void> sessionResult = userSessionService().runRoleSession(choice, id, firstName, lastName);
         if (!sessionResult) {
             ConsoleIO::printError(sessionResult.error());
+            // Keep the original UX pacing for common login failures.
             if (sessionResult.errorCode() == ErrorCodes::kUserNotFound) {
                 ConsoleIO::pauseSeconds(2);
             } else if (sessionResult.errorCode() == ErrorCodes::kAuthNameMismatch) {
@@ -86,6 +89,7 @@ int EprCliApplication::run() {
         std::cout << "Login successful.\n";
         std::this_thread::sleep_for(std::chrono::seconds(2));
 
+        // UI composition decides which role menu controller to execute.
         if (choice == 1) {
             Patient patient(id, firstName, lastName);
             runPatientMenu(patient);

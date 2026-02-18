@@ -5,6 +5,7 @@
 
 namespace {
 std::string extractPatientId(const std::string& entry) {
+    // Requests currently encode IDs with a leading role marker (e.g. P00000001).
     const size_t idStart = entry.find("P");
     if (idStart == std::string::npos) {
         return "";
@@ -13,6 +14,7 @@ std::string extractPatientId(const std::string& entry) {
 }
 
 std::string extractDateTime(const std::string& entry) {
+    // Datetime is stored in brackets: "[YYYY-MM-DD HH:MM]".
     const size_t bracketStart = entry.find('[');
     const size_t bracketEnd = entry.find(']');
     if (bracketStart == std::string::npos || bracketEnd == std::string::npos || bracketEnd < bracketStart) {
@@ -74,6 +76,7 @@ Result<AppointmentDecisionOutcome> AppointmentReviewService::applyDecision(std::
 
     if (!repository_.ensurePatientDirectory(patientId) ||
         !repository_.appendAppointment(patientId, dateTime + " - Dr. " + doctorResult.value() + " (confirmed)")) {
+        // Keep review loop running for this recoverable write failure.
         return Result<AppointmentDecisionOutcome>::success({
             false,
             true,

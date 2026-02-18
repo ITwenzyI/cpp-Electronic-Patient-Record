@@ -8,6 +8,7 @@
 
 namespace {
 std::string extractField(const std::vector<std::string>& lines, const std::string& keyPrefix) {
+    // info.txt entries are line-based key/value pairs like "First Name: John".
     for (const auto& line : lines) {
         if (line.starts_with(keyPrefix)) {
             return line.substr(keyPrefix.size());
@@ -31,6 +32,7 @@ Result<void> AuthService::authenticate(
         );
     }
 
+    // Compare normalized strings to keep compatibility with existing text-file data.
     const std::vector<std::string> info = repository_.readInfo(id);
     const std::string fileFirstName = extractField(info, "First Name:");
     const std::string fileLastName = extractField(info, "Last Name:");

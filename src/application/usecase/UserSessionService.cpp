@@ -24,6 +24,7 @@ Result<void> UserSessionService::runRoleSession(
     const std::string& firstName,
     const std::string& lastName
 ) const {
+    // Session service validates role and credentials only; no UI dispatch here.
     if (choice < 1 || choice > 3) {
         return Result<void>::failure(
             ErrorCodes::kInvalidSelection, "Invalid selection.", ErrorSources::kApplication, "UserSessionService::runRoleSession"
