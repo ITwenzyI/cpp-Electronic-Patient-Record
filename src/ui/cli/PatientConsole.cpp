@@ -4,6 +4,7 @@
 #include "infrastructure/persistence/FilePatientRepository.hpp"
 #include "infrastructure/persistence/FileUserRepository.hpp"
 #include "ui/cli/ConsoleIO.hpp"
+#include "ui/cli/PatientMenuController.hpp"
 
 #include <iostream>
 
@@ -29,14 +30,13 @@ PatientWriteService& patientWriteService() {
 }
 }
 
-// Patient menu.
-void Patient::displayMenu() {
+void runPatientMenu(Patient& patient) {
     int choice;
     std::string id;
 
     do {
         ConsoleIO::printHeader("=== Patient Menu ===");
-        std::cout << getRole() << ": " << getFirstName() << " " << getLastName() << "\nID: " << getID() << std::endl;
+        std::cout << patient.getRole() << ": " << patient.getFirstName() << " " << patient.getLastName() << "\nID: " << patient.getID() << std::endl;
         std::cout << "-----------------------------" << std::endl;
         std::cout << "1. View Appointments" << std::endl;
         std::cout << "2. View Medications" << std::endl;

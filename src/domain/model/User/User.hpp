@@ -71,9 +71,6 @@ public:
     virtual void setFirstName(const std::string& firstName);
     virtual void setLastName(const std::string& lastName);
 
-    // Abstract method
-    virtual void displayMenu() = 0;
-
 };
 
 #endif // USER_HPP
